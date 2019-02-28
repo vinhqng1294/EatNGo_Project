@@ -1,0 +1,3 @@
+rootProject.name = 'EatNGo_mobile_app'
+
+include ':app'
