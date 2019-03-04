@@ -24,14 +24,17 @@ export default class WelcomeScreen extends Component<Props> {
                         Sign in using
                     </Text>
                     <TouchableOpacity style={styles.option}>
+                        {/* onPress = () => {}; */}
                         <Image source={require('../Assets/facebook.png')}
                             style={styles.img} />
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.option}>
+                        {/* onPress = () => {}; */}
                         <Image source={require('../Assets/google.png')}
                             style={styles.img} />
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.option}>
+                        {/* onPress = () => {}; */}
                         <Image source={require('../Assets/mobile.png')}
                             style={styles.img} />
                     </TouchableOpacity>
@@ -76,7 +79,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 23,
         color: '#878787',
-        fontFamily: ''
     },
     option: {
         flex: 1,
