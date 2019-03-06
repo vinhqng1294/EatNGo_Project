@@ -15,7 +15,7 @@ export default class WelcomeScreen extends Component<Props> {
         return (
             <View style={styles.container}>
                 <View style={styles.logoTitleContainer}>
-                    <Image source={require('../assets/eatngo_logo_trans.png')}
+                    <Image source={require('../Assets/eatngo_logo_trans.png')}
                         style={styles.logoImg} />
                 </View>
 
@@ -25,17 +25,17 @@ export default class WelcomeScreen extends Component<Props> {
                     </Text>
                     <TouchableOpacity style={styles.option}>
                         {/* onPress = () => {}; */}
-                        <Image source={require('../assets/facebook.png')}
+                        <Image source={require('../Assets/facebook.png')}
                             style={styles.img} />
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.option}>
                         {/* onPress = () => {}; */}
-                        <Image source={require('../assets/google.png')}
+                        <Image source={require('../Assets/google.png')}
                             style={styles.img} />
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.option}>
                         {/* onPress = () => {}; */}
-                        <Image source={require('../assets/mobile.png')}
+                        <Image source={require('../Assets/mobile.png')}
                             style={styles.img} />
                     </TouchableOpacity>
                 </View>
