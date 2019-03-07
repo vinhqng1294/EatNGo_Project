@@ -19,56 +19,57 @@ export default class WelcomeScreen extends Component<Props> {
     state = {
         authToken: null,
         loggedAccount: null
-      };
-    
-      componentWillMount() {
+    };
+
+    componentWillMount() {
         this.configureAccountKit();
-    
+
         AccountKit.getCurrentAccessToken()
-          .then(token => {
-            if (token) {
-              AccountKit.getCurrentAccount().then(account => {
-                this.setState({
-                  authToken: token,
-                  loggedAccount: account
-                });
-              });
-            } else {
-              console.log("No user account logged");
-            }
-          })
-          .catch(e => console.log("Failed to get current access token", e));
-      }
-    
-      configureAccountKit() {
+            .then(token => {
+                if (token) {
+                    AccountKit.getCurrentAccount().then(account => {
+                        this.setState({
+                            authToken: token,
+                            loggedAccount: account
+                        });
+                    });
+                } else {
+                    console.log("No user account logged");
+                }
+            })
+            .catch(e => console.log("Failed to get current access token", e));
+    }
+
+    configureAccountKit() {
         AccountKit.configure({
-          theme: {
-          },
-          defaultCountry: "VN",
-          initialEmail: "example.com",
-          initialPhoneCountryPrefix: "+84"
+            theme: {
+            },
+            defaultCountry: "VN",
+            initialEmail: "example.com",
+            initialPhoneCountryPrefix: "+84"
 
         });
-      }
-    
-      onLogin(token) {
+    }
+
+    onLogin(token) {
         if (!token) {
-          console.warn("User canceled login");
-          this.setState({});
+            console.warn("User canceled login");
+            this.setState({});
         } else {
-          AccountKit.getCurrentAccount().then(account => {
-            console.log(account)
-            this.setState({
-              authToken: token,
-              loggedAccount: account
+            AccountKit.getCurrentAccount().then(account => {
+                console.log(account)
+                this.setState({
+                    authToken: token,
+                    loggedAccount: account
+                });
+                this.props.navigation.navigate('ConfirmRegister')
             });
-          });
         }
-      }
-    
-      onLoginError(e) {
+    }
+
+    onLoginError(e) {
         console.log("Failed to login", e);
-      }
+    }
     render() {
         return (
             <View style={styles.container}>
