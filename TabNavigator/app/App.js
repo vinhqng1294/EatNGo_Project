@@ -5,14 +5,26 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import HomeScreen from './HomeScreen';
 import ActiveOrderScreen from './ActiveOrderScreen';
 import ProfileScreen from './ProfileScreen';
+import MenuScreen from './MenuScreen';
 
-const HomeStack = createStackNavigator({
-  "Restaurants": { screen: HomeScreen },
-});
+const HomeStack = createStackNavigator(
+  {
+    "Restaurants": { screen: HomeScreen },
+    "Menu": { screen: MenuScreen },
+  },
+  {
+    initialRouteName: 'Menu',
+  }
+);
 
-const ActiveOrderStack = createStackNavigator({
-  "Active Orders": { screen: ActiveOrderScreen },
-});
+const ActiveOrderStack = createStackNavigator(
+  {
+    "Active Orders": { screen: ActiveOrderScreen },
+  },
+  {
+    initialRouteName: 'Active Orders',
+  }
+);
 
 const ProfileStack = createStackNavigator({
   "Profile": { screen: ProfileScreen },
@@ -50,7 +62,7 @@ const TabNavigator = createBottomTabNavigator(
         }
 
         // You can return any component that you like here!
-        return <IconComponent name={iconName} size={20} color={tintColor} solid/>;
+        return <IconComponent name={iconName} size={20} color={tintColor} solid />;
       },
     }),
   }

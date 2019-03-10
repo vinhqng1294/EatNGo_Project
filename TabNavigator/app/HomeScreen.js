@@ -6,13 +6,14 @@ import {
     FlatList,
     ImageBackground,
     Text,
+    ScrollView,
 } from 'react-native';
 
 type Props = {};
 export default class HomeScreen extends Component<Props> {
     render() {
         return (
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
                 {/* first row */}
                 <ImageBackground style={styles.row}
                     source={require('../Assets/resA.jpg')}>
@@ -134,8 +135,72 @@ export default class HomeScreen extends Component<Props> {
                         </View>
                     </View>
                 </ImageBackground>
+                
+                {/* no image row */}
+                <ImageBackground style={styles.row}
+                    source={require('../Assets/resDefault_1.png')}
+                    imageStyle={{ resizeMode: 'contain' }}>
+                    <View style={styles.rowContentNoImage}>
+                        <View style={styles.restaurantNameContainer}>
+                            <Text numberOfLines={1} style={styles.restaurantName}>
+                                Eat'n'Go Food Shop
+                        </Text>
+                        </View>
+                        <View style={styles.miniDetailsContainer}>
+                            <View style={styles.distance}>
+                                <Text numberOfLines={1} style={styles.distanceTxt}>
+                                    16.5 mi
+                            </Text>
+                                <Text numberOfLines={1} style={styles.streetName}>
+                                    Quang Trung street
+                                </Text>
+                                {/* <Text style={styles.remainingSeat}>
+                                5
+                            </Text> */}
+                            </View>
+                            <TouchableOpacity style={styles.button}>
+                                <Text style={styles.btnText}>Take-away</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.button}>
+                                <Text style={styles.btnText}>Dine-in</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </ImageBackground>
 
-            </View>
+                {/* no image row */}
+                <ImageBackground style={styles.row}
+                    source={require('../Assets/resDefault_1.png')}
+                    imageStyle={{ resizeMode: 'contain' }}>
+                    <View style={styles.rowContentNoImage}>
+                        <View style={styles.restaurantNameContainer}>
+                            <Text numberOfLines={1} style={styles.restaurantName}>
+                                Eat'n'Go Food Shop
+                        </Text>
+                        </View>
+                        <View style={styles.miniDetailsContainer}>
+                            <View style={styles.distance}>
+                                <Text numberOfLines={1} style={styles.distanceTxt}>
+                                    16.5 mi
+                            </Text>
+                                <Text numberOfLines={1} style={styles.streetName}>
+                                    Quang Trung street
+                                </Text>
+                                {/* <Text style={styles.remainingSeat}>
+                                5
+                            </Text> */}
+                            </View>
+                            <TouchableOpacity style={styles.button}>
+                                <Text style={styles.btnText}>Take-away</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.button}>
+                                <Text style={styles.btnText}>Dine-in</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </ImageBackground>
+
+            </ScrollView>
         );
     }
 }
