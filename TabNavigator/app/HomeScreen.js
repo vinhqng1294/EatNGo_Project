@@ -25,7 +25,7 @@ export default class HomeScreen extends Component<Props> {
                         <View style={styles.miniDetailsContainer}>
                             <View style={styles.distance}>
                                 <Text numberOfLines={1} style={styles.distanceTxt}>
-                                    12.5 mi
+                                    1.5 mi
                                 </Text>
                             </View>
                             <TouchableOpacity style={styles.button}>
@@ -44,13 +44,13 @@ export default class HomeScreen extends Component<Props> {
                     <View style={styles.rowContent}>
                         <View style={styles.restaurantNameContainer}>
                             <Text numberOfLines={1} style={styles.restaurantName}>
-                                Eat'n'Go Food Shop
+                                Tokyo Deli
                         </Text>
                         </View>
                         <View style={styles.miniDetailsContainer}>
                             <View style={styles.distance}>
                                 <Text numberOfLines={1} style={styles.distanceTxt}>
-                                    12.5 mi
+                                    6.5 mi
                             </Text>
                                 {/* <Text style={styles.remainingSeat}>
                                 5
@@ -72,13 +72,42 @@ export default class HomeScreen extends Component<Props> {
                     <View style={styles.rowContent}>
                         <View style={styles.restaurantNameContainer}>
                             <Text numberOfLines={1} style={styles.restaurantName}>
+                                Sushi Kei
+                        </Text>
+                        </View>
+                        <View style={styles.miniDetailsContainer}>
+                            <View style={styles.distance}>
+                                <Text numberOfLines={1} style={styles.distanceTxt}>
+                                    16.5 mi
+                            </Text>
+                                {/* <Text style={styles.remainingSeat}>
+                                5
+                            </Text> */}
+                            </View>
+                            <TouchableOpacity style={styles.button}>
+                                <Text style={styles.btnText}>Take-away</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.button}>
+                                <Text style={styles.btnText}>Dine-in</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </ImageBackground>
+
+                {/* no image row */}
+                <ImageBackground style={styles.row}
+                    source={require('../Assets/resDefault_1.png')}
+                    imageStyle={{resizeMode: 'contain'}}>
+                    <View style={styles.rowContentNoImage}>
+                        <View style={styles.restaurantNameContainer}>
+                            <Text numberOfLines={1} style={styles.restaurantName}>
                                 Eat'n'Go Food Shop
                         </Text>
                         </View>
                         <View style={styles.miniDetailsContainer}>
                             <View style={styles.distance}>
                                 <Text numberOfLines={1} style={styles.distanceTxt}>
-                                    12.5 mi
+                                    16.5 mi
                             </Text>
                                 {/* <Text style={styles.remainingSeat}>
                                 5
@@ -107,39 +136,49 @@ const styles = StyleSheet.create({
     },
     row: {
         flex: 0,
-        // backgroundColor: 'purple',
+        backgroundColor: 'rgba(0, 0, 0, .6)',
         height: 100,
         width: null,
         margin: 5,
-        resizeMode: 'cover',
-        backgroundColor: 'gray',
+        // resizeMode: 'contain',
+    },
+    rowContentNoImage: {
+        backgroundColor: 'rgba(84, 179, 61, .27)',
+        flex: 0,
+        height: 100,
+        width: null,
     },
     rowContent: {
-        backgroundColor: 'rgba(0, 0, 0, .45)',
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, .6)',
+        flex: 0,
+        height: 100,
+        width: null,
     },
     normalText: {
         fontSize: 18,
-        fontFamily: 'Quicksand',
+        fontFamily: 'Quicksand-Regular',
     },
     restaurantNameContainer: {
-        flex: 1,
+        flex: 2,
         justifyContent: 'center',
-        width: null,
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, .0)',
     },
     restaurantName: {
         textAlign: 'center',
-        justifyContent: 'center',
-        fontFamily: 'Quicksand',
+        fontFamily: 'Quicksand-Medium',
         fontSize: 22,
-        fontWeight: 'bold',
         color: '#EBEBEB',
+        padding: 3,
+        width: null,
+        height: null,
     },
     miniDetailsContainer: {
         flex: 1,
         flexDirection: 'row',
+        backgroundColor: 'rgba(84, 179, 61, .2)',
+        marginTop: 10,
+        marginBottom: 10,
     },
     distance: {
         flex: 1,
@@ -150,12 +189,11 @@ const styles = StyleSheet.create({
     },
     distanceTxt: {
         textAlign: 'center',
-        fontFamily: 'Quicksand',
-        fontSize: 18,
+        fontFamily: 'Quicksand-Medium',
+        fontSize: 16,
         color: '#EBEBEB',
         // backgroundColor: 'green',
         marginLeft: 10,
-        fontStyle: 'italic',
     },
     button: {
         flex: 0,
@@ -164,12 +202,11 @@ const styles = StyleSheet.create({
         margin: 5,
     },
     btnText: {
-        backgroundColor: 'green',
+        backgroundColor: '#54b33d',
         padding: 5,
         color: '#EBEBEB',
-        fontFamily: 'Quicksand',
+        fontFamily: 'Quicksand-Bold',
         fontSize: 15,
-        fontWeight: "bold",
         borderWidth: 0,
     }
 });
