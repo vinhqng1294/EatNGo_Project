@@ -27,6 +27,9 @@ export default class HomeScreen extends Component<Props> {
                                 <Text numberOfLines={1} style={styles.distanceTxt}>
                                     1.5 mi
                                 </Text>
+                                <Text numberOfLines={1} style={styles.streetName}>
+                                    Quang Trung street
+                                </Text>
                             </View>
                             <TouchableOpacity style={styles.button}>
                                 <Text style={styles.btnText}>Take-away</Text>
@@ -51,7 +54,10 @@ export default class HomeScreen extends Component<Props> {
                             <View style={styles.distance}>
                                 <Text numberOfLines={1} style={styles.distanceTxt}>
                                     6.5 mi
-                            </Text>
+                                </Text>
+                                <Text numberOfLines={1} style={styles.streetName}>
+                                    Hai Ba Trung street
+                                </Text>
                                 {/* <Text style={styles.remainingSeat}>
                                 5
                             </Text> */}
@@ -80,6 +86,9 @@ export default class HomeScreen extends Component<Props> {
                                 <Text numberOfLines={1} style={styles.distanceTxt}>
                                     16.5 mi
                             </Text>
+                                <Text numberOfLines={1} style={styles.streetName}>
+                                    Ba Huyen Thanh Quang street
+                                </Text>
                                 {/* <Text style={styles.remainingSeat}>
                                 5
                             </Text> */}
@@ -97,7 +106,7 @@ export default class HomeScreen extends Component<Props> {
                 {/* no image row */}
                 <ImageBackground style={styles.row}
                     source={require('../Assets/resDefault_1.png')}
-                    imageStyle={{resizeMode: 'contain'}}>
+                    imageStyle={{ resizeMode: 'contain' }}>
                     <View style={styles.rowContentNoImage}>
                         <View style={styles.restaurantNameContainer}>
                             <Text numberOfLines={1} style={styles.restaurantName}>
@@ -109,6 +118,9 @@ export default class HomeScreen extends Component<Props> {
                                 <Text numberOfLines={1} style={styles.distanceTxt}>
                                     16.5 mi
                             </Text>
+                                <Text numberOfLines={1} style={styles.streetName}>
+                                    Quang Trung street
+                                </Text>
                                 {/* <Text style={styles.remainingSeat}>
                                 5
                             </Text> */}
@@ -137,7 +149,7 @@ const styles = StyleSheet.create({
     row: {
         flex: 0,
         backgroundColor: 'rgba(0, 0, 0, .6)',
-        height: 100,
+        height: 110,
         width: null,
         margin: 5,
         // resizeMode: 'contain',
@@ -145,13 +157,13 @@ const styles = StyleSheet.create({
     rowContentNoImage: {
         backgroundColor: 'rgba(84, 179, 61, .27)',
         flex: 0,
-        height: 100,
+        height: 110,
         width: null,
     },
     rowContent: {
         backgroundColor: 'rgba(0, 0, 0, .6)',
         flex: 0,
-        height: 100,
+        height: 110,
         width: null,
     },
     normalText: {
@@ -159,7 +171,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Quicksand-Regular',
     },
     restaurantNameContainer: {
-        flex: 2,
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, .0)',
@@ -182,7 +194,8 @@ const styles = StyleSheet.create({
     },
     distance: {
         flex: 1,
-        margin: 5,
+        marginLeft: 5,
+        marginRight: 5,
         justifyContent: 'center',
         alignItems: 'flex-start',
         // backgroundColor: 'gray',
@@ -190,10 +203,20 @@ const styles = StyleSheet.create({
     distanceTxt: {
         textAlign: 'center',
         fontFamily: 'Quicksand-Medium',
-        fontSize: 16,
+        fontSize: 15,
         color: '#EBEBEB',
         // backgroundColor: 'green',
         marginLeft: 10,
+    },
+    streetName: {
+        textAlign: 'left',
+        fontFamily: 'Quicksand-Regular',
+        fontSize: 15,
+        color: '#EBEBEB',
+        // backgroundColor: 'green',
+        marginLeft: 10,
+        // width: 190,
+        maxWidth: 190,
     },
     button: {
         flex: 0,
