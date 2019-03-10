@@ -23,7 +23,6 @@ export default class WelcomeScreen extends Component<Props> {
 
     componentWillMount() {
         this.configureAccountKit();
-
         AccountKit.getCurrentAccessToken()
             .then(token => {
                 if (token) {
@@ -62,7 +61,7 @@ export default class WelcomeScreen extends Component<Props> {
                     authToken: token,
                     loggedAccount: account
                 });
-                this.props.navigation.navigate('ConfirmRegister')
+                this.props.navigation.navigate('Register')
             });
         }
     }
@@ -74,7 +73,7 @@ export default class WelcomeScreen extends Component<Props> {
         return (
             <View style={styles.container}>
                 <View style={styles.logoTitleContainer}>
-                    <Image source={require('../Assets/eatngo_logo_trans.png')}
+                    <Image source={require('../../Assets/eatngo_logo_trans.png')}
                         style={styles.logoImg} />
                 </View>
 
@@ -84,19 +83,21 @@ export default class WelcomeScreen extends Component<Props> {
                     </Text>
                     <TouchableOpacity style={styles.option}>
                         {/* onPress = () => {}; */}
-                        <Image source={require('../Assets/facebook.png')}
+                        <Image source={require('../../Assets/facebook.png')}
                             style={styles.img} />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.option}>
-                        {/* onPress = () => {}; */}
-                        <Image source={require('../Assets/google.png')}
+                    <TouchableOpacity style={styles.option}
+                        onPress={() => {
+                            this.props.navigation.navigate('Register')
+                        }}>
+                        <Image source={require('../../Assets/google.png')}
                             style={styles.img} />
                     </TouchableOpacity>
                     <LoginButton style={styles.option}
-                        type="phone"
+                         type="phone"
                         onLogin={(token) => this.onLogin(token)} onError={(e) => this.onLogin(e)}>
                         {/* onPress = () => {}; */}
-                        <Image source={require('../Assets/mobile.png')}
+                        <Image source={require('../../Assets/mobile.png')}
                             style={styles.img} />
                     </LoginButton>
                 </View>
