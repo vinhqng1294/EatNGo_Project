@@ -19,61 +19,61 @@ export default class WelcomeScreen extends Component<Props> {
     state = {
         authToken: null,
         loggedAccount: null
-      };
-    
-      componentWillMount() {
+    };
+
+    componentWillMount() {
         this.configureAccountKit();
-    
         AccountKit.getCurrentAccessToken()
-          .then(token => {
-            if (token) {
-              AccountKit.getCurrentAccount().then(account => {
-                this.setState({
-                  authToken: token,
-                  loggedAccount: account
-                });
-              });
-            } else {
-              console.log("No user account logged");
-            }
-          })
-          .catch(e => console.log("Failed to get current access token", e));
-      }
-    
-      configureAccountKit() {
+            .then(token => {
+                if (token) {
+                    AccountKit.getCurrentAccount().then(account => {
+                        this.setState({
+                            authToken: token,
+                            loggedAccount: account
+                        });
+                    });
+                } else {
+                    console.log("No user account logged");
+                }
+            })
+            .catch(e => console.log("Failed to get current access token", e));
+    }
+
+    configureAccountKit() {
         AccountKit.configure({
-          theme: {
-          },
-          defaultCountry: "VN",
-          initialEmail: "example.com",
-          initialPhoneCountryPrefix: "+84"
+            theme: {
+            },
+            defaultCountry: "VN",
+            initialEmail: "example.com",
+            initialPhoneCountryPrefix: "+84"
 
         });
-      }
-    
-      onLogin(token) {
+    }
+
+    onLogin(token) {
         if (!token) {
-          console.warn("User canceled login");
-          this.setState({});
+            console.warn("User canceled login");
+            this.setState({});
         } else {
-          AccountKit.getCurrentAccount().then(account => {
-            console.log(account)
-            this.setState({
-              authToken: token,
-              loggedAccount: account
+            AccountKit.getCurrentAccount().then(account => {
+                console.log(account)
+                this.setState({
+                    authToken: token,
+                    loggedAccount: account
+                });
+                this.props.navigation.navigate('Register')
             });
-          });
         }
-      }
-    
-      onLoginError(e) {
+    }
+
+    onLoginError(e) {
         console.log("Failed to login", e);
-      }
+    }
     render() {
         return (
             <View style={styles.container}>
                 <View style={styles.logoTitleContainer}>
-                    <Image source={require('../Assets/eatngo_logo_trans.png')}
+                    <Image source={require('../../Assets/eatngo_logo_trans.png')}
                         style={styles.logoImg} />
                 </View>
 
@@ -83,19 +83,21 @@ export default class WelcomeScreen extends Component<Props> {
                     </Text>
                     <TouchableOpacity style={styles.option}>
                         {/* onPress = () => {}; */}
-                        <Image source={require('../Assets/facebook.png')}
+                        <Image source={require('../../Assets/facebook.png')}
                             style={styles.img} />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.option}>
-                        {/* onPress = () => {}; */}
-                        <Image source={require('../Assets/google.png')}
+                    <TouchableOpacity style={styles.option}
+                        onPress={() => {
+                            this.props.navigation.navigate('Register')
+                        }}>
+                        <Image source={require('../../Assets/google.png')}
                             style={styles.img} />
                     </TouchableOpacity>
                     <LoginButton style={styles.option}
                         type="phone"
                         onLogin={(token) => this.onLogin(token)} onError={(e) => this.onLogin(e)}>
                         {/* onPress = () => {}; */}
-                        <Image source={require('../Assets/mobile.png')}
+                        <Image source={require('../../Assets/mobile.png')}
                             style={styles.img} />
                     </LoginButton>
                 </View>
@@ -139,7 +141,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 18,
         color: '#878787',
-        fontFamily: 'Quicksand',
+        fontFamily: 'Quicksand-Medium',
     },
     option: {
         flex: 1,
