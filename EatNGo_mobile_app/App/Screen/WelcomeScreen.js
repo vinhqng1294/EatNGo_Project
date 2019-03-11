@@ -94,7 +94,7 @@ export default class WelcomeScreen extends Component<Props> {
                             style={styles.img} />
                     </TouchableOpacity>
                     <LoginButton style={styles.option}
-                         type="phone"
+                        type="phone"
                         onLogin={(token) => this.onLogin(token)} onError={(e) => this.onLogin(e)}>
                         {/* onPress = () => {}; */}
                         <Image source={require('../../Assets/mobile.png')}
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 18,
         color: '#878787',
-        fontFamily: 'Quicksand',
+        fontFamily: 'Quicksand-Medium',
     },
     option: {
         flex: 1,
