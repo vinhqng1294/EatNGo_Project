@@ -29,8 +29,14 @@ class RegisterScreen extends Component {
         }
     }
     handleSignUp() {
-        const { name, email } = this.state;
-        this.props.authRegister(email, "123456")
+
+        const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: 'Home' })],
+        });
+        this.props.navigation.dispatch(resetAction);
+        // const { name, email } = this.state;
+        // this.props.authRegister(email, "123456")
 
     }
     // shouldComponentUpdate(nextProps, nextState){
@@ -51,20 +57,16 @@ class RegisterScreen extends Component {
         }
         return (
             <View style={styles.container} >
-                <Text style={{
-                    fontWeight: 'bold',
-                    fontSize: 16,
-                    color: 'black'
-                }}>How should we contact you?</Text>
+                <Text style={styles.question}>How should we contact you?</Text>
                 <TextInput
                     style={styles.input}
-                    placeholder="Your name"
+                    placeholder="Please enter your name"
                     onChangeText={(text) => this.setState({ name: text })}
                     value={this.state.name}
                 />
                 <TextInput
                     style={styles.input}
-                    placeholder="Your Email"
+                    placeholder="Please enter your email"
                     onChangeText={(text) => this.setState({ email: text })}
                     value={this.state.email}
                 />
@@ -81,7 +83,7 @@ class RegisterScreen extends Component {
                             this.handleSignUp()
                         }
                     }}>
-                    <Text style={{ textAlign: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold' }}>DONE</Text>
+                    <Text style={styles.submitButtonText}>FINISH</Text>
 
                 </TouchableOpacity>
             </View>
@@ -92,22 +94,34 @@ class RegisterScreen extends Component {
 const styles = StyleSheet.create({
     container: {
         padding: 15,
-        marginBottom: 10
+        marginBottom: 10,
+    },
+    question: {
+        fontFamily: 'Quicksand-Bold',
+        color: 'black',
+        fontSize: 20,
     },
     input: {
         height: 50,
         fontSize: 18,
-        borderColor: '#9FA6AD',
-        borderBottomWidth: 1
+        fontFamily: 'Quicksand-Regular',
+        borderColor: '#EBEBEB',
+        borderBottomWidth: 1,
     },
     submitButton: {
         marginTop: 15,
-        backgroundColor: 'green',
-        padding: 15,
+        backgroundColor: '#54b33d',
         height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     submitButtonText: {
-        color: 'white'
+        // backgroundColor: 'black',
+        textAlign: 'center',
+        justifyContent: 'center',
+        color: '#EBEBEB',
+        fontFamily: 'Quicksand-Bold',
+        fontSize: 18,
     }
 })
 

@@ -8,14 +8,17 @@ import {
     Text,
     TouchableOpacity,
     Image,
+    StatusBar,
 } from 'react-native';
+
 import AccountKit, {
     LoginButton,
     Color,
     StatusBarStyle,
-} from 'react-native-facebook-account-kit'
-type Props = {};
-export default class WelcomeScreen extends Component<Props> {
+} from 'react-native-facebook-account-kit';
+import { RotationGestureHandler } from 'react-native-gesture-handler';
+
+export default class WelcomeScreen extends Component {
     state = {
         authToken: null,
         loggedAccount: null
@@ -72,6 +75,7 @@ export default class WelcomeScreen extends Component<Props> {
     render() {
         return (
             <View style={styles.container}>
+                <StatusBar backgroundColor="#EBEBEB" barStyle="dark-content" />
                 <View style={styles.logoTitleContainer}>
                     <Image source={require('../../Assets/eatngo_logo_trans.png')}
                         style={styles.logoImg} />

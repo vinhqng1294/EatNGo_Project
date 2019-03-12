@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
     StyleSheet,
     View,
+    StatusBar,
     TouchableOpacity,
     FlatList,
     ImageBackground,
@@ -13,6 +14,7 @@ export default class HomeScreen extends Component {
     render() {
         return (
             <ScrollView style={styles.container}>
+                <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
                 {/* first row */}
                 <ImageBackground style={styles.row}
                     source={require('../../Assets/resA.jpg')}>
