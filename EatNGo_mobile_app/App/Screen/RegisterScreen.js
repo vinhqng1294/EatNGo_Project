@@ -29,8 +29,13 @@ class RegisterScreen extends Component {
         }
     }
     handleSignUp() {
-        const { name, email } = this.state;
-        this.props.authRegister(email, "123456")
+        const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: 'Home' })],
+        });
+        this.props.navigation.dispatch(resetAction);
+        // const { name, email } = this.state;
+        // this.props.authRegister(email, "123456")
 
     }
     // shouldComponentUpdate(nextProps, nextState){
