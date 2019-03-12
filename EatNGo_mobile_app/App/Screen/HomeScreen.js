@@ -33,7 +33,8 @@ export default class HomeScreen extends Component {
                                     Quang Trung street
                                 </Text>
                             </View>
-                            <TouchableOpacity style={styles.button}>
+                            <TouchableOpacity style={styles.button}
+                                onPress={() => {this.props.navigation.navigate('Menu')}}>
                                 <Text style={styles.btnText}>Take-away</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.button}>

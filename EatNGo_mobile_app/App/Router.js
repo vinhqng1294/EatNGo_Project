@@ -16,7 +16,7 @@ const HomeStack = createStackNavigator(
         "Menu": { screen: MenuScreen },
     },
     {
-        initialRouteName: 'Menu',
+        initialRouteName: 'Restaurants',
     }
 );
 
@@ -76,11 +76,10 @@ const AppNavigator = createStackNavigator(
         Welcome: { screen: WelcomeScreen },
         Register: { screen: RegisterScreen },
         Home: { screen: TabNavigator },
-        "Menu": { screen: MenuScreen },
     },
     {
-        initialRouteName: 'Menu',
-        // headerMode: 'none',
+        initialRouteName: 'Home',
+        headerMode: 'none',
     },
 );
 let Navigation = createAppContainer(AppNavigator);
