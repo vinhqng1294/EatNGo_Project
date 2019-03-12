@@ -7,14 +7,16 @@ import RegisterScreen from './Screen/RegisterScreen';
 import HomeScreen from './Screen/HomeScreen';
 import ActiveOrderScreen from './Screen/ActiveOrderScreen';
 import ProfileScreen from './Screen/ProfileScreen';
+import MenuScreen from './Screen/MenuScreen';
 
 
 const HomeStack = createStackNavigator(
     {
-        "Restaurants": { screen: HomeScreen }
+        "Restaurants": { screen: HomeScreen },
+        "Menu": { screen: MenuScreen },
     },
     {
-        initialRouteName: 'Restaurants',
+        initialRouteName: 'Menu',
     }
 );
 
@@ -73,10 +75,12 @@ const AppNavigator = createStackNavigator(
     {
         Welcome: { screen: WelcomeScreen },
         Register: { screen: RegisterScreen },
-        Home: { screen: TabNavigator }
+        Home: { screen: TabNavigator },
+        "Menu": { screen: MenuScreen },
     },
     {
-        initialRouteName: 'Welcome'
+        initialRouteName: 'Menu',
+        // headerMode: 'none',
     },
 );
 let Navigation = createAppContainer(AppNavigator);

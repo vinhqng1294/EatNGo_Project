@@ -11,6 +11,8 @@
     "react": "16.6.3",
     "react-native": "0.58.6",
     "react-native-button": "^2.3.0",
+    "react-native-check-box": "^2.1.7",
+    "react-native-elements": "^1.1.0",
     "react-native-facebook-account-kit": "^1.1.0",
     "react-native-gesture-handler": "^1.0.16",
     "react-native-vector-icons": "^6.3.0",
@@ -21,12 +23,12 @@
     "babel-jest": "24.1.0",
     "jest": "24.1.0",
     "metro-react-native-babel-preset": "0.52.0",
-    "react-test-renderer": "16.6.3",
+    "react-navigation": "^3.3.2",
     "react-redux": "^6.0.1",
     "react-saga": "^0.2.6",
+    "react-test-renderer": "16.6.3",
     "redux": "^4.0.1",
-    "redux-saga": "^1.0.2",
-    "react-navigation": "^3.3.2"
+    "redux-saga": "^1.0.2"
   },
   "jest": {
     "preset": "react-native"
