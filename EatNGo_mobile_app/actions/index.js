@@ -21,8 +21,8 @@ export const fetchCuisineTypes = () => ({
   type: 'FETCH_CUISINE_TYPES',
 });
 
-export const fetchRestaurant = (id = null) => ({
-  type: 'FETCH_RESTAURANT',
+export const fetchStore = (id = null) => ({
+  type: 'FETCH_STORE',
   payload: {
     id,
   },
