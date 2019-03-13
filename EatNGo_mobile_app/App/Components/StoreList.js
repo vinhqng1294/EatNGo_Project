@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { FlatList, Image, View } from 'react-native';
 import StoreItem from './StoreItem'
+import { withNavigation } from 'react-navigation';
 class StoreList extends Component{
     renderStoreList = ({ item: store }) => {
         if (store) {
@@ -8,14 +9,15 @@ class StoreList extends Component{
             <StoreItem
               store={store}
               onPress={() => {
-                  console.log(JSON.stringify(store))
+                 this.props.navigation.navigate('Menu')
               }}
             />
           );
         }
         return null;
       };
-
+      
+      
       renderStoreSection = () => (        
             <FlatList
               data={this.props.storeList}
@@ -31,4 +33,4 @@ class StoreList extends Component{
           )
       }
 }
-export default StoreList
+export default withNavigation(StoreList)

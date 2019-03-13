@@ -12,11 +12,10 @@ import MenuScreen from './Screen/MenuScreen';
 
 const HomeStack = createStackNavigator(
     {
-        "Restaurants": { screen: HomeScreen },
-        "Menu": { screen: MenuScreen },
+        "Restaurants": { screen: HomeScreen }
     },
     {
-        initialRouteName: 'Menu',
+        initialRouteName: 'Restaurants',
     }
 );
 
@@ -76,7 +75,7 @@ const AppNavigator = createStackNavigator(
         Welcome: { screen: WelcomeScreen },
         Register: { screen: RegisterScreen },
         Home: { screen: TabNavigator },
-        Menu: { screen: MenuScreen },
+        Menu: { screen: MenuScreen }
     },
     {
         initialRouteName: 'Home',

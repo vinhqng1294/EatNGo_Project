@@ -1,0 +1,21 @@
+{
+    "parser": "babel-eslint",
+    "plugins": [
+        "react",
+        "react-native",
+        "import"
+    ],
+    "extends": [
+        "eslint:recommended",
+        "plugin:import/errors",
+        "plugin:import/warnings",
+        "plugin:react/recommended"
+    ],
+    "rules": {
+        "class-methods-use-this": "off",
+        "no-use-before-define": "off"
+    },
+    "env": {
+        "react-native/react-native": true
+    }
+}
