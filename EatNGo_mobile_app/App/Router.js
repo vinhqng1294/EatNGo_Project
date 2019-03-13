@@ -76,11 +76,11 @@ const AppNavigator = createStackNavigator(
         Welcome: { screen: WelcomeScreen },
         Register: { screen: RegisterScreen },
         Home: { screen: TabNavigator },
-        "Menu": { screen: MenuScreen },
+        Menu: { screen: MenuScreen },
     },
     {
-        initialRouteName: 'Menu',
-        // headerMode: 'none',
+        initialRouteName: 'Home',
+        headerMode: 'none',
     },
 );
 let Navigation = createAppContainer(AppNavigator);
