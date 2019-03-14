@@ -80,7 +80,7 @@ const AppNavigator = createStackNavigator(
         FoodDetail: { screen: FoodDetailScreen },
     },
     {
-        initialRouteName: 'Home',
+        initialRouteName: 'Welcome',
         headerMode: 'none',
     },
 );

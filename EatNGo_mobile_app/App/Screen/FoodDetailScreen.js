@@ -14,6 +14,8 @@ import {
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import CheckBox from 'react-native-check-box';
+import NumericInput from 'react-native-numeric-input';
+import ActionButton from 'react-native-action-button';
 
 export default class MenuScreen extends Component {
     constructor() {
@@ -21,56 +23,63 @@ export default class MenuScreen extends Component {
         this.state = {
             checked: true,
             radioButton: 'y1',
+            food: [
+                {
+                    name: 'Banh Trang tron',
+                    price: 13,
+                    imgURL: require('../../Assets/resA.jpg'),
+                    description: 'No Ice Added! Includes Strawberry, Blueberry, Banana, Pineapple (comes with Basil Seed Pudding and Flaxseed as topping).',
+                    extraOptions: [
+                        {
+                            categoryName: 'Sauce',
+                            items: [
+                                {
+                                    name: 'Egg',
+                                    price: 1
+                                },
+                                {
+                                    name: 'Banana',
+                                    price: 2
+                                }
+                            ]
+                        },
+                        {
+                            categoryName: 'Toppings',
+                            items: [
+                                {
+                                    name: 'Topping 1',
+                                    price: 3
+                                },
+                                {
+                                    name: 'Topping 2',
+                                    price: 4
+                                }
+                            ]
+                        }
+
+                    ]
+                }
+            ]
         };
     }
     render() {
-        const food = {
-            name: 'Food 1',
-            price: 13,
-            options: [
-                {
-                    categoryName: 'Sauce',
-                    items: [
-                        {
-                            name: 'Egg',
-                            price: 1
-                        },
-                        {
-                            name: 'Banana',
-                            price: 2
-                        }
-                    ]
-                },
-                {
-                    categoryName: 'Toppings',
-                    items: [
-                        {
-                            name: 'Topping 1',
-                            price: 3
-                        },
-                        {
-                            name: 'Topping 2',
-                            price: 4
-                        }
-                    ]
-                }
-
-            ]
-        };
         return (
             <ScrollView style={styles.container}>
                 <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
+                {/* <ActionButton
+                    buttonColor={'#54b33d'}
+                    icon={<FontAwesome5 name={'plus'} size={20} color={'#EBEBEB'} solid />}
+                /> */}
+
                 <Image style={styles.foodImg}
-                    source={require('../../Assets/resC.jpg')}>
-                </Image>
+                    source={this.state.food[0].imgURL} />
                 <View style={styles.miniHeader}>
-                    <Text numberOfLines={2} style={styles.foodName}>Banh Trang Tron asda dsasa sadsad adsddddddd</Text>
-                    <Text numberOfLines={1} style={styles.foodPrice}>$ 12.99</Text>
+                    <Text numberOfLines={2} style={styles.foodName}>{this.state.food[0].name}</Text>
+                    <Text numberOfLines={1} style={styles.foodPrice}>$ {this.state.food[0].price}</Text>
                 </View>
                 <View style={styles.descriptionContainer}>
                     <Text style={styles.descriptionTxt}>
-                        No Ice Added! Includes Strawberry, Blueberry, Banana, Pineapple
-                        (comes with Basil Seed Pudding and Flaxseed as topping)
+                        {this.state.food[0].description}
                     </Text>
                 </View>
 
@@ -258,7 +267,28 @@ export default class MenuScreen extends Component {
                     </View>
                 </View>
 
+                <View style={styles.numericInputContainer}>
+                    <NumericInput
+                        // value={this.state.value}
+                        // onChange={value => this.setState({ value })}
+                        onChange={() => { }}
+                        inputStyle={styles.numericInput}
+                        totalWidth={180}
+                        totalHeight={40}
+                        step={1}
+                        valueType='integer'
+                        initValue={1}
+                        minValue={1}
+                        maxValue={50}
+                        rounded
+                        textColor='black'
+                        iconStyle={{ color: '#EBEBEB' }}
+                        rightButtonBackgroundColor='#54b33d'
+                        leftButtonBackgroundColor='#54b33d' />
+                </View>
+
             </ScrollView>
+
         );
     }
 }
@@ -451,6 +481,23 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         borderLeftWidth: .6,
         borderLeftColor: '#54b33d',
-    }
-
+    },
+    numericInputContainer: {
+        flex: 0,
+        width: null,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 20,
+        marginBottom: 20,
+    },
+    numericInput: {
+        fontFamily: 'Quicksand-Medium',
+        backgroundColor: 'white',
+    },
+    addFood: {
+        position: 'absolute',
+        left: 0,
+        top: 100,
+        backgroundColor: 'yellow',
+    },
 });
