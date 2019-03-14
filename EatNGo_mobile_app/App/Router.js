@@ -8,6 +8,7 @@ import HomeScreen from './Screen/HomeScreen';
 import ActiveOrderScreen from './Screen/ActiveOrderScreen';
 import ProfileScreen from './Screen/ProfileScreen';
 import MenuScreen from './Screen/MenuScreen';
+import FoodDetailScreen from './Screen/FoodDetailScreen';
 
 
 const HomeStack = createStackNavigator(
@@ -75,7 +76,8 @@ const AppNavigator = createStackNavigator(
         Welcome: { screen: WelcomeScreen },
         Register: { screen: RegisterScreen },
         Home: { screen: TabNavigator },
-        Menu: { screen: MenuScreen }
+        Menu: { screen: MenuScreen },
+        FoodDetail: { screen: FoodDetailScreen },
     },
     {
         initialRouteName: 'Home',
