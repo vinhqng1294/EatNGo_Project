@@ -7,6 +7,42 @@ function getStore(id = null, headers = null) {
     params = {
       id,
     };
+    return {
+      status : 200,
+      id: 2,
+      data : [
+        {
+            type: 'Main Food',
+            foods: [
+                {
+                    name: 'Banh Trang Tron',
+                    img: '',
+                    price: 13
+                },
+                {
+                    name: 'Bun Bo Hue',
+                    img: '',
+                    price: 14,
+                }
+            ]
+        },
+        {
+            type: 'Drinks',
+            foods: [
+                {
+                    name: 'Banh Trang Tron',
+                    img: '',
+                    price: 33
+                },
+                {
+                    name: 'Bun Bo Hue',
+                    img: '',
+                    price: 22,
+                }
+            ]
+        }
+    ]
+    }
   }
   return {
     status: 200,

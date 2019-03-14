@@ -11,7 +11,7 @@ import {
     StatusBar,
 } from 'react-native';
 
-import AccountKit, {
+import RNAccountKit, {
     LoginButton,
     Color,
     StatusBarStyle,
@@ -24,50 +24,33 @@ export default class WelcomeScreen extends Component {
         loggedAccount: null
     };
 
-    componentWillMount() {
+    componentDidMount() {
         this.configureAccountKit();
-        AccountKit.getCurrentAccessToken()
-            .then(token => {
-                if (token) {
-                    AccountKit.getCurrentAccount().then(account => {
-                        this.setState({
-                            authToken: token,
-                            loggedAccount: account
-                        });
-                    });
-                } else {
-                    console.log("No user account logged");
-                }
-            })
-            .catch(e => console.log("Failed to get current access token", e));
     }
 
     configureAccountKit() {
-        AccountKit.configure({
+        RNAccountKit.configure({
             theme: {
             },
             defaultCountry: "VN",
             initialEmail: "example.com",
-            initialPhoneCountryPrefix: "+84"
-
+            initialPhoneCountryPrefix: "+84",
         });
     }
-
-    onLogin(token) {
-        if (!token) {
-            console.warn("User canceled login");
-            this.setState({});
-        } else {
-            AccountKit.getCurrentAccount().then(account => {
-                console.log(account)
-                this.setState({
-                    authToken: token,
-                    loggedAccount: account
-                });
+    handlePhoneLoginButton = async () => {
+        try {
+            const payload = await RNAccountKit.loginWithPhone()
+            if (!payload) {
+                console.warn('Login cancelled', payload)
+            } else {
+                console.log(payload)
                 this.props.navigation.navigate('Register')
-            });
+            }
+        } catch (error) {
+            console.warn('Error', error.message)
         }
     }
+
 
     onLoginError(e) {
         console.log("Failed to login", e);
@@ -97,13 +80,14 @@ export default class WelcomeScreen extends Component {
                         <Image source={require('../../Assets/google.png')}
                             style={styles.img} />
                     </TouchableOpacity>
-                    <LoginButton style={styles.option}
+                    <TouchableOpacity style={styles.option}
                         type="phone"
-                        onLogin={(token) => this.onLogin(token)} onError={(e) => this.onLogin(e)}>
+                        onPress={this.handlePhoneLoginButton}
+                    >
                         {/* onPress = () => {}; */}
                         <Image source={require('../../Assets/mobile.png')}
                             style={styles.img} />
-                    </LoginButton>
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.footer}>

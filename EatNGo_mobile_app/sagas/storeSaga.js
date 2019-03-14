@@ -17,7 +17,7 @@ function* storeTask(action) {
         });
       } else {
         yield put({
-          type: 'FETCH_RESTAURANT_INFO_SUCCESS',
+          type: 'FETCH_STORE_INFO_SUCCESS',
           payload: res.data,
         });
       }
