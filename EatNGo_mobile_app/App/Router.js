@@ -13,10 +13,13 @@ import FoodDetailScreen from './Screen/FoodDetailScreen';
 
 const HomeStack = createStackNavigator(
     {
-        "Restaurants": { screen: HomeScreen }
+        "Restaurants": { screen: HomeScreen },
+        "Menu": { screen: MenuScreen },
+        "FoodDetail": { screen: FoodDetailScreen },
     },
     {
         initialRouteName: 'Restaurants',
+        // headerMode: 'none'
     }
 );
 
@@ -73,15 +76,14 @@ const TabNavigator = createBottomTabNavigator(
 
 const AppNavigator = createStackNavigator(
     {
-        Welcome: { screen: WelcomeScreen },
+        Welcome: { screen: WelcomeScreen, navigationOptions: { header: null } },
         Register: { screen: RegisterScreen },
-        Home: { screen: TabNavigator },
-        Menu: { screen: MenuScreen },
-        FoodDetail: { screen: FoodDetailScreen },
+        Home: { screen: TabNavigator, navigationOptions: { header: null } },
     },
     {
-        initialRouteName: 'Welcome',
-        headerMode: 'none',
+        initialRouteName: 'Home',
+
+        // headerMode: 'none',
     },
 );
 let Navigation = createAppContainer(AppNavigator);

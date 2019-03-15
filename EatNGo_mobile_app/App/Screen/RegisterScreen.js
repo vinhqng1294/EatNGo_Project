@@ -11,8 +11,31 @@ import {
     TextInput,
     TouchableOpacity,
     Image,
+    StatusBar,
 } from 'react-native';
+import { Header } from 'react-native-elements';
+
 class RegisterScreen extends Component {
+    static navigationOptions = {
+        headerTintColor: 'white',
+        headerStyle: { backgroundColor: '#54b33d' },
+        headerRight: <View></View>,
+        headerTitle:
+            <View style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                flex: 1,
+            }}>
+                <Text style={{
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    fontFamily: 'Quicksand-Medium',
+                    fontSize: 20,
+                    color: 'white',
+                }}>Complete Your Registration</Text>
+            </View>
+    };
+
     constructor(props) {
         super(props);
         this.state = {
@@ -56,6 +79,7 @@ class RegisterScreen extends Component {
         }
         return (
             <View style={styles.container} >
+                <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
                 <Text style={styles.question}>How should we contact you?</Text>
                 <TextInput
                     style={styles.input}
@@ -91,6 +115,10 @@ class RegisterScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+    headerTitle: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     container: {
         padding: 15,
         marginBottom: 10,

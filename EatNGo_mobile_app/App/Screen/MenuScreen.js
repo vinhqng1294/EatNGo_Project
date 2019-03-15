@@ -15,6 +15,26 @@ import CheckBox from 'react-native-check-box';
 // import { CheckBox } from 'react-native-elements';
 
 export default class MenuScreen extends Component {
+    static navigationOptions = {
+        headerTintColor: 'white',
+        headerStyle: { backgroundColor: '#54b33d' },
+        headerRight: <View></View>,
+        headerTitle:
+            <View style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                flex: 1,
+            }}>
+                <Text style={{
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    fontFamily: 'Quicksand-Medium',
+                    fontSize: 20,
+                    color: 'white',
+                }}>Complete Your Registration</Text>
+            </View>
+    };
+    
     render() {
         return (
             <ScrollView style={styles.container}>
