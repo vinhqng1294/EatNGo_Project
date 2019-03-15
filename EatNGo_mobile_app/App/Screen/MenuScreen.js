@@ -26,7 +26,7 @@ export default class MenuScreen extends Component {
                     </View>
                     <View style={styles.menuSetItemContainer}>
                         <TouchableOpacity style={styles.menuSetItem}
-                        onPress={() => {this.props.navigation.navigate('Restaurants')}}>
+                        onPress={() => {this.props.navigation.navigate('FoodDetail')}}>
                             <Image style={styles.foodImg} source={require('../../Assets/resA.jpg')} />
                             <View style={styles.itemDetail}>
                                 <Text numberOfLines={1} style={styles.foodName}>Banh Trang Tron</Text>
