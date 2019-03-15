@@ -8,10 +8,11 @@ import {
     ScrollView,
     View,
     Text,
+    StatusBar,
 } from 'react-native';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { SearchBar, Icon } from 'react-native-elements';
+import { SearchBar } from 'react-native-elements';
 
 class HomeScreen extends Component {
 
@@ -19,8 +20,8 @@ class HomeScreen extends Component {
         return {
             headerTintColor: 'white',
             headerStyle: { backgroundColor: '#54b33d' },
-            // headerRight: <View></View>,
-            // headerLeft: <View></View>,
+            headerRight: null,
+            headerLeft: null,
             headerTitle:
                 <View style={{
                     justifyContent: 'center',
@@ -46,7 +47,7 @@ class HomeScreen extends Component {
                             textAlignVertical: 'center',
                             color: 'white',
                         }}
-                        onChangeText={(value) => {navigation.setParams({searchValue: value})}} />
+                        onChangeText={(value) => { navigation.setParams({ searchValue: value }) }} />
                 </View>
         }
 
@@ -66,7 +67,7 @@ class HomeScreen extends Component {
     render() {
         return (
             <ScrollView style={styles.container}>
-
+                <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
                 <StoreList storeList={this.props.storeList} />
             </ScrollView>
         );

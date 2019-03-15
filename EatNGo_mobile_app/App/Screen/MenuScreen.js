@@ -12,29 +12,77 @@ import {
 } from 'react-native';
 
 import CheckBox from 'react-native-check-box';
-// import { CheckBox } from 'react-native-elements';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { Badge, Button } from 'react-native-elements';
 
 export default class MenuScreen extends Component {
-    static navigationOptions = {
-        headerTintColor: 'white',
-        headerStyle: { backgroundColor: '#54b33d' },
-        headerRight: <View></View>,
-        headerTitle:
-            <View style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                flex: 1,
-            }}>
-                <Text style={{
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerTintColor: '#54b33d',
+            headerStyle: { backgroundColor: 'white' },
+            headerRight:
+                <View style={{
                     justifyContent: 'center',
-                    textAlign: 'center',
-                    fontFamily: 'Quicksand-Medium',
-                    fontSize: 20,
-                    color: 'white',
-                }}>Complete Your Registration</Text>
-            </View>
+                    alignItems: 'center',
+                    flex: 1,
+                    marginRight: 5,
+                }}>
+                    <Badge
+                        value={navigation.getParam('notiValue')}
+                        status="primary"
+                        containerStyle={{ position: 'absolute', top: -5, left: -5, zIndex: 10 }}
+                    />
+                    <Button
+                        icon={<FontAwesome5 name={'receipt'} size={23} color={'#54b33d'} solid />}
+                        type='clear'
+                        title={null}
+                        onPress={() => {
+                            // navigation.setParams({ notiValue: navigation.getParam('notiValue') + 1 });
+                        }}
+                    />
+                </View>,
+            headerLeft:
+                <View style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flex: 1,
+                    marginLeft: 5,
+                }}>
+                    <Button
+                        icon={<FontAwesome5 name={'info-circle'} size={23} color={'#54b33d'} solid />}
+                        type='clear'
+                        title={null}
+                        onPress={() => {
+
+                        }}
+                    />
+                </View>,
+            headerTitle:
+                <View style={{
+                    justifyContent: 'center',
+                    alignItems: 'stretch',
+                    flex: 1,
+                }}>
+                    <Text numberOfLines={1} style={{
+                        fontFamily: 'Quicksand-Medium',
+                        fontSize: 20,
+                        textAlign: 'center',
+                        color: '#54b33d',
+                        marginLeft: 10,
+                        marginRight: 10,
+                        borderBottomWidth: .7,
+                        borderBottomColor: '#54b33d',
+                    }} >Eat'n'Go Food Store</Text>
+                </View>
+        };
     };
-    
+
+    componentDidMount() {
+        this.props.navigation.setParams({
+            notiValue: 1,
+        });
+    }
+
     render() {
         return (
             <ScrollView style={styles.container}>
@@ -46,7 +94,7 @@ export default class MenuScreen extends Component {
                     </View>
                     <View style={styles.menuSetItemContainer}>
                         <TouchableOpacity style={styles.menuSetItem}
-                        onPress={() => {this.props.navigation.navigate('FoodDetail')}}>
+                            onPress={() => { this.props.navigation.navigate('FoodDetail') }}>
                             <Image style={styles.foodImg} source={require('../../Assets/resA.jpg')} />
                             <View style={styles.itemDetail}>
                                 <Text numberOfLines={1} style={styles.foodName}>Banh Trang Tron</Text>

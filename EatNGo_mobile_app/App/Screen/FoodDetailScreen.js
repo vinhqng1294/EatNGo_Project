@@ -62,6 +62,14 @@ export default class MenuScreen extends Component {
             ]
         };
     }
+
+    static navigationOptions = ({navigation}) => {
+        return {
+            header: null,
+            tabBarVisible: false,
+        };
+    };
+
     render() {
         return (
             <ScrollView style={styles.container}>
