@@ -1,5 +1,7 @@
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeLatest, takeEvery } from 'redux-saga/effects';
 import API from '../services/store';
+import { changeAlias } from '../utils/index'
+const storeListSelector = state => state.storeReducer.storeList || null;
 function* storeTask(action) {
   try {
     const { payload } = action;
@@ -36,8 +38,18 @@ function* storeTask(action) {
   }
 }
 
+function* searchStore(action) {
+  const { payload } = action;
+  const storeList = yield select(storeListSelector)
+  const filteredStoreList = storeList.filter(store => changeAlias(store.name).includes(payload.value))
+  yield put({
+    type: 'SEARCH_STORE_COMPLETED',
+    payload: filteredStoreList,
+  });
+}
 
 function* storeSaga() {
-  yield takeLatest('FETCH_STORE', storeTask);  
+  yield takeLatest('FETCH_STORE', storeTask);
+  yield takeEvery('SEARCH_STORE', searchStore);
 }
 export default storeSaga

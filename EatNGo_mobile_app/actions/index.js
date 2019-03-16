@@ -76,3 +76,10 @@ export const createOrder = (items, total) => ({
   },
 });
 
+export const searchStore = (value) => ({
+  type: 'SEARCH_STORE',
+  payload: {
+    value
+  },
+});
+

@@ -1,5 +1,6 @@
 const initialState = {
   storeList: [],
+  filteredStoreList: [],
   store: null,
   error: null,
   foodDetail: null,
@@ -11,6 +12,7 @@ export default (state = initialState, { type, payload }) => {
       return {
         ...state,
         storeList: payload,
+        filteredStoreList: payload,
         store: null,
         error: null,
       };
@@ -35,6 +37,12 @@ export default (state = initialState, { type, payload }) => {
         ...state,
         foodDetail: null,
         error: payload
+      }
+    case 'SEARCH_STORE_COMPLETED':
+      return {
+        ...state,
+        filteredStoreList: payload,
+        error: null
       }
     default:
       return state;
