@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import StoreList from '../Components/StoreList'
 import { bindActionCreators } from 'redux';
-import { fetchStore } from '../../actions/index'
+import { fetchStore, searchStore } from '../../actions/index'
 import {
     StyleSheet,
     ScrollView,
@@ -15,7 +15,6 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { SearchBar } from 'react-native-elements';
 
 class HomeScreen extends Component {
-
     static navigationOptions = ({ navigation }) => {
         return {
             headerTintColor: 'white',
@@ -47,11 +46,17 @@ class HomeScreen extends Component {
                             textAlignVertical: 'center',
                             color: 'white',
                         }}
-                        onChangeText={(value) => { navigation.setParams({ searchValue: value }) }} />
+                        onChangeText={(value) => {
+                            navigation.setParams({ searchValue: value })
+                            let handleSearch = navigation.getParam('handleSearch')
+                            handleSearch(value)
+                        }} />
                 </View>
         }
 
     };
+
+
 
     componentDidMount() {
         const { storeList } = this.props;
@@ -61,9 +66,13 @@ class HomeScreen extends Component {
 
         this.props.navigation.setParams({
             searchValue: '',
+            handleSearch: this.handleSearch.bind(this)
         });
     }
 
+    handleSearch(value) {
+        this.props.searchStore(value)
+    }
     render() {
         return (
             <ScrollView style={styles.container}>
@@ -73,9 +82,9 @@ class HomeScreen extends Component {
         );
     }
 }
-const mapStateToProps = (state) => {    
+const mapStateToProps = (state) => {
     return {
-        storeList: state.storeReducer.storeList
+        storeList: state.storeReducer.filteredStoreList
     }
     // return {
     //     storeList: state.authReducer.registerMessage,
@@ -91,6 +100,7 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
         fetchStore,
+        searchStore
     }, dispatch);
 }
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
