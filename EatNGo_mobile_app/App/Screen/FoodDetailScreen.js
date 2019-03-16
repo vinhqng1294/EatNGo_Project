@@ -17,7 +17,7 @@ import {
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import CheckBox from 'react-native-check-box';
 import NumericInput from 'react-native-numeric-input';
-import { fetchFood, updateFoodQuantity } from '../../actions/index'
+import { fetchFoodInfo, updateFoodQuantity } from '../../actions/index'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ActionButton from 'react-native-action-button';
@@ -107,7 +107,9 @@ class FoodDetailScreen extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchFood(1);
+        const { navigation } = this.props;
+        const foodId = navigation.getParam('id', null);
+        this.props.fetchFoodInfo(foodId);
     }
     render() {
         let { food } = this.props
@@ -459,12 +461,12 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
     console.log(state)
     return {
-        food: state.foodReducer.foodItem
+        food: state.foodReducer.foodInfo
     }
 };
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-        fetchFood,
+        fetchFoodInfo,
         updateFoodQuantity
     }, dispatch);
 }

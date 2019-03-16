@@ -78,13 +78,12 @@ class MenuScreen extends Component {
         };
     };
     componentDidMount() {
-
-        this.props.navigation.setParams({
-            notiValue: 1,
-        });
         const { navigation } = this.props;
-        const id = navigation.getParam('id', null);
-        this.props.fetchFood();
+        navigation.setParams({
+            notiValue: 1,
+        })
+        const brandId = navigation.getParam('id', null);
+        this.props.fetchFood(brandId);
     }
     render() {
 
@@ -104,11 +103,11 @@ class MenuScreen extends Component {
                                     showsVerticalScrollIndicator={false}
                                     renderItem={({ item }) =>
                                         <TouchableOpacity style={styles.menuSetItem}
-                                            onPress={() => { this.props.navigation.navigate('Restaurants') }}>
+                                            onPress={() => { this.props.navigation.navigate('FoodDetail', { id: item.id }) }}>
                                             <Image style={styles.foodImg} source={require('../../Assets/resA.jpg')} />
                                             <View style={styles.itemDetail}>
                                                 <Text numberOfLines={1} style={styles.foodName}>{item.name}</Text>
-                                                <Text numberOfLines={1} style={styles.foodPrice}>{item.price}</Text>
+                                                <Text numberOfLines={1} style={styles.foodPrice}> $ {parseFloat(item.price).toFixed(2)}</Text>
                                             </View>
                                         </TouchableOpacity>
                                     }
@@ -211,7 +210,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-    console.log(state.foodReducer.foods)
     return {
         foods: state.foodReducer.foods
     }

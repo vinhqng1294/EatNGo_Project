@@ -28,8 +28,15 @@ export const fetchStore = (id = null) => ({
   },
 });
 
-export const fetchFood = (id = null) => ({
+export const fetchFood = (brandId = null) => ({
   type: 'FETCH_FOOD',
+  payload: {
+    brandId,
+  }
+})
+
+export const fetchFoodInfo = (id = null) => ({
+  type: 'FETCH_FOOD_INFO',
   payload: {
     id,
   }
