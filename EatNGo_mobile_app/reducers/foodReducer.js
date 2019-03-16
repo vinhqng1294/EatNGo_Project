@@ -1,7 +1,6 @@
 const initialState = {
   foods: null,
-  foodDetails: null,
-  foodItem: null,
+  foodInfo: null,
   error: null,
 };
 export default (state = initialState, { type, payload }) => {
@@ -10,7 +9,6 @@ export default (state = initialState, { type, payload }) => {
       return {
         ...state,
         foods: payload,
-        foodItem: payload
       }
     case 'FETCH_FOOD_ERROR':
       return {
@@ -18,10 +16,16 @@ export default (state = initialState, { type, payload }) => {
         foods: null,
         error: payload
       }
+    case 'FETCH_FOOD_INFO_SUCCESS':
+      return {
+        ...state,
+        foodInfo: { ...payload, quantity: 1, originalPrice: parseFloat(payload.price).toFixed(2), price: parseFloat(payload.price).toFixed(2) },
+        error: null
+      }
     case 'UPDATE_FOOD_QUANTITY_SUCCESS':
       return {
         ...state,
-        foodItem: payload,
+        foodInfo: payload,
         error: null,
       }
     default:

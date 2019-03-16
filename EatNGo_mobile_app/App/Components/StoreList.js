@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { FlatList, Image, View } from 'react-native';
 import StoreItem from './StoreItem'
 import { withNavigation } from 'react-navigation';
+
 class StoreList extends Component {
   renderStoreList = ({ item: store }) => {
     if (store) {
@@ -9,7 +10,7 @@ class StoreList extends Component {
         <StoreItem
           store={store}
           onPress={() => {
-            this.props.navigation.navigate('Menu', { id: store.brandId })
+            this.props.navigation.navigate('Menu', { id: store.id })
           }}
         />
       );

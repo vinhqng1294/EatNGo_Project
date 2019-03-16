@@ -5,4 +5,5 @@ export const REGISTER_URL = '/auth/register';
 export const STORE_URL = '/stores';
 export const FOOD_URL = '/foods';
 export const FOOD_TYPES_URL = '/food/types';
+export const BRAND_URL = '/brands';
 export const ORDER_URL = '/orders';
