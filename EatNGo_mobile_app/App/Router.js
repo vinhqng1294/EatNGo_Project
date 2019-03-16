@@ -9,14 +9,19 @@ import ActiveOrderScreen from './Screen/ActiveOrderScreen';
 import ProfileScreen from './Screen/ProfileScreen';
 import MenuScreen from './Screen/MenuScreen';
 import FoodDetailScreen from './Screen/FoodDetailScreen';
+import OrderDetailScreen from './Screen/OrderDetailScreen';
 
 
 const HomeStack = createStackNavigator(
     {
-        "Restaurants": { screen: HomeScreen }
+        "Restaurants": { screen: HomeScreen },
+        // "Menu": { screen: MenuScreen },
+        // "FoodDetail": { screen: FoodDetailScreen },
     },
     {
         initialRouteName: 'Restaurants',
+
+        // headerMode: 'none'
     }
 );
 
@@ -67,21 +72,22 @@ const TabNavigator = createBottomTabNavigator(
                 // You can return any component that you like here!
                 return <IconComponent name={iconName} size={20} color={tintColor} solid />;
             },
+
         }),
     }
 );
 
 const AppNavigator = createStackNavigator(
     {
-        Welcome: { screen: WelcomeScreen },
-        Register: { screen: RegisterScreen },
-        Home: { screen: TabNavigator },
-        Menu: { screen: MenuScreen },
-        FoodDetail: { screen: FoodDetailScreen },
+        "Welcome": { screen: WelcomeScreen, navigationOptions: { header: null } },
+        "Register": { screen: RegisterScreen },
+        "Home": { screen: TabNavigator, navigationOptions: { header: null, } },
+        "Menu": { screen: MenuScreen },
+        "FoodDetail": { screen: FoodDetailScreen },
+        "OrderDetail": { screen: OrderDetailScreen },
     },
     {
         initialRouteName: 'Welcome',
-        headerMode: 'none',
     },
 );
 let Navigation = createAppContainer(AppNavigator);

@@ -10,91 +10,47 @@ import {
     StatusBar,
     Image,
 } from 'react-native';
+import { bindActionCreators } from 'redux';
+import { fetchFood } from '../../actions/index'
+import { connect } from 'react-redux';
 
-import CheckBox from 'react-native-check-box';
-// import { CheckBox } from 'react-native-elements';
-
-export default class MenuScreen extends Component {
+class MenuScreen extends Component {
+    componentDidMount() {
+        const { navigation } = this.props;
+        const id = navigation.getParam('id', null);
+        this.props.fetchFood();
+    }
     render() {
+
         return (
             <ScrollView style={styles.container}>
                 <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
-                <View style={styles.menuSetContainer}>
-                    <View style={styles.menuSetHeaderContainer}>
-                        <Text style={styles.menuSetTitle}>
-                            Main Food</Text>
-                    </View>
-                    <View style={styles.menuSetItemContainer}>
-                        <TouchableOpacity style={styles.menuSetItem}
-                        onPress={() => {this.props.navigation.navigate('FoodDetail')}}>
-                            <Image style={styles.foodImg} source={require('../../Assets/resA.jpg')} />
-                            <View style={styles.itemDetail}>
-                                <Text numberOfLines={1} style={styles.foodName}>Banh Trang Tron</Text>
-                                <Text numberOfLines={1} style={styles.foodPrice}>$ 32.99</Text>
+                <FlatList
+                    data={this.props.foods}
+                    showsVerticalScrollIndicator={false}
+                    renderItem={({ item }) =>
+                        <View style={styles.menuSetHeaderContainer}>
+                            <Text style={styles.menuSetTitle}>
+                                {item.type}</Text>
+                            <View style={styles.menuSetItemContainer}>
+                                <FlatList
+                                    data={item.foods}
+                                    showsVerticalScrollIndicator={false}
+                                    renderItem={({ item }) =>
+                                        <TouchableOpacity style={styles.menuSetItem}
+                                            onPress={() => { this.props.navigation.navigate('Restaurants') }}>
+                                            <Image style={styles.foodImg} source={require('../../Assets/resA.jpg')} />
+                                            <View style={styles.itemDetail}>
+                                                <Text numberOfLines={1} style={styles.foodName}>{item.name}</Text>
+                                                <Text numberOfLines={1} style={styles.foodPrice}>{item.price}</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    }
+                                />
                             </View>
-
-                            {/* <CheckBox
-                                style={styles.checkbox}
-                                onClick={()=>{this.setState({checked: !this.state.checked})}}
-                                isChecked={this.state.checked}
-                                checkBoxColor='#54b33d'
-                            /> */}
-                        </TouchableOpacity>
-                        <View style={styles.menuSetItem}>
-                            <Image style={styles.foodImg} source={require('../../Assets/resB.jpg')} />
-                            <View style={styles.itemDetail}>
-                                <Text numberOfLines={1} style={styles.foodName}>Bun Bo Hue</Text>
-                                <Text numberOfLines={1} style={styles.foodPrice}>$ 12.99</Text>
-                            </View>
-
-                            {/* <CheckBox
-                                style={styles.checkbox}
-                                onClick={()=>{this.setState({checked: !this.state.checked})}}
-                                isChecked={this.state.checked}
-                                checkBoxColor='#54b33d'
-                            /> */}
                         </View>
-
-                    </View>
-                </View>
-
-                <View style={styles.menuSetContainer}>
-                    <View style={styles.menuSetHeaderContainer}>
-                        <Text style={styles.menuSetTitle}>
-                            Drinks</Text>
-                    </View>
-                    <View style={styles.menuSetItemContainer}>
-                        <View style={styles.menuSetItem}>
-                            <Image style={styles.foodImg} source={require('../../Assets/resA.jpg')} />
-                            <View style={styles.itemDetail}>
-                                <Text numberOfLines={1} style={styles.foodName}>Banh Trang Tron</Text>
-                                <Text numberOfLines={1} style={styles.foodPrice}>$ 32.99</Text>
-                            </View>
-
-                            {/* <CheckBox
-                                style={styles.checkbox}
-                                onClick={()=>{this.setState({checked: !this.state.checked})}}
-                                isChecked={this.state.checked}
-                                checkBoxColor='#54b33d'
-                            /> */}
-                        </View>
-                        <View style={styles.menuSetItem}>
-                            <Image style={styles.foodImg} source={require('../../Assets/resB.jpg')} />
-                            <View style={styles.itemDetail}>
-                                <Text numberOfLines={1} style={styles.foodName}>Bun Bo Hue</Text>
-                                <Text numberOfLines={1} style={styles.foodPrice}>$ 12.99</Text>
-                            </View>
-
-                            {/* <CheckBox
-                                style={styles.checkbox}
-                                onClick={()=>{this.setState({checked: !this.state.checked})}}
-                                isChecked={this.state.checked}
-                                checkBoxColor='#54b33d'
-                            /> */}
-                        </View>
-
-                    </View>
-                </View>
+                    }
+                />
             </ScrollView>
         );
     }
@@ -187,3 +143,19 @@ const styles = StyleSheet.create({
 
 
 });
+
+const mapStateToProps = (state) => {
+    console.log(state.foodReducer.foods)
+    return {
+        foods: state.foodReducer.foods
+    }
+    // return {
+    //     storeList: state.authReducer.registerMessage,
+    // }
+};
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({
+        fetchFood,
+    }, dispatch);
+}
+export default connect(mapStateToProps, mapDispatchToProps)(MenuScreen);

@@ -17,7 +17,7 @@ function* storeTask(action) {
         });
       } else {
         yield put({
-          type: 'FETCH_RESTAURANT_INFO_SUCCESS',
+          type: 'FETCH_STORE_INFO_SUCCESS',
           payload: res.data,
         });
       }
@@ -36,7 +36,8 @@ function* storeTask(action) {
   }
 }
 
+
 function* storeSaga() {
-  yield takeLatest('FETCH_STORE', storeTask);
+  yield takeLatest('FETCH_STORE', storeTask);  
 }
 export default storeSaga
