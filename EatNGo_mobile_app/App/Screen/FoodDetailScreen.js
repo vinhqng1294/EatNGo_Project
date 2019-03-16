@@ -10,6 +10,8 @@ import {
     StatusBar,
     Image,
     TextInput,
+    Dimensions,
+    PixelRatio,
 } from 'react-native';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -28,6 +30,11 @@ class FoodDetailScreen extends Component {
         };
     }
 
+    static navigationOptions = ({ navigation }) => {
+        return {
+            header: null
+        };
+    };
     handleRadioButton(item, option) {
         console.log(item)
         item.isChecked = true
@@ -106,85 +113,95 @@ class FoodDetailScreen extends Component {
         let { food } = this.props
         if (food) {
             return (
-                <ScrollView style={styles.container}>
+                <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0)' }}>
                     <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
-                    {/* <ActionButton
+                    <TouchableOpacity style={styles.closeBtn}
+                        onPress={() => { this.props.navigation.navigate('Menu') }}>
+                        <FontAwesome5 name={'times'} size={16} color={'#54b33d'} solid />
+                    </TouchableOpacity>
+                    <ScrollView style={styles.container}>
+                        {/* <ActionButton
                     buttonColor={'#54b33d'}
                     icon={<FontAwesome5 name={'plus'} size={20} color={'#EBEBEB'} solid />}
                 /> */}
 
-                    <Image style={styles.foodImg}
-                        source={food.imgURL} />
-                    <View style={styles.miniHeader}>
-                        <Text numberOfLines={2} style={styles.foodName}>{food.name}</Text>
-                        <Text numberOfLines={1} style={styles.foodPrice}>$ {food.price}</Text>
-                    </View>
-                    <View style={styles.descriptionContainer}>
-                        <Text style={styles.descriptionTxt}>
-                            {food.description}
-                        </Text>
-                    </View>
-                    <FlatList
-                        data={food.extraOptions}
-                        showsVerticalScrollIndicator={false}
-                        renderItem={({ item }) =>
-                            <View style={styles.extraContainer}>
-                                <View style={styles.extraHeaderContainer}>
-                                    <Text style={styles.extraHeaderTxt}>
-                                        {item.categoryName}</Text>
+                        <Image style={styles.foodImg}
+                            source={food.imgURL} />
+                        <View style={styles.miniHeader}>
+                            <Text numberOfLines={2} style={styles.foodName}>{food.name}</Text>
+                            <Text numberOfLines={1} style={styles.foodPrice}>$ {food.price}</Text>
+                        </View>
+                        <View style={styles.descriptionContainer}>
+                            <Text style={styles.descriptionTxt}>
+                                {food.description}
+                            </Text>
+                        </View>
+                        <FlatList
+                            data={food.extraOptions}
+                            showsVerticalScrollIndicator={false}
+                            renderItem={({ item }) =>
+                                <View style={styles.extraContainer}>
+                                    <View style={styles.extraHeaderContainer}>
+                                        <Text style={styles.extraHeaderTxt}>
+                                            {item.categoryName}</Text>
 
-                                    {this.renderCompulsoryIcon(item)}
-                                    {/* Recommend</Text> */}
-                                    {/* Optional</Text> */}
+                                        {this.renderCompulsoryIcon(item)}
+                                        {/* Recommend</Text> */}
+                                        {/* Optional</Text> */}
 
+                                    </View>
+                                    <View style={styles.extraItemContainer}>
+                                        {this.renderOption(item)}
+                                    </View>
                                 </View>
-                                <View style={styles.extraItemContainer}>
-                                    {this.renderOption(item)}
-                                </View>
+
+                            }
+                        />
+
+                        <View style={styles.extraContainer}>
+                            <View style={styles.extraHeaderContainer}>
+                                <Text style={styles.specialRequestHeaderTxt}>
+                                    <FontAwesome5 name={'sticky-note'} size={13} color={'#EBEBEB'} solid />
+                                    <Text> </Text>
+                                    Special Requests</Text>
                             </View>
-
-                        }
-                    />
-
-                    <View style={styles.extraContainer}>
-                        <View style={styles.extraHeaderContainer}>
-                            <Text style={styles.specialRequestHeaderTxt}>
-                                <FontAwesome5 name={'sticky-note'} size={13} color={'#EBEBEB'} solid />
-                                <Text> </Text>
-                                Special Requests</Text>
+                            <View style={styles.specialRequestInputContainer}>
+                                <TextInput
+                                    style={styles.specialRequestInputText}
+                                    multiline={true}
+                                    placeholder="eg. extra limes, extra chilis, etc."
+                                    onChangeText={() => { }} />
+                            </View>
                         </View>
-                        <View style={styles.specialRequestInputContainer}>
-                            <TextInput
-                                style={styles.specialRequestInputText}
-                                multiline={true}
-                                placeholder="eg. extra limes, extra chilis, etc."
-                                onChangeText={() => { }} />
+
+                        <View style={styles.numericInputContainer}>
+                            <NumericInput
+                                // onChange={value => this.setState({ value })}                            
+                                onChange={(value) => {
+                                    this.props.updateFoodQuantity(value)
+                                }}
+                                inputStyle={styles.numericInput}
+                                totalWidth={180}
+                                totalHeight={40}
+                                step={1}
+                                valueType='integer'
+                                initValue={food.quantity}
+                                minValue={1}
+                                maxValue={50}
+                                rounded
+                                textColor='black'
+                                iconStyle={{ color: '#EBEBEB' }}
+                                rightButtonBackgroundColor='#54b33d'
+                                leftButtonBackgroundColor='#54b33d' />
                         </View>
-                    </View>
 
-                    <View style={styles.numericInputContainer}>
-                        <NumericInput
-                            // onChange={value => this.setState({ value })}                            
-                            onChange={(value) => {
-                                this.props.updateFoodQuantity(value)
-                            }}
-                            inputStyle={styles.numericInput}
-                            totalWidth={180}
-                            totalHeight={40}
-                            step={1}
-                            valueType='integer'
-                            initValue={food.quantity}
-                            minValue={1}
-                            maxValue={50}
-                            rounded
-                            textColor='black'
-                            iconStyle={{ color: '#EBEBEB' }}
-                            rightButtonBackgroundColor='#54b33d'
-                            leftButtonBackgroundColor='#54b33d' />
-                    </View>
-
-                </ScrollView>
-
+                    </ScrollView>
+                    <TouchableOpacity style={styles.addFoodBtn}
+                        onPress={() => { this.props.navigation.navigate('OrderDetail') }}>
+                        <FontAwesome5 name={'cart-plus'} size={16} color={'white'} solid />
+                        <Text style={styles.txtAdd}>Add</Text>
+                    </TouchableOpacity>
+                </View>
             );
         }
         return null
@@ -386,24 +403,63 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 20,
-        marginBottom: 20,
+        marginBottom: 60,
     },
     numericInput: {
         fontFamily: 'Quicksand-Medium',
         backgroundColor: 'white',
     },
-    addFood: {
+    closeBtn: {
+        flex: 1,
+        flexDirection: 'row',
         position: 'absolute',
-        left: 0,
-        top: 100,
-        backgroundColor: 'yellow',
-    }
+        left: 10,
+        top: 10,
+        backgroundColor: 'rgba(255, 255, 255, 1)',
+        zIndex: 100,
+        width: 25,
+        height: 25,
+        borderRadius: 25 / 2,
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlignVertical: 'center',
+        borderWidth: 1,
+        borderColor: '#54b33d',
+    },
+    addFoodBtn: {
+        flex: 1,
+        flexDirection: 'row',
+        position: 'absolute',
+        left: Dimensions.get('window').width / 2,
+        bottom: 10,
+        zIndex: 100,
+        transform: [{ 'translateX': -300 / 2 }],
+        backgroundColor: 'rgba(84, 179, 61, .8)',
+        width: 300,
+        height: 40,
+        borderRadius: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlignVertical: 'center',
+        borderWidth: 1,
+        borderColor: 'white',
+    },
+    txtAdd: {
+        marginLeft: 5,
+        marginBottom: 3,
+        fontFamily: 'Quicksand-Bold',
+        fontSize: 18,
+        color: 'white',
+        textAlignVertical: 'center',
+        // backgroundColor: 'black',
+        padding: 0,
+    },
 });
 
 const mapStateToProps = (state) => {
     console.log(state)
     return {
-        food: state.foodReducer.food
+        food: state.foodReducer.foodItem
     }
 };
 const mapDispatchToProps = (dispatch) => {

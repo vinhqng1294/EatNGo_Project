@@ -9,7 +9,8 @@ export default (state = initialState, { type, payload }) => {
     case 'FETCH_FOOD_SUCCESS':
       return {
         ...state,
-        foods: payload
+        foods: payload,
+        foodItem: payload
       }
     case 'FETCH_FOOD_ERROR':
       return {
