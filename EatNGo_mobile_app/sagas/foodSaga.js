@@ -8,7 +8,7 @@ function* foodTask(action) {
 
     //   const authToken = yield select(authTokenSelector);
 
-    const res = yield call(API.getStoreFood, payload.id);
+    const res = yield call(API.getFood, payload.id);
     if (res.status === 200) {
       yield put({
         type: 'FETCH_FOOD_SUCCESS',
