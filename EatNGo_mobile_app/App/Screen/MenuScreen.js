@@ -37,7 +37,7 @@ export default class MenuScreen extends Component {
                         type='clear'
                         title={null}
                         onPress={() => {
-                            // navigation.setParams({ notiValue: navigation.getParam('notiValue') + 1 });
+                            navigation.setParams({ notiValue: navigation.getParam('notiValue') + 1 });
                         }}
                     />
                 </View>,
