@@ -36,7 +36,8 @@ function* storeTask(action) {
   }
 }
 
+
 function* storeSaga() {
-  yield takeLatest('FETCH_STORE', storeTask);
+  yield takeLatest('FETCH_STORE', storeTask);  
 }
 export default storeSaga

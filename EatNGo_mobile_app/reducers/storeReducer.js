@@ -2,6 +2,7 @@ const initialState = {
   storeList: [],
   store: null,
   error: null,
+  foodDetail: null,
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -24,6 +25,17 @@ export default (state = initialState, { type, payload }) => {
         ...state,
         error: payload,
       };
+    case 'FETCH_FOOD_SUCCESS':
+      return {
+        ...state,
+        foodDetail: payload
+      }
+    case 'FETCH_FOOD_ERROR':
+      return {
+        ...state,
+        foodDetail: null,
+        error: payload
+      }
     default:
       return state;
   }

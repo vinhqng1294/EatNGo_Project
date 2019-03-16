@@ -28,6 +28,13 @@ export const fetchStore = (id = null) => ({
   },
 });
 
+export const fetchFood = (id = null) => ({
+  type: 'FETCH_FOOD',
+  payload: {
+    id,
+  }
+})
+
 export const fetchRestaurantByType = (type = null, isFromCuisine = false) => ({
   type: 'FETCH_RESTAURANT_TYPE',
   payload: {
@@ -44,6 +51,16 @@ export const doCancelOrder = () => ({
   type: 'CANCEL_ORDER',
 });
 
+export const updateFoodOption = () => ({
+
+})
+
+export const updateFoodQuantity = (quantity) => ({
+  type: 'UPDATE_FOOD_QUANTITY',
+  payload: {
+    quantity
+  }
+})
 export const createOrder = (items, total) => ({
   type: 'CREATE_ORDER',
   payload: {

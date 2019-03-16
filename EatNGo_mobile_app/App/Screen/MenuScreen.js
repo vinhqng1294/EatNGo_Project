@@ -11,19 +11,22 @@ import {
     Image,
 } from 'react-native';
 import { bindActionCreators } from 'redux';
-import { fetchStore } from '../../actions/index'
+import { fetchFood } from '../../actions/index'
 import { connect } from 'react-redux';
 
 class MenuScreen extends Component {
     componentDidMount() {
-        this.props.fetchStore(1);
+        const { navigation } = this.props;
+        const id = navigation.getParam('id', null);
+        this.props.fetchFood();
     }
     render() {
+
         return (
             <ScrollView style={styles.container}>
                 <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
                 <FlatList
-                    data={this.props.store}
+                    data={this.props.foods}
                     showsVerticalScrollIndicator={false}
                     renderItem={({ item }) =>
                         <View style={styles.menuSetHeaderContainer}>
@@ -142,9 +145,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-    console.log(state)
+    console.log(state.foodReducer.foods)
     return {
-        store: state.storeReducer.store
+        foods: state.foodReducer.foods
     }
     // return {
     //     storeList: state.authReducer.registerMessage,
@@ -152,7 +155,7 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-        fetchStore,
+        fetchFood,
     }, dispatch);
 }
 export default connect(mapStateToProps, mapDispatchToProps)(MenuScreen);

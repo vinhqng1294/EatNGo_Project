@@ -13,8 +13,8 @@ const StoreItem = ({ store, onPress }) => (
   <ImageBackground
     style={styles.row}
     source={require('../../Assets/resDefault_1.png')}
-    imageStyle={{ resizeMode: 'contain'}}
-            >
+    imageStyle={{ resizeMode: 'contain' }}
+  >
     <View style={styles.rowContentNoImage}>
       <View style={styles.restaurantNameContainer}>
         <Text numberOfLines={1} style={styles.restaurantName}>
@@ -24,7 +24,7 @@ const StoreItem = ({ store, onPress }) => (
       <View style={styles.miniDetailsContainer}>
         <View style={styles.distance}>
           <Text numberOfLines={1} style={styles.distanceTxt}>
-                                    16.5 mi
+            {store.phone}
           </Text>
           <Text numberOfLines={1} style={styles.streetName}>
             {store.address}
@@ -39,7 +39,7 @@ const StoreItem = ({ store, onPress }) => (
         <TouchableOpacity
           style={styles.button}
           onPress={onPress}
-                            >
+        >
           <Text style={styles.btnText}>Dine-in</Text>
         </TouchableOpacity>
       </View>

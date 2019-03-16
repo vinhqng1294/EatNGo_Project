@@ -15,281 +15,179 @@ import {
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import CheckBox from 'react-native-check-box';
 import NumericInput from 'react-native-numeric-input';
+import { fetchFood, updateFoodQuantity } from '../../actions/index'
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import ActionButton from 'react-native-action-button';
 
-export default class MenuScreen extends Component {
+class FoodDetailScreen extends Component {
     constructor() {
         super();
         this.state = {
-            checked: true,
-            radioButton: 'y1',
-            food: [
-                {
-                    name: 'Banh Trang tron',
-                    price: 13,
-                    imgURL: require('../../Assets/resA.jpg'),
-                    description: 'No Ice Added! Includes Strawberry, Blueberry, Banana, Pineapple (comes with Basil Seed Pudding and Flaxseed as topping).',
-                    extraOptions: [
-                        {
-                            categoryName: 'Sauce',
-                            items: [
-                                {
-                                    name: 'Egg',
-                                    price: 1
-                                },
-                                {
-                                    name: 'Banana',
-                                    price: 2
-                                }
-                            ]
-                        },
-                        {
-                            categoryName: 'Toppings',
-                            items: [
-                                {
-                                    name: 'Topping 1',
-                                    price: 3
-                                },
-                                {
-                                    name: 'Topping 2',
-                                    price: 4
-                                }
-                            ]
-                        }
-
-                    ]
-                }
-            ]
+            value: 1
         };
     }
+
+    handleRadioButton(item, option) {
+        console.log(item)
+        item.isChecked = true
+        console.log(option)
+    }
+    renderOption(option) {
+        if (option.isCompulsory) {
+            return (
+                <FlatList
+                    data={option.items}
+                    showsVerticalScrollIndicator={false}
+                    renderItem={({ item }) =>
+                        <View style={styles.extraItemsContainer}>
+                            <Text numberOfLines={1} style={styles.extraItemsName}>
+                                {item.name}
+                            </Text>
+                            <Text numberOfLines={1} style={styles.extraItemsPrice}>
+                                + $ {item.price} </Text>
+                            <CheckBox
+                                style={styles.radioBtn}
+                                onClick={() => {
+                                    this.handleRadioButton(item, option)
+                                }}
+                                isChecked={item.isChecked}
+                                checkBoxColor='#54b33d'
+                                checkedImage={<FontAwesome5 name={'dot-circle'} size={18} color={'#54b33d'} solid />}
+                                unCheckedImage={<FontAwesome5 name={'circle'} size={18} color={'#54b33d'} />}
+                            />
+                        </View>
+                    }
+                />
+            )
+        } else {
+            return (
+                <FlatList
+                    data={option.items}
+                    showsVerticalScrollIndicator={false}
+                    renderItem={({ item }) =>
+                        <View style={styles.extraItemsContainer}>
+                            <Text numberOfLines={1} style={styles.extraItemsName}>
+                                {item.name}
+                            </Text>
+                            <Text numberOfLines={1} style={styles.extraItemsPrice}>
+                                + $ {item.price}</Text>
+                            <CheckBox
+                                style={styles.checkbox}
+                                onClick={() => { }}
+                                isChecked={item.isChecked}
+                                checkBoxColor='#54b33d'
+                            />
+                        </View>
+                    }
+                />
+            )
+        }
+    }
+
+    renderCompulsoryIcon(item) {
+        if (item.isCompulsory) {
+            return (
+                <Text style={styles.extraInfoTxt}>
+                    <FontAwesome5 name={'exclamation-circle'} size={13} color={'#54b33d'} solid />
+                    {/* <FontAwesome5 name={'thumbs-up'} size={13} color={'#54b33d'} solid /> */}
+                    {/* <FontAwesome5 name={'check'} size={13} color={'#54b33d'} solid /> */}
+                    <Text> </Text>
+                    Compulsory</Text>
+            )
+        }
+        return null;
+    }
+
+    componentDidMount() {
+        this.props.fetchFood(1);
+    }
     render() {
-        return (
-            <ScrollView style={styles.container}>
-                <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
-                {/* <ActionButton
+        let { food } = this.props
+        if (food) {
+            return (
+                <ScrollView style={styles.container}>
+                    <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
+                    {/* <ActionButton
                     buttonColor={'#54b33d'}
                     icon={<FontAwesome5 name={'plus'} size={20} color={'#EBEBEB'} solid />}
                 /> */}
 
-                <Image style={styles.foodImg}
-                    source={this.state.food[0].imgURL} />
-                <View style={styles.miniHeader}>
-                    <Text numberOfLines={2} style={styles.foodName}>{this.state.food[0].name}</Text>
-                    <Text numberOfLines={1} style={styles.foodPrice}>$ {this.state.food[0].price}</Text>
-                </View>
-                <View style={styles.descriptionContainer}>
-                    <Text style={styles.descriptionTxt}>
-                        {this.state.food[0].description}
-                    </Text>
-                </View>
-
-                <View style={styles.extraContainer}>
-                    <View style={styles.extraHeaderContainer}>
-                        <Text style={styles.extraHeaderTxt}>
-                            Size</Text>
-                        <Text style={styles.extraInfoTxt}>
-                            <FontAwesome5 name={'exclamation-circle'} size={13} color={'#54b33d'} solid />
-                            {/* <FontAwesome5 name={'thumbs-up'} size={13} color={'#54b33d'} solid /> */}
-                            {/* <FontAwesome5 name={'check'} size={13} color={'#54b33d'} solid /> */}
-                            <Text> </Text>
-                            Compulsory</Text>
-                        {/* Recommend</Text> */}
-                        {/* Optional</Text> */}
-
+                    <Image style={styles.foodImg}
+                        source={food.imgURL} />
+                    <View style={styles.miniHeader}>
+                        <Text numberOfLines={2} style={styles.foodName}>{food.name}</Text>
+                        <Text numberOfLines={1} style={styles.foodPrice}>$ {food.price}</Text>
                     </View>
-                    <View style={styles.extraItemContainer}>
-                        <View style={styles.extraItemsContainer}>
-                            <Text numberOfLines={1} style={styles.extraItemsName}>
-                                Small</Text>
-                            <Text numberOfLines={1} style={styles.extraItemsPrice}>
-                                + $1.95</Text>
-                            <CheckBox
-                                style={styles.radioBtn}
-                                onClick={() => { this.setState({ radioButton: 'y1' }) }}
-                                isChecked={this.state.radioButton === 'y1'}
-                                checkBoxColor='#54b33d'
-                                checkedImage={<FontAwesome5 name={'dot-circle'} size={18} color={'#54b33d'} solid />}
-                                unCheckedImage={<FontAwesome5 name={'circle'} size={18} color={'#54b33d'} />}
-                            />
+                    <View style={styles.descriptionContainer}>
+                        <Text style={styles.descriptionTxt}>
+                            {food.description}
+                        </Text>
+                    </View>
+                    <FlatList
+                        data={food.extraOptions}
+                        showsVerticalScrollIndicator={false}
+                        renderItem={({ item }) =>
+                            <View style={styles.extraContainer}>
+                                <View style={styles.extraHeaderContainer}>
+                                    <Text style={styles.extraHeaderTxt}>
+                                        {item.categoryName}</Text>
+
+                                    {this.renderCompulsoryIcon(item)}
+                                    {/* Recommend</Text> */}
+                                    {/* Optional</Text> */}
+
+                                </View>
+                                <View style={styles.extraItemContainer}>
+                                    {this.renderOption(item)}
+                                </View>
+                            </View>
+
+                        }
+                    />
+
+                    <View style={styles.extraContainer}>
+                        <View style={styles.extraHeaderContainer}>
+                            <Text style={styles.specialRequestHeaderTxt}>
+                                <FontAwesome5 name={'sticky-note'} size={13} color={'#EBEBEB'} solid />
+                                <Text> </Text>
+                                Special Requests</Text>
                         </View>
-                        <View style={styles.extraItemsContainer}>
-                            <Text numberOfLines={1} style={styles.extraItemsName}>
-                                Medium</Text>
-                            <Text numberOfLines={1} style={styles.extraItemsPrice}>
-                                + $1.95</Text>
-                            <CheckBox
-                                style={styles.radioBtn}
-                                onClick={() => { this.setState({ radioButton: 'y2' }) }}
-                                isChecked={this.state.radioButton === 'y2'}
-                                checkBoxColor='#54b33d'
-                                checkedImage={<FontAwesome5 name={'dot-circle'} size={18} color={'#54b33d'} solid />}
-                                unCheckedImage={<FontAwesome5 name={'circle'} size={18} color={'#54b33d'} />}
-                            />
-                        </View>
-                        <View style={styles.extraItemsContainer}>
-                            <Text numberOfLines={1} style={styles.extraItemsName}>
-                                Large</Text>
-                            <Text numberOfLines={1} style={styles.extraItemsPrice}>
-                                + $1.95</Text>
-                            <CheckBox
-                                style={styles.radioBtn}
-                                onClick={() => { this.setState({ radioButton: 'y3' }) }}
-                                isChecked={this.state.radioButton === 'y3'}
-                                checkBoxColor='#54b33d'
-                                checkedImage={<FontAwesome5 name={'dot-circle'} size={18} color={'#54b33d'} solid />}
-                                unCheckedImage={<FontAwesome5 name={'circle'} size={18} color={'#54b33d'} />}
-                            />
+                        <View style={styles.specialRequestInputContainer}>
+                            <TextInput
+                                style={styles.specialRequestInputText}
+                                multiline={true}
+                                placeholder="eg. extra limes, extra chilis, etc."
+                                onChangeText={() => { }} />
                         </View>
                     </View>
-                </View>
 
-                <View style={styles.extraContainer}>
-                    <View style={styles.extraHeaderContainer}>
-                        <Text style={styles.extraHeaderTxt}>
-                            Toppings</Text>
-                        <Text style={styles.extraInfoTxt}>
-                            {/* <FontAwesome5 name={'exclamation-circle'} size={13} color={'#54b33d'} solid /> */}
-                            <FontAwesome5 name={'thumbs-up'} size={13} color={'#54b33d'} solid />
-                            {/* <FontAwesome5 name={'check'} size={13} color={'#54b33d'} solid /> */}
-                            <Text> </Text>
-                            {/* Compulsory</Text> */}
-                            Recommend</Text>
-                        {/* Optional</Text> */}
-
+                    <View style={styles.numericInputContainer}>
+                        <NumericInput
+                            // onChange={value => this.setState({ value })}                            
+                            onChange={(value) => {
+                                this.props.updateFoodQuantity(value)
+                            }}
+                            inputStyle={styles.numericInput}
+                            totalWidth={180}
+                            totalHeight={40}
+                            step={1}
+                            valueType='integer'
+                            initValue={food.quantity}
+                            minValue={1}
+                            maxValue={50}
+                            rounded
+                            textColor='black'
+                            iconStyle={{ color: '#EBEBEB' }}
+                            rightButtonBackgroundColor='#54b33d'
+                            leftButtonBackgroundColor='#54b33d' />
                     </View>
-                    <View style={styles.extraItemContainer}>
-                        <View style={styles.extraItemsContainer}>
-                            <Text numberOfLines={1} style={styles.extraItemsName}>
-                                Topping 1</Text>
-                            <Text numberOfLines={1} style={styles.extraItemsPrice}>
-                                + $9.95</Text>
-                            <CheckBox
-                                style={styles.checkbox}
-                                onClick={() => { this.setState({ checked: !this.state.checked }) }}
-                                isChecked={this.state.checked}
-                                checkBoxColor='#54b33d'
-                            />
-                        </View>
-                        <View style={styles.extraItemsContainer}>
-                            <Text numberOfLines={1} style={styles.extraItemsName}>
-                                Topping 2</Text>
-                            <Text numberOfLines={1} style={styles.extraItemsPrice}>
-                                + $7.95</Text>
-                            <CheckBox
-                                style={styles.checkbox}
-                                onClick={() => { this.setState({ checked: !this.state.checked }) }}
-                                isChecked={this.state.checked}
-                                checkBoxColor='#54b33d'
-                            />
-                        </View>
-                        <View style={styles.extraItemsContainer}>
-                            <Text numberOfLines={1} style={styles.extraItemsName}>
-                                Topping 3</Text>
-                            <Text numberOfLines={1} style={styles.extraItemsPrice}>
-                                + $8.95</Text>
-                            <CheckBox
-                                style={styles.checkbox}
-                                onClick={() => { this.setState({ checked: !this.state.checked }) }}
-                                isChecked={this.state.checked}
-                                checkBoxColor='#54b33d'
-                            />
-                        </View>
-                    </View>
-                </View>
 
-                <View style={styles.extraContainer}>
-                    <View style={styles.extraHeaderContainer}>
-                        <Text style={styles.extraHeaderTxt}>
-                            Toppings</Text>
-                        <Text style={styles.extraInfoTxt}>
-                            {/* <FontAwesome5 name={'exclamation-circle'} size={13} color={'#54b33d'} solid /> */}
-                            {/* <FontAwesome5 name={'thumbs-up'} size={13} color={'#54b33d'} solid /> */}
-                            <FontAwesome5 name={'check'} size={13} color={'#54b33d'} solid />
-                            <Text> </Text>
-                            {/* Compulsory</Text> */}
-                            {/* Recommend</Text> */}
-                            Optional</Text>
+                </ScrollView>
 
-                    </View>
-                    <View style={styles.extraItemContainer}>
-                        <View style={styles.extraItemsContainer}>
-                            <Text numberOfLines={1} style={styles.extraItemsName}>
-                                Topping 1</Text>
-                            <Text numberOfLines={1} style={styles.extraItemsPrice}>
-                                + $9.95</Text>
-                            <CheckBox
-                                style={styles.checkbox}
-                                onClick={() => { this.setState({ checked: !this.state.checked }) }}
-                                isChecked={this.state.checked}
-                                checkBoxColor='#54b33d'
-                            />
-                        </View>
-                        <View style={styles.extraItemsContainer}>
-                            <Text numberOfLines={1} style={styles.extraItemsName}>
-                                Topping 2</Text>
-                            <Text numberOfLines={1} style={styles.extraItemsPrice}>
-                                + $7.95</Text>
-                            <CheckBox
-                                style={styles.checkbox}
-                                onClick={() => { this.setState({ checked: !this.state.checked }) }}
-                                isChecked={this.state.checked}
-                                checkBoxColor='#54b33d'
-                            />
-                        </View>
-                        <View style={styles.extraItemsContainer}>
-                            <Text numberOfLines={1} style={styles.extraItemsName}>
-                                Topping 3</Text>
-                            <Text numberOfLines={1} style={styles.extraItemsPrice}>
-                                + $8.95</Text>
-                            <CheckBox
-                                style={styles.checkbox}
-                                onClick={() => { this.setState({ checked: !this.state.checked }) }}
-                                isChecked={this.state.checked}
-                                checkBoxColor='#54b33d'
-                            />
-                        </View>
-                    </View>
-                </View>
-
-                <View style={styles.extraContainer}>
-                    <View style={styles.extraHeaderContainer}>
-                        <Text style={styles.specialRequestHeaderTxt}>
-                            <FontAwesome5 name={'sticky-note'} size={13} color={'#EBEBEB'} solid />
-                            <Text> </Text>
-                            Special Requests</Text>
-                    </View>
-                    <View style={styles.specialRequestInputContainer}>
-                        <TextInput
-                            style={styles.specialRequestInputText}
-                            multiline={true}
-                            placeholder="eg. extra limes, extra chilis, etc."
-                            onChangeText={() => { }} />
-                    </View>
-                </View>
-
-                <View style={styles.numericInputContainer}>
-                    <NumericInput
-                        // value={this.state.value}
-                        // onChange={value => this.setState({ value })}
-                        onChange={() => { }}
-                        inputStyle={styles.numericInput}
-                        totalWidth={180}
-                        totalHeight={40}
-                        step={1}
-                        valueType='integer'
-                        initValue={1}
-                        minValue={1}
-                        maxValue={50}
-                        rounded
-                        textColor='black'
-                        iconStyle={{ color: '#EBEBEB' }}
-                        rightButtonBackgroundColor='#54b33d'
-                        leftButtonBackgroundColor='#54b33d' />
-                </View>
-
-            </ScrollView>
-
-        );
+            );
+        }
+        return null
     }
 }
 
@@ -499,5 +397,19 @@ const styles = StyleSheet.create({
         left: 0,
         top: 100,
         backgroundColor: 'yellow',
-    },
+    }
 });
+
+const mapStateToProps = (state) => {
+    console.log(state)
+    return {
+        food: state.foodReducer.food
+    }
+};
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({
+        fetchFood,
+        updateFoodQuantity
+    }, dispatch);
+}
+export default connect(mapStateToProps, mapDispatchToProps)(FoodDetailScreen);
