@@ -1,7 +1,9 @@
 'use strict';
 
 import React, { Component } from 'react';
-
+import { bindActionCreators } from 'redux';
+import { authLogin } from '../../actions/index'
+import { connect } from 'react-redux';
 import {
     StyleSheet,
     View,
@@ -11,25 +13,26 @@ import {
     StatusBar,
 } from 'react-native';
 
-import RNAccountKit, {
+import AccountKit, {
     LoginButton,
     Color,
     StatusBarStyle,
 } from 'react-native-facebook-account-kit';
 import { RotationGestureHandler } from 'react-native-gesture-handler';
-
-export default class WelcomeScreen extends Component {
+class WelcomeScreen extends Component {
     state = {
-        authToken: null,
-        loggedAccount: null
+        phoneNumber: null,
+        authId: null,
     };
 
-    componentDidMount() {
+    componentWillMount() {
         this.configureAccountKit();
     }
+    // componentDidMount() {
 
+    // }
     configureAccountKit() {
-        RNAccountKit.configure({
+        AccountKit.configure({
             theme: {
             },
             defaultCountry: "VN",
@@ -37,25 +40,50 @@ export default class WelcomeScreen extends Component {
             initialPhoneCountryPrefix: "+84",
         });
     }
-    handlePhoneLoginButton = async () => {
-        try {
-            const payload = await RNAccountKit.loginWithPhone()
-            if (!payload) {
-                console.warn('Login cancelled', payload)
-            } else {
-                console.log(payload)
-                this.props.navigation.navigate('Register')
-            }
-        } catch (error) {
-            console.warn('Error', error.message)
+    // handlePhoneLoginButton = async () => {
+    //     try {
+    //         const payload = await RNAccountKit.loginWithPhone()
+    //         if (!payload) {
+    //             console.warn('Login cancelled', payload)
+    //         } else {
+    //             console.log(payload)
+    //             this.props.navigation.navigate('Register')
+    //         }
+    //     } catch (error) {
+    //         console.warn('Error', error.message)
+    //     }
+    // }
+    onLogin(token) {
+        if (!token) {
+            console.warn("User canceled login");
+            this.setState({});
+        } else {
+            AccountKit.getCurrentAccount().then(account => {
+                const phoneNumber = this.getPhoneNumber(account.phoneNumber.number)
+                this.setState({ phoneNumber, authId: account.id })
+                this.props.authLogin(phoneNumber, account.id)
+                // this.props.navigation.navigate('Register')
+            });
         }
     }
-
-
+    getPhoneNumber(phoneNumber) {
+        if (phoneNumber.length < 10) {
+            return '0'.concat(phoneNumber)
+        }
+        return phoneNumber
+    }
     onLoginError(e) {
         console.log("Failed to login", e);
     }
     render() {
+        const { loginError, user } = this.props
+        if (loginError) {
+            console.log(this.state.phoneNumber)
+            this.props.navigation.navigate('Register', { phoneNumber: this.state.phoneNumber, authId: this.state.authId })
+        }
+        if (user) {
+            this.props.navigation.navigate('Home')
+        }
         return (
             <View style={styles.container}>
                 <StatusBar backgroundColor="#EBEBEB" barStyle="dark-content" />
@@ -80,14 +108,13 @@ export default class WelcomeScreen extends Component {
                         <Image source={require('../../Assets/google.png')}
                             style={styles.img} />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.option}
+                    <LoginButton style={styles.option}
                         type="phone"
-                        onPress={this.handlePhoneLoginButton}
-                    >
+                        onLogin={(token) => this.onLogin(token)} onError={(e) => this.onLogin(e)}>
                         {/* onPress = () => {}; */}
                         <Image source={require('../../Assets/mobile.png')}
                             style={styles.img} />
-                    </TouchableOpacity>
+                    </LoginButton>
                 </View>
 
                 <View style={styles.footer}>
@@ -149,3 +176,16 @@ const styles = StyleSheet.create({
         backgroundColor: '#EBEBEB',
     },
 });
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({
+        authLogin,
+    }, dispatch);
+}
+const mapStateToProps = (state) => {
+    console.log(state)
+    return {
+        user: state.authReducer.user,
+        loginError: state.authReducer.loginError
+    }
+};
+export default connect(mapStateToProps, mapDispatchToProps)(WelcomeScreen);

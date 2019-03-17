@@ -47,9 +47,17 @@ function* searchStore(action) {
     payload: filteredStoreList,
   });
 }
+function * setStore(action){
+  const { payload } = action;  
+  yield put({
+    type: 'SET_STORE_SUCCESS',
+    payload: payload,
+  });
+}
 
 function* storeSaga() {
   yield takeLatest('FETCH_STORE', storeTask);
+  yield takeLatest('SET_STORE', setStore);
   yield takeEvery('SEARCH_STORE', searchStore);
 }
 export default storeSaga

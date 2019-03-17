@@ -11,12 +11,11 @@ import {
     Image,
 } from 'react-native';
 import { bindActionCreators } from 'redux';
-import { fetchFood } from '../../actions/index'
+import { fetchFood, setSelectedStore, cleanCart } from '../../actions/index'
 import { connect } from 'react-redux';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Badge, Button } from 'react-native-elements';
 class MenuScreen extends Component {
-
     static navigationOptions = ({ navigation }) => {
         return {
             headerTintColor: '#54b33d',
@@ -29,7 +28,7 @@ class MenuScreen extends Component {
                     marginRight: 5,
                 }}>
                     <Badge
-                        value={navigation.getParam('notiValue')}
+                        value={navigation.getParam('cartLength')}
                         status="primary"
                         containerStyle={{ position: 'absolute', top: -5, left: -5, zIndex: 10 }}
                     />
@@ -38,7 +37,7 @@ class MenuScreen extends Component {
                         type='clear'
                         title={null}
                         onPress={() => {
-                            navigation.setParams({ notiValue: navigation.getParam('notiValue') + 1 });
+                            navigation.navigate('OrderDetail')
                         }}
                     />
                 </View>,
@@ -73,18 +72,31 @@ class MenuScreen extends Component {
                         marginRight: 10,
                         borderBottomWidth: .7,
                         borderBottomColor: '#54b33d',
-                    }} >Eat'n'Go Food Store</Text>
+                    }} >{navigation.getParam('storeName')}</Text>
                 </View>
         };
     };
     componentDidMount() {
         const { navigation } = this.props;
+        const store = navigation.getParam('store', null);
+        const checkNewStore = this.props.store && store.id !== this.props.store.id
+        if (checkNewStore) {
+            this.props.cleanCart()
+        }
+        this.props.setSelectedStore(store)
+        this.props.fetchFood(store);
         navigation.setParams({
-            notiValue: 1,
+            cartLength: !checkNewStore ? this.props.cart.length : 0,
+            storeName: store.name
         })
-        const brandId = navigation.getParam('id', null);
-        this.props.fetchFood(brandId);
     }
+
+    updateCartQuantity() {
+        this.props.navigation.setParams({
+            cartLength: this.props.cart.length
+        })
+    }
+
     render() {
 
         return (
@@ -103,8 +115,13 @@ class MenuScreen extends Component {
                                     showsVerticalScrollIndicator={false}
                                     renderItem={({ item }) =>
                                         <TouchableOpacity style={styles.menuSetItem}
-                                            onPress={() => { this.props.navigation.navigate('FoodDetail', { id: item.id }) }}>
-                                            <Image style={styles.foodImg} source={require('../../Assets/resA.jpg')} />
+                                            onPress={() => {
+                                                this.props.navigation.navigate('FoodDetail', {
+                                                    id: item.id,
+                                                    onGoBack: () => this.updateCartQuantity()
+                                                })
+                                            }}>
+                                            <Image style={styles.foodImg} source={{ uri: item.images[0].image }} />
                                             <View style={styles.itemDetail}>
                                                 <Text numberOfLines={1} style={styles.foodName}>{item.name}</Text>
                                                 <Text numberOfLines={1} style={styles.foodPrice}> $ {parseFloat(item.price).toFixed(2)}</Text>
@@ -210,8 +227,11 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
+    console.log(state)
     return {
-        foods: state.foodReducer.foods
+        foods: state.foodReducer.foods,
+        cart: state.cartReducer.cart,
+        store: state.storeReducer.store
     }
     // return {
     //     storeList: state.authReducer.registerMessage,
@@ -220,6 +240,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
         fetchFood,
+        setSelectedStore,
+        cleanCart
     }, dispatch);
 }
 export default connect(mapStateToProps, mapDispatchToProps)(MenuScreen);

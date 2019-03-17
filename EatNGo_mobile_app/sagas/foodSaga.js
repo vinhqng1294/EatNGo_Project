@@ -1,14 +1,14 @@
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeLatest, takeEvery } from 'redux-saga/effects';
 import API from '../services/food';
 
 const foodSelector = state => state.foodReducer.foodInfo || null;
+
 function* foodByTypeTask(action) {
   try {
     const { payload } = action;
-
     //   const authToken = yield select(authTokenSelector);
-
-    const res = yield call(API.getStoreFoodGroupByType, payload.brandId);
+    
+    const res = yield call(API.getStoreFoodGroupByType, payload.store.brandId);
     if (res.status === 200) {
       yield put({
         type: 'FETCH_FOOD_SUCCESS',
@@ -72,6 +72,6 @@ function* updateFoodQuantityTask(action) {
 function* storeSaga() {
   yield takeLatest('FETCH_FOOD', foodByTypeTask);
   yield takeLatest('FETCH_FOOD_INFO', foodInfoTask);
-  yield takeLatest('UPDATE_FOOD_QUANTITY', updateFoodQuantityTask);
+  yield takeEvery('UPDATE_FOOD_QUANTITY', updateFoodQuantityTask);
 }
 export default storeSaga

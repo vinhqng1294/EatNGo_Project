@@ -10,6 +10,11 @@ const changeAlias = (str) => {
   str = str.replace(/đ/g, 'd')
   return str
 }
+function validateEmail(email) {
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
 export {
-  changeAlias
+  changeAlias,
+  validateEmail
 }

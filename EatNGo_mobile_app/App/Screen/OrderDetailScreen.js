@@ -8,6 +8,7 @@ import {
     Text,
     ScrollView,
     StatusBar,
+    Alert,
     Image,
     Dimensions,
 } from 'react-native';
@@ -15,8 +16,11 @@ import {
 import CheckBox from 'react-native-check-box';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Badge, Button, Divider } from 'react-native-elements';
+import { deleteCartItem, fetchCartItems } from '../../actions/index'
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
-export default class MenuScreen extends Component {
+class OrderDetailScreen extends Component {
     static navigationOptions = ({ navigation }) => {
         return {
             headerTintColor: '#54b33d',
@@ -63,13 +67,13 @@ export default class MenuScreen extends Component {
                 }}>
                     <Text numberOfLines={1} style={{
                         flex: 1,
+                        textAlign: 'center',
                         fontFamily: 'Quicksand-Bold',
                         fontSize: 18,
-                        paddingLeft: 10,
                         color: '#757575',
                         // backgroundColor: 'yellow',
                     }}> ORDER</Text>
-                    <Text numberOfLines={1} style={{
+                    {/* <Text numberOfLines={1} style={{
                         flex: 2.7,
                         fontFamily: 'Quicksand-Medium',
                         fontSize: 18,
@@ -78,103 +82,95 @@ export default class MenuScreen extends Component {
                         color: '#757575',
                         textAlignVertical: 'center',
                         // backgroundColor: 'black',
-                    }} > #A12345</Text>
+                    }} > #A12345</Text> */}
                 </View>
         };
     };
 
-    componentDidMount() {
-        this.props.navigation.setParams({
-            notiValue: 1,
-        });
+
+    getTotalPrice(cart) {
+        const totalPrice = cart.reduce((acc, item) => { return acc + (parseFloat(item.originalPrice) * item.quantity) }, 0.0)
+        return totalPrice.toFixed(2)
     }
 
     render() {
-        return (
-            <View style={{ flex: 1 }}>
-                <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
-                <ScrollView style={styles.container}>
-                    <View style={styles.addMoreItemContainer}>
-                        <TouchableOpacity style={styles.addMoreItemWrapper}
-                            onPress={() => { this.props.navigation.navigate('Menu') }}>
+        const { cart } = this.props
+        console.log(cart)
+        if (cart.length) {
+            return (
+                <View style={{ flex: 1 }}>
+                    <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
+                    <ScrollView style={styles.container}>
+                        <View style={styles.addMoreItemContainer}>
+                            <TouchableOpacity style={styles.addMoreItemWrapper}
+                                onPress={() => { this.props.navigation.navigate('Menu') }}>
+                                <View style={styles.iconWrapper}>
+                                    <FontAwesome5
+                                        style={styles.icons}
+                                        name={'hand-point-right'}
+                                        size={14}
+                                        color={'#54b33d'}
+                                        solid
+                                    />
+                                </View>
+                                <Text numberOfLines={1} style={styles.addMoreItemTxt}>Order more here ...</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        <View style={styles.orderItemsContainer}>
+                            {/* Flat list items */}
+                            <FlatList
+                                data={cart}
+                                showsVerticalScrollIndicator={false}
+                                renderItem={({ item }) =>
+                                    <View style={styles.orderItemWrapper}>
+                                        <View style={styles.textWrapper}>
+                                            <Text numberOfLines={1} style={styles.quantity}>{item.quantity} x</Text>
+                                            <Text numberOfLines={2} style={styles.foodName}>{item.name}</Text>
+                                            <Text numberOfLines={1} style={styles.price}>$ {item.originalPrice}</Text>
+                                        </View>
+                                        <TouchableOpacity style={styles.iconButtonWrapper}
+                                            onPress={() => {
+                                                Alert.alert(
+                                                    'Remove Item',
+                                                    'Are you sure you want to delete this item?',
+                                                    [
+                                                        {
+                                                            text: 'Cancel',
+                                                            onPress: () => console.log('Cancel Pressed'),
+                                                            style: 'cancel',
+                                                        },
+                                                        { text: 'OK', onPress: () => this.props.deleteCartItem(item) },
+                                                    ],
+                                                    { cancelable: false },
+                                                );
+                                            }}>
+                                            <FontAwesome5
+                                                name={'trash-alt'}
+                                                color={'#54b33d'}
+                                                size={12}
+                                                solid
+                                            />
+                                        </TouchableOpacity>
+                                    </View>
+                                }
+                            />
+                        </View>
+                        <Divider style={styles.divider} />
+
+                        <TouchableOpacity style={styles.longBtn}>
                             <View style={styles.iconWrapper}>
                                 <FontAwesome5
                                     style={styles.icons}
-                                    name={'hand-point-right'}
-                                    size={14}
+                                    name={'credit-card'}
+                                    size={23}
                                     color={'#54b33d'}
                                     solid
                                 />
                             </View>
-                            <Text numberOfLines={1} style={styles.addMoreItemTxt}>Order more here ...</Text>
+                            <Text numberOfLines={1} style={styles.iconText}>Add Credit Card</Text>
                         </TouchableOpacity>
-                    </View>
-
-                    <View style={styles.orderItemsContainer}>
-
-                        {/* Flat list items */}
-                        <View style={styles.orderItemWrapper}>
-                            <View style={styles.textWrapper}>
-                                <Text numberOfLines={1} style={styles.quantity}>1 x</Text>
-                                <Text numberOfLines={2} style={styles.foodName}>Banh Trang Tron khong Trung</Text>
-                                <Text numberOfLines={1} style={styles.price}>$ 5.99</Text>
-                            </View>
-                            <TouchableOpacity style={styles.iconButtonWrapper}>
-                                <FontAwesome5
-                                    name={'trash-alt'}
-                                    color={'#54b33d'}
-                                    size={12}
-                                    solid
-                                />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.orderItemWrapper}>
-                            <View style={styles.textWrapper}>
-                                <Text numberOfLines={1} style={styles.quantity}>1 x</Text>
-                                <Text numberOfLines={1} style={styles.foodName}>Bun Bo Hue</Text>
-                                <Text numberOfLines={1} style={styles.price}>$ 13.99</Text>
-                            </View>
-                            <TouchableOpacity style={styles.iconButtonWrapper}>
-                                <FontAwesome5
-                                    name={'trash-alt'}
-                                    color={'#54b33d'}
-                                    size={12}
-                                    solid
-                                />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.orderItemWrapper}>
-                            <View style={styles.textWrapper}>
-                                <Text numberOfLines={1} style={styles.quantity}>1 x</Text>
-                                <Text numberOfLines={1} style={styles.foodName}>Pho Bo</Text>
-                                <Text numberOfLines={1} style={styles.price}>$ 11.99</Text>
-                            </View>
-                            <TouchableOpacity style={styles.iconButtonWrapper}>
-                                <FontAwesome5
-                                    name={'trash-alt'}
-                                    color={'#54b33d'}
-                                    size={12}
-                                    solid
-                                />
-                            </TouchableOpacity>
-                        </View>
-
-                    </View>
-                    <Divider style={styles.divider} />
-
-                    <TouchableOpacity style={styles.longBtn}>
-                        <View style={styles.iconWrapper}>
-                            <FontAwesome5
-                                style={styles.icons}
-                                name={'credit-card'}
-                                size={23}
-                                color={'#54b33d'}
-                                solid
-                            />
-                        </View>
-                        <Text numberOfLines={1} style={styles.iconText}>Add Credit Card</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.longBtn}>
+                        {/* <TouchableOpacity style={styles.longBtn}>
                         <View style={styles.iconWrapper}>
                             <FontAwesome5
                                 style={styles.icons}
@@ -185,40 +181,49 @@ export default class MenuScreen extends Component {
                             />
                         </View>
                         <Text numberOfLines={1} style={styles.iconText}>Apply Coupon Code</Text>
-                    </TouchableOpacity>
-                    <Divider style={styles.divider} />
+                    </TouchableOpacity> */}
+                        <Divider style={styles.divider} />
 
-                    <View style={styles.priceSummaryContainer}>
-                        <View style={styles.priceSummaryWrapper}>
-                            <Text numberOfLines={1} style={styles.priceInfoTxt}>Sub-total</Text>
-                            <Text numberOfLines={1} style={styles.priceInfo}>20.99</Text>
+                        <View style={styles.priceSummaryContainer}>
+                            <View style={styles.priceSummaryWrapper}>
+                                <Text numberOfLines={1} style={styles.priceInfoTxt}>Sub-total</Text>
+                                <Text numberOfLines={1} style={styles.priceInfo}>$ {this.getTotalPrice(cart)}</Text>
+                            </View>
+                            <View style={styles.totalWrapper}>
+                                <Text numberOfLines={1} style={styles.totalTxt}>Total</Text>
+                                <Text numberOfLines={1} style={styles.total}>$ {this.getTotalPrice(cart)}</Text>
+                            </View>
                         </View>
-                        <View style={styles.priceSummaryWrapper}>
-                            <Text numberOfLines={1} style={styles.priceInfoTxt}>Discount</Text>
-                            <Text numberOfLines={1} style={styles.priceInfo}>-10.99</Text>
+                    </ScrollView>
+                    <TouchableOpacity style={styles.checkoutBtn}
+                        onPress={() => { this.props.navigation.navigate('Restaurants') }}>
+                        <View style={styles.iconWrapper}>
+                            <FontAwesome5
+                                style={styles.icons}
+                                name={'cash-register'}
+                                size={23}
+                                color={'white'}
+                                solid
+                            />
                         </View>
-                        <View style={styles.totalWrapper}>
-                            <Text numberOfLines={1} style={styles.totalTxt}>Total</Text>
-                            <Text numberOfLines={1} style={styles.total}>$ 20.99</Text>
-                        </View>
-                    </View>
-                </ScrollView>
-                <TouchableOpacity style={styles.checkoutBtn}
-                    onPress={() => { this.props.navigation.navigate('Restaurants') }}>
-                    <View style={styles.iconWrapper}>
-                        <FontAwesome5
-                            style={styles.icons}
-                            name={'cash-register'}
-                            size={23}
-                            color={'white'}
-                            solid
-                        />
-                    </View>
-                    <Text numberOfLines={1} style={styles.buttonTitle}>Checkout</Text>
-                </TouchableOpacity>
-            </View>
-        );
+                        <Text numberOfLines={1} style={styles.buttonTitle}>Checkout</Text>
+                    </TouchableOpacity>
+                </View>
+            );
+        }
+        else {
+            return (
+                <View>
+                    <Text style={{
+                        textAlign: 'center',
+                        fontSize: 20,
+                        fontWeight: 'bold'
+                    }}> Your order is empty</Text>
+                </View>
+            )
+        }
     }
+
 }
 
 const styles = StyleSheet.create({
@@ -438,5 +443,18 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlignVertical: 'center',
     },
-    
+
 });
+function initMapStateToProps(state) {
+    return {
+        cart: state.cartReducer.cart
+    };
+}
+
+function initMapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        deleteCartItem,
+    }, dispatch);
+}
+
+export default connect(initMapStateToProps, initMapDispatchToProps)(OrderDetailScreen);

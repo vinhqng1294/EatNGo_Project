@@ -1,18 +1,20 @@
 import request from './request';
 import { LOGIN_URL, REGISTER_URL } from './api_constants';
 
-function doLogin(email, password) {
+function doLogin(phone, authId) {
   const data = {
-    email,
-    password,
+    phone,
+    id: authId,
   };
   return request({ url: LOGIN_URL, method: 'POST', data });
 }
 
-function doRegister(email, password) {
+function doRegister(phoneNumber, authId, email, name) {
   const data = {
+    phoneNumber,
     email,
-    password,
+    name,
+    authId
   };
   return request({ url: REGISTER_URL, method: 'POST', data });
 }

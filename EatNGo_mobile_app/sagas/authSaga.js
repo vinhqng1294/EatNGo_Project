@@ -8,7 +8,7 @@ function* loginTask(action) {
     });
     const { payload } = action;
 
-    const res = yield call(Auth.doLogin, payload.email, payload.password);
+    const res = yield call(Auth.doLogin, payload.phone, payload.authId);
 
     if (res.status === 200) {
       yield put({
@@ -39,7 +39,7 @@ function* registerTask(action) {
 
     const { payload } = action;
 
-    const res = yield call(Auth.doRegister, payload.email, payload.password);
+    const res = yield call(Auth.doRegister, payload.phoneNumber, payload.email, payload.name, payload.authId);
 
     if (res.status === 200) {
       yield put({

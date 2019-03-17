@@ -10,7 +10,7 @@ class StoreList extends Component {
         <StoreItem
           store={store}
           onPress={() => {
-            this.props.navigation.navigate('Menu', { id: store.id })
+            this.props.navigation.navigate('Menu', { store: store })
           }}
         />
       );
