@@ -16,7 +16,7 @@ export default (state = initialState, { type, payload }) => {
         store: null,
         error: null,
       };
-    case 'FETCH_STORE_INFO_SUCCESS':
+    case 'SET_STORE_SUCCESS':
       return {
         ...state,
         store: payload,

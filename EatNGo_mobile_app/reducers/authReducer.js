@@ -1,7 +1,7 @@
 const initialState = {
   loginError: null,
   loginLoading: false,
-  loginMessage: null,
+  user: null,
   registerLoading: false,
   registerError: null,
   registerMessage: null,
@@ -19,21 +19,21 @@ export default (state = initialState, { type, payload }) => {
         ...state,
         loginLoading: false,
         loginError: null,
-        loginMessage: payload,
+        user: payload,
       };
     case 'AUTH_LOGIN_SUCCESS':
       return {
         ...state,
         loginLoading: false,
         loginError: null,
-        loginMessage: payload,
+        user: payload,
       };
     case 'AUTH_LOGIN_ERROR':
       return {
         ...state,
         loginLoading: false,
         loginError: payload,
-        loginMessage: null,
+        user: null,
       };
     case 'AUTH_REGISTER_LOADING':
       return {
@@ -45,7 +45,7 @@ export default (state = initialState, { type, payload }) => {
         ...state,
         registerLoading: false,
         registerError: null,
-        registerMessage: payload,
+        user: payload,
       };
     case 'AUTH_REGISTER_ERROR':
       return {

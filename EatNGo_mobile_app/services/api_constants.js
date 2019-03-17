@@ -1,7 +1,7 @@
 export const API_BASE = 'http://157.230.243.255:5000/api';
 
-export const LOGIN_URL = '/auth/login';
-export const REGISTER_URL = '/auth/register';
+export const LOGIN_URL = '/members/authorize';
+export const REGISTER_URL = '/members';
 export const STORE_URL = '/stores';
 export const FOOD_URL = '/foods';
 export const FOOD_TYPES_URL = '/food/types';

@@ -12,7 +12,7 @@ import {
 const StoreItem = ({ store, onPress }) => (
   <ImageBackground
     style={styles.row}
-    source={require('../../Assets/resDefault_1.png')}
+    source={{ uri :store.image}}
     imageStyle={{ resizeMode: 'contain' }}
   >
     <View style={styles.rowContentNoImage}>

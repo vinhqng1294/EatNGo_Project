@@ -17,7 +17,7 @@ import {
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import CheckBox from 'react-native-check-box';
 import NumericInput from 'react-native-numeric-input';
-import { fetchFoodInfo, updateFoodQuantity } from '../../actions/index'
+import { fetchFoodInfo, updateFoodQuantity, updateCartItems } from '../../actions/index'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ActionButton from 'react-native-action-button';
@@ -36,9 +36,6 @@ class FoodDetailScreen extends Component {
         };
     };
     handleRadioButton(item, option) {
-        console.log(item)
-        item.isChecked = true
-        console.log(option)
     }
     renderOption(option) {
         if (option.isCompulsory) {
@@ -128,7 +125,7 @@ class FoodDetailScreen extends Component {
                 /> */}
 
                         <Image style={styles.foodImg}
-                            source={food.imgURL} />
+                            source={{uri: food.images[0].image}} />
                         <View style={styles.miniHeader}>
                             <Text numberOfLines={2} style={styles.foodName}>{food.name}</Text>
                             <Text numberOfLines={1} style={styles.foodPrice}>$ {food.price}</Text>
@@ -199,7 +196,11 @@ class FoodDetailScreen extends Component {
 
                     </ScrollView>
                     <TouchableOpacity style={styles.addFoodBtn}
-                        onPress={() => { this.props.navigation.navigate('OrderDetail') }}>
+                        onPress={() => { 
+                            this.props.updateCartItems(food)
+                            this.props.navigation.state.params.onGoBack();
+                            this.props.navigation.goBack()
+                            }}>
                         <FontAwesome5 name={'cart-plus'} size={16} color={'white'} solid />
                         <Text style={styles.txtAdd}>Add</Text>
                     </TouchableOpacity>
@@ -459,15 +460,16 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-    console.log(state)
     return {
-        food: state.foodReducer.foodInfo
+        food: state.foodReducer.foodInfo,
+        cart: state.cartReducer.cart
     }
 };
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
         fetchFoodInfo,
-        updateFoodQuantity
+        updateFoodQuantity,
+        updateCartItems
     }, dispatch);
 }
 export default connect(mapStateToProps, mapDispatchToProps)(FoodDetailScreen);

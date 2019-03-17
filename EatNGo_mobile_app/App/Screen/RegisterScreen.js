@@ -4,6 +4,7 @@ import { StackActions, NavigationActions } from 'react-navigation';
 import { bindActionCreators } from 'redux';
 import { AsyncStorage } from 'react-native';
 import { authRegister } from '../../actions/index'
+import { validateEmail } from '../../utils/index'
 import {
     StyleSheet,
     View,
@@ -11,7 +12,8 @@ import {
     TextInput,
     TouchableOpacity,
     Image,
-    StatusBar,
+    Alert,
+    StatusBar
 } from 'react-native';
 import { Header } from 'react-native-elements';
 
@@ -51,14 +53,11 @@ class RegisterScreen extends Component {
             console.log(error)
         }
     }
-    handleSignUp() {
-        const resetAction = StackActions.reset({
-            index: 0,
-            actions: [NavigationActions.navigate({ routeName: 'Home' })],
-        });
-        this.props.navigation.dispatch(resetAction);
+    handleSignUp(phoneNumber, email, name, authId) {
+        this.props.authRegister(phoneNumber, email, name, authId)
+
         // const { name, email } = this.state;
-        // this.props.authRegister(email, "123456")
+
 
     }
     // shouldComponentUpdate(nextProps, nextState){
@@ -68,11 +67,13 @@ class RegisterScreen extends Component {
     //     return
     // }
     render() {
-        const { registerMessage } = this.props
-        if (registerMessage && registerMessage.success) {
-            // this.storeUserInfo()            
+        const phoneNumber = this.props.navigation.getParam('phoneNumber', null);
+        const authId = this.props.navigation.getParam('authId', null);
+        const { user } = this.props
+        if (user) {
             const resetAction = StackActions.reset({
                 index: 0,
+                key: null,
                 actions: [NavigationActions.navigate({ routeName: 'Home' })],
             });
             this.props.navigation.dispatch(resetAction);
@@ -81,6 +82,11 @@ class RegisterScreen extends Component {
             <View style={styles.container} >
                 <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
                 <Text style={styles.question}>How should we contact you?</Text>
+                <TextInput
+                    style={styles.input}
+                    value={phoneNumber}
+                    editable={false}
+                />
                 <TextInput
                     style={styles.input}
                     placeholder="Please enter your name"
@@ -98,12 +104,12 @@ class RegisterScreen extends Component {
                         if (this.state.name.length == 0) {
                             Alert.alert("Alert", 'You must enter name');
                             return;
-                        } else if (this.state.email.length == 0) {
+                        } else if (this.state.email.length == 0 || !validateEmail(this.state.email)) {
                             Alert.alert('Alert', "You must enter email");
                             return
                         }
                         else {
-                            this.handleSignUp()
+                            this.handleSignUp(phoneNumber, this.state.email, this.state.name, authId)
                         }
                     }}>
                     <Text style={styles.submitButtonText}>FINISH</Text>
@@ -155,7 +161,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
     console.log(state)
     return {
-        registerMessage: state.authReducer.registerMessage,
+        user: state.authReducer.user,
     }
 };
 const mapDispatchToProps = (dispatch) => {

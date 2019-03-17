@@ -1,16 +1,15 @@
-export const authLogin = (email, password) => ({
+export const authLogin = (phone, authId) => ({
   type: 'AUTH_LOGIN',
   payload: {
-    email,
-    password,
+    phone,
+    authId,
   },
 });
 
-export const authRegister = (email, password) => ({
+export const authRegister = (phoneNumber, email, name, authId) => ({
   type: 'AUTH_REGISTER',
   payload: {
-    email,
-    password,
+    phoneNumber, email, name, authId
   },
 });
 export const authLogout = () => ({
@@ -28,10 +27,10 @@ export const fetchStore = (id = null) => ({
   },
 });
 
-export const fetchFood = (brandId = null) => ({
+export const fetchFood = (store = null) => ({
   type: 'FETCH_FOOD',
   payload: {
-    brandId,
+    store,
   }
 })
 
@@ -81,5 +80,28 @@ export const searchStore = (value) => ({
   payload: {
     value
   },
+});
+
+export const updateCartItems = (data) => ({
+  type: 'UPDATE_CART_ITEMS',
+  payload: {
+    data
+  },
+});
+
+export const fetchCartItems = () => ({
+  type: 'FETCH_CART_ITEMS',
+});
+
+export const deleteCartItem = item => ({
+  type: 'DELETE_CART_ITEM',
+  payload: item,
+});
+export const cleanCart = () => ({
+  type: 'CLEAN_CART_ITEMS',
+});
+export const setSelectedStore = store => ({
+  type: 'SET_STORE',
+  payload: store,
 });
 
