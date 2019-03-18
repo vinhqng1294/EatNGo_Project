@@ -37,11 +37,14 @@ class FoodDetailScreen extends Component {
     };
     handleRadioButton(item, option) {
     }
+    checkDisable(food) {
+        
+    }
     renderOption(option) {
-        if (option.isCompulsory) {
+        if (option.compulsory) {
             return (
                 <FlatList
-                    data={option.items}
+                    data={option.options}
                     showsVerticalScrollIndicator={false}
                     renderItem={({ item }) =>
                         <View style={styles.extraItemsContainer}>
@@ -90,7 +93,7 @@ class FoodDetailScreen extends Component {
     }
 
     renderCompulsoryIcon(item) {
-        if (item.isCompulsory) {
+        if (item.compulsory) {
             return (
                 <Text style={styles.extraInfoTxt}>
                     <FontAwesome5 name={'exclamation-circle'} size={13} color={'#54b33d'} solid />
@@ -125,7 +128,7 @@ class FoodDetailScreen extends Component {
                 /> */}
 
                         <Image style={styles.foodImg}
-                            source={{uri: food.images[0].image}} />
+                            source={{ uri: food.images[0].image }} />
                         <View style={styles.miniHeader}>
                             <Text numberOfLines={2} style={styles.foodName}>{food.name}</Text>
                             <Text numberOfLines={1} style={styles.foodPrice}>$ {food.price}</Text>
@@ -136,13 +139,13 @@ class FoodDetailScreen extends Component {
                             </Text>
                         </View>
                         <FlatList
-                            data={food.extraOptions}
+                            data={food.attributes}
                             showsVerticalScrollIndicator={false}
                             renderItem={({ item }) =>
                                 <View style={styles.extraContainer}>
                                     <View style={styles.extraHeaderContainer}>
                                         <Text style={styles.extraHeaderTxt}>
-                                            {item.categoryName}</Text>
+                                            {item.name}</Text>
 
                                         {this.renderCompulsoryIcon(item)}
                                         {/* Recommend</Text> */}
@@ -196,11 +199,12 @@ class FoodDetailScreen extends Component {
 
                     </ScrollView>
                     <TouchableOpacity style={styles.addFoodBtn}
-                        onPress={() => { 
+                        disabled={this.checkDisable(food)}
+                        onPress={() => {
                             this.props.updateCartItems(food)
                             this.props.navigation.state.params.onGoBack();
                             this.props.navigation.goBack()
-                            }}>
+                        }}>
                         <FontAwesome5 name={'cart-plus'} size={16} color={'white'} solid />
                         <Text style={styles.txtAdd}>Add</Text>
                     </TouchableOpacity>
