@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, StyleSheet, View, Text, Image, ToastAndroid } from 'react-native';
+import { ScrollView, StyleSheet, View, Text, Image, ToastAndroid, TouchableOpacity } from 'react-native';
 import { ListItem, Button, Icon } from 'react-native-elements';
 
 
@@ -61,10 +61,24 @@ export default class ProfileScreen extends Component {
         )
     }
 
+    renderSeparator = () => {
+        return (
+            <View
+                style={{
+                    height: 1,
+                    width: "86%",
+                    backgroundColor: "#CED0CE",
+                    marginLeft: "14%"
+                }}
+            />
+        );
+    };
+
     renderOptions = () => {
         return (
             list.map((item, i) => (
                 <ListItem
+                    renderSeparator={this.renderSeparator}
                     key={i}
                     title={item.title}
                     leftIcon={{ name: item.icon }}
@@ -75,7 +89,10 @@ export default class ProfileScreen extends Component {
     }
 
     onPressOption(title) {
-        ToastAndroid.show(title, ToastAndroid.SHORT);
+        switch (title) {
+            case 'Settings':
+                this.props.navigation.navigate('EditProfile')
+        }
     }
 
     render() {
@@ -107,7 +124,7 @@ export default class ProfileScreen extends Component {
 
 
 const styles = StyleSheet.create({
-    version: {fontFamily: "vincHand", fontSize: 13},
+    version: { fontFamily: "vincHand", fontSize: 13 },
     footerInfo: { flex: 1, alignItems: 'center', marginTop: 20 },
     logoutButton: { backgroundColor: '#54C242' },
     cardContainer: {
