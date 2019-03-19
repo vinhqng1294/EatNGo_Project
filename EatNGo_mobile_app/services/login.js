@@ -6,7 +6,6 @@ function doLogin(phoneNumber, facebookId) {
     phoneNumber,
     facebookId,
   };
-  console.log(data)
   return request({ url: LOGIN_URL, method: 'POST', data });
 }
 
