@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { ScrollView, StyleSheet, View, Text, Image, ToastAndroid, TouchableOpacity } from 'react-native';
 import { ListItem, Button, Icon } from 'react-native-elements';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 
-export default class ProfileScreen extends Component {
+class ProfileScreen extends Component {
 
     constructor(props) {
         super(props);
@@ -11,7 +13,7 @@ export default class ProfileScreen extends Component {
     }
 
     renderContactHeader = () => {
-
+        const { user } = this.props
         return (
             <View style={styles.headerContainer}>
                 <View style={styles.userRow}>
@@ -22,10 +24,10 @@ export default class ProfileScreen extends Component {
                         }}
                     />
                     <View style={styles.userNameRow}>
-                        <Text style={styles.userNameText}>Vu Huynh</Text>
+                        <Text style={styles.userNameText}>{user.name}</Text>
                     </View>
                     <View style={styles.userBioRow}>
-                        <Text style={styles.userBioText}>vuhuynhhoan@gmail.com</Text>
+                        <Text style={styles.userBioText}>{user.email}</Text>
                     </View>
                 </View>
                 <View style={styles.socialRow}>
@@ -227,3 +229,14 @@ const list = [
         icon: 'settings'
     }
 ]
+const mapStateToProps = (state) => {
+    console.log(state)
+    return {
+        user: state.authReducer.user
+    }
+};
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({
+    }, dispatch);
+}
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);
