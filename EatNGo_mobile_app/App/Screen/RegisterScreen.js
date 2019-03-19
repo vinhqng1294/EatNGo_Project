@@ -53,8 +53,8 @@ class RegisterScreen extends Component {
             console.log(error)
         }
     }
-    handleSignUp(phoneNumber, email, name, authId) {
-        this.props.authRegister(phoneNumber, email, name, authId)
+    handleSignUp(phoneNumber, email, name, facebookId) {
+        this.props.authRegister(phoneNumber, email, name, facebookId)
 
         // const { name, email } = this.state;
 
@@ -68,7 +68,7 @@ class RegisterScreen extends Component {
     // }
     render() {
         const phoneNumber = this.props.navigation.getParam('phoneNumber', null);
-        const authId = this.props.navigation.getParam('authId', null);
+        const facebookId = this.props.navigation.getParam('facebookId', null);
         const { user } = this.props
         if (user) {
             const resetAction = StackActions.reset({
@@ -109,7 +109,7 @@ class RegisterScreen extends Component {
                             return
                         }
                         else {
-                            this.handleSignUp(phoneNumber, this.state.email, this.state.name, authId)
+                            this.handleSignUp(phoneNumber, this.state.email, this.state.name, facebookId)
                         }
                     }}>
                     <Text style={styles.submitButtonText}>FINISH</Text>

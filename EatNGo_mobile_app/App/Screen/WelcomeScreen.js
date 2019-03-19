@@ -22,7 +22,7 @@ import { RotationGestureHandler } from 'react-native-gesture-handler';
 class WelcomeScreen extends Component {
     state = {
         phoneNumber: null,
-        authId: null,
+        facebookId: null,
     };
 
     componentWillMount() {
@@ -59,8 +59,9 @@ class WelcomeScreen extends Component {
             this.setState({});
         } else {
             AccountKit.getCurrentAccount().then(account => {
+                console.log(account)
                 const phoneNumber = this.getPhoneNumber(account.phoneNumber.number)
-                this.setState({ phoneNumber, authId: account.id })
+                this.setState({ phoneNumber, facebookId: account.id })
                 this.props.authLogin(phoneNumber, account.id)
                 // this.props.navigation.navigate('Register')
             });
@@ -79,7 +80,7 @@ class WelcomeScreen extends Component {
         const { loginError, user } = this.props
         if (loginError) {
             console.log(this.state.phoneNumber)
-            this.props.navigation.navigate('Register', { phoneNumber: this.state.phoneNumber, authId: this.state.authId })
+            this.props.navigation.navigate('Register', { phoneNumber: this.state.phoneNumber, facebookId: this.state.facebookId })
         }
         if (user) {
             this.props.navigation.navigate('Home')

@@ -2,13 +2,14 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 import Auth from '../services/login';
 
 function* loginTask(action) {
+  console.log(action)
   try {
     yield put({
       type: 'AUTH_LOGIN_LOADING',
     });
     const { payload } = action;
 
-    const res = yield call(Auth.doLogin, payload.phone, payload.authId);
+    const res = yield call(Auth.doLogin, payload.phoneNumber, payload.facebookId);
 
     if (res.status === 200) {
       yield put({
@@ -39,7 +40,7 @@ function* registerTask(action) {
 
     const { payload } = action;
 
-    const res = yield call(Auth.doRegister, payload.phoneNumber, payload.email, payload.name, payload.authId);
+    const res = yield call(Auth.doRegister, payload.phoneNumber, payload.email, payload.name, payload.facebookId);
 
     if (res.status === 200) {
       yield put({
