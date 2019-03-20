@@ -10,8 +10,14 @@ function* cartItemsAdd(action) {
     const duplicateItemIndex = currentCart.findIndex(item => item.id === payload.data.id)
     if (duplicateItemIndex !== -1) {
       currentCart[duplicateItemIndex].quantity += payload.data.quantity
+
     } else {
-      currentCart.push(payload.data)
+      const attributes = [...payload.data.attributes]
+      attributes.map(attr => {
+        attr.options = attr.options.filter(item => item.isChecked)
+        return attr
+      })
+      currentCart.push({ ...payload.data, attributes: attributes })
     }
     yield put({ type: 'SAVE_NEW_CART', payload: currentCart });
   } catch (e) {

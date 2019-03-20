@@ -16,18 +16,20 @@ import {
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import CheckBox from 'react-native-check-box';
+// import { CheckBox } from 'react-native-elements'
 import NumericInput from 'react-native-numeric-input';
-import { fetchFoodInfo, updateFoodQuantity, updateCartItems } from '../../actions/index'
+import { fetchFoodInfo, updateFoodQuantity, updateCartItems, updateFoodOption } from '../../actions/index'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import ActionButton from 'react-native-action-button';
+
 
 class FoodDetailScreen extends Component {
+
+    state = {
+        checked: []
+    }
     constructor() {
         super();
-        this.state = {
-            value: 1
-        };
     }
 
     static navigationOptions = ({ navigation }) => {
@@ -35,18 +37,29 @@ class FoodDetailScreen extends Component {
             header: null
         };
     };
-    handleRadioButton(item, option) {
+    handleRadioButton(optionIndex, index) {
+        this.props.updateFoodOption(optionIndex, index)
+        // const { checked } = this.state
+        // if (!checked.includes(item)) {
+        //     console.log('check')
+        //     this.setState({ checked: [...checked, item] })
+        // } else {
+        //     console.log('uncheck')
+        //     this.setState({ checked: checked.filter(a => a.param !== item.param) });
+        // }
+
     }
-    checkDisable(food) {
-        
+
+    hasAttributes(food) {
+        return food.attributes && food.attributes.length > 0
     }
-    renderOption(option) {
+    renderOption(option, optionIndex) {
         if (option.compulsory) {
             return (
                 <FlatList
                     data={option.options}
-                    showsVerticalScrollIndicator={false}
-                    renderItem={({ item }) =>
+                    extraData={this.props}
+                    renderItem={({ item, index }) =>
                         <View style={styles.extraItemsContainer}>
                             <Text numberOfLines={1} style={styles.extraItemsName}>
                                 {item.name}
@@ -56,12 +69,13 @@ class FoodDetailScreen extends Component {
                             <CheckBox
                                 style={styles.radioBtn}
                                 onClick={() => {
-                                    this.handleRadioButton(item, option)
+                                    this.handleRadioButton(optionIndex, index)
                                 }}
                                 isChecked={item.isChecked}
                                 checkBoxColor='#54b33d'
                                 checkedImage={<FontAwesome5 name={'dot-circle'} size={18} color={'#54b33d'} solid />}
-                                unCheckedImage={<FontAwesome5 name={'circle'} size={18} color={'#54b33d'} />}
+                                unCheckedImage={<FontAwesome5 name={'circle'} size={18} color={'#54b33d'}
+                                />}
                             />
                         </View>
                     }
@@ -82,7 +96,7 @@ class FoodDetailScreen extends Component {
                             <CheckBox
                                 style={styles.checkbox}
                                 onClick={() => { }}
-                                isChecked={item.isChecked}
+                                isChecked={item.isCheck}
                                 checkBoxColor='#54b33d'
                             />
                         </View>
@@ -112,6 +126,7 @@ class FoodDetailScreen extends Component {
         this.props.fetchFoodInfo(foodId);
     }
     render() {
+
         let { food } = this.props
         if (food) {
             return (
@@ -140,8 +155,9 @@ class FoodDetailScreen extends Component {
                         </View>
                         <FlatList
                             data={food.attributes}
+                            extraData={this.props}
                             showsVerticalScrollIndicator={false}
-                            renderItem={({ item }) =>
+                            renderItem={({ item, index }) =>
                                 <View style={styles.extraContainer}>
                                     <View style={styles.extraHeaderContainer}>
                                         <Text style={styles.extraHeaderTxt}>
@@ -153,7 +169,7 @@ class FoodDetailScreen extends Component {
 
                                     </View>
                                     <View style={styles.extraItemContainer}>
-                                        {this.renderOption(item)}
+                                        {this.renderOption(item, index)}
                                     </View>
                                 </View>
 
@@ -199,7 +215,6 @@ class FoodDetailScreen extends Component {
 
                     </ScrollView>
                     <TouchableOpacity style={styles.addFoodBtn}
-                        disabled={this.checkDisable(food)}
                         onPress={() => {
                             this.props.updateCartItems(food)
                             this.props.navigation.state.params.onGoBack();
@@ -464,6 +479,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
+    console.log(state)
     return {
         food: state.foodReducer.foodInfo,
         cart: state.cartReducer.cart
@@ -473,7 +489,8 @@ const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
         fetchFoodInfo,
         updateFoodQuantity,
-        updateCartItems
+        updateCartItems,
+        updateFoodOption
     }, dispatch);
 }
 export default connect(mapStateToProps, mapDispatchToProps)(FoodDetailScreen);

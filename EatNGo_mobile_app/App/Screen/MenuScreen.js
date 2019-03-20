@@ -37,7 +37,13 @@ class MenuScreen extends Component {
                         type='clear'
                         title={null}
                         onPress={() => {
-                            navigation.navigate('OrderDetail')
+                            navigation.navigate('OrderDetail', {
+                                onGoBack: () => {
+                                    const updateCartQuantity = navigation.getParam('updateCartQuantity')
+                                    updateCartQuantity()
+                                }
+                            })
+
                         }}
                     />
                 </View>,
@@ -87,7 +93,8 @@ class MenuScreen extends Component {
         this.props.fetchFood(store);
         navigation.setParams({
             cartLength: !checkNewStore ? this.props.cart.length : 0,
-            storeName: store.name
+            storeName: store.name,
+            updateCartQuantity: this.updateCartQuantity.bind(this)
         })
     }
 
@@ -96,9 +103,10 @@ class MenuScreen extends Component {
             cartLength: this.props.cart.length
         })
     }
-
     render() {
-
+        // this.props.navigation.setParams({
+        //     cartLength: this.props.cart.length || 0,
+        // })
         return (
             <ScrollView style={styles.container}>
                 <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
