@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Text, View, StyleSheet, Button } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 
-const ActiveOrderItems = ({ id, name, status, date, time }) => (
+const ActiveOrderItems = ({ id, name, status, date, time, onPress }) => (
     <View style={styles.container}>
         <View style={styles.container_text}>
             <Text style={styles.title}>{id}</Text>
@@ -11,6 +11,7 @@ const ActiveOrderItems = ({ id, name, status, date, time }) => (
             <Button
                 icon={<Icon name="arrow-right" size={15} color="white"  />}
                 iconRight
+                onPress={onPress}
                 title="View Order"
                 color="#54C242"
             />
