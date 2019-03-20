@@ -4,58 +4,63 @@ const initialState = {
   user: null,
   registerLoading: false,
   registerError: null,
-  registerMessage: null,
+  registerMessage: null
 };
 
 export default (state = initialState, { type, payload }) => {
   switch (type) {
-    case 'AUTH_LOGIN_LOADING':
+    case "AUTH_LOGIN_LOADING":
       return {
         ...state,
-        loginLoading: true,
+        loginLoading: true
       };
-    case 'AUTH_HYDRATE_TOKEN':
-      return {
-        ...state,
-        loginLoading: false,
-        loginError: null,
-        user: payload,
-      };
-    case 'AUTH_LOGIN_SUCCESS':
+    case "AUTH_HYDRATE_TOKEN":
       return {
         ...state,
         loginLoading: false,
         loginError: null,
-        user: payload,
+        user: payload
       };
-    case 'AUTH_LOGIN_ERROR':
+    case "AUTH_LOGIN_SUCCESS":
+      return {
+        ...state,
+        loginLoading: false,
+        loginError: null,
+        user: payload
+      };
+    case "AUTH_LOGIN_ERROR":
       return {
         ...state,
         loginLoading: false,
         loginError: payload,
-        user: null,
+        user: null
       };
-    case 'AUTH_REGISTER_LOADING':
+    case "AUTH_REGISTER_LOADING":
       return {
         ...state,
-        registerLoading: true,
+        registerLoading: true
       };
-    case 'AUTH_REGISTER_SUCCESS':
+    case "AUTH_REGISTER_SUCCESS":
       return {
         ...state,
         registerLoading: false,
         registerError: null,
-        user: payload,
+        user: payload
       };
-    case 'AUTH_REGISTER_ERROR':
+    case "AUTH_REGISTER_ERROR":
       return {
         ...state,
         registerError: payload,
         registerLoading: false,
-        registerMessage: null,
+        registerMessage: null
       };
-    case 'AUTH_LOGOUT_RESET':
+    case "AUTH_LOGOUT_RESET":
       return initialState;
+    case "AUTH_LOGOUT_SUCCESS":
+      return {
+        ...state,
+        user: null
+      }
     default:
       return state;
   }

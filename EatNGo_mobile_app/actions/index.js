@@ -1,104 +1,120 @@
 export const authLogin = (phoneNumber, facebookId) => ({
-  type: 'AUTH_LOGIN',
+  type: "AUTH_LOGIN",
   payload: {
     phoneNumber,
-    facebookId,
-  },
+    facebookId
+  }
 });
 
 export const authRegister = (phoneNumber, email, name, facebookId) => ({
-  type: 'AUTH_REGISTER',
+  type: "AUTH_REGISTER",
   payload: {
-    phoneNumber, email, name, facebookId
-  },
+    phoneNumber,
+    email,
+    name,
+    facebookId
+  }
 });
 export const authLogout = () => ({
-  type: 'AUTH_LOGOUT',
+  type: "AUTH_LOGOUT"
 });
 
 export const fetchCuisineTypes = () => ({
-  type: 'FETCH_CUISINE_TYPES',
+  type: "FETCH_CUISINE_TYPES"
 });
 
 export const fetchStore = (id = null) => ({
-  type: 'FETCH_STORE',
+  type: "FETCH_STORE",
   payload: {
-    id,
-  },
+    id
+  }
 });
 
 export const fetchFood = (store = null) => ({
-  type: 'FETCH_FOOD',
+  type: "FETCH_FOOD",
   payload: {
-    store,
+    store
   }
-})
+});
 
 export const fetchFoodInfo = (id = null) => ({
-  type: 'FETCH_FOOD_INFO',
+  type: "FETCH_FOOD_INFO",
   payload: {
-    id,
+    id
   }
-})
+});
 
 export const fetchRestaurantByType = (type = null, isFromCuisine = false) => ({
-  type: 'FETCH_RESTAURANT_TYPE',
+  type: "FETCH_RESTAURANT_TYPE",
   payload: {
     type,
-    isFromCuisine,
-  },
+    isFromCuisine
+  }
 });
 
-export const fetchOrders = () => ({
-  type: 'FETCH_ORDERS',
+export const fetchOrders = memberId => ({
+  type: "FETCH_ORDERS",
+  payload: {
+    memberId
+  }
 });
+
+export const fetchOrderById = orderId => ({
+  type: "FETCH_ORDER_BY_ID",
+  payload: {
+    orderId
+  }
+});
+
 
 export const doCancelOrder = () => ({
-  type: 'CANCEL_ORDER',
+  type: "CANCEL_ORDER"
 });
 
-export const updateFoodQuantity = (quantity) => ({
-  type: 'UPDATE_FOOD_QUANTITY',
+
+
+export const updateFoodQuantity = quantity => ({
+  type: "UPDATE_FOOD_QUANTITY",
   payload: {
     quantity
   }
-})
+});
 export const createOrder = (items, total) => ({
-  type: 'CREATE_ORDER',
+  type: "CREATE_ORDER",
   payload: {
     items,
-    total,
-  },
+    total
+  }
 });
 
-export const searchStore = (value) => ({
-  type: 'SEARCH_STORE',
+export const searchStore = value => ({
+  type: "SEARCH_STORE",
   payload: {
     value
-  },
+  }
 });
 
-export const updateCartItems = (data) => ({
-  type: 'UPDATE_CART_ITEMS',
+export const updateCartItems = data => ({
+  type: "UPDATE_CART_ITEMS",
   payload: {
     data
-  },
+  }
 });
 
 export const fetchCartItems = () => ({
-  type: 'FETCH_CART_ITEMS',
+  type: "FETCH_CART_ITEMS"
 });
 
 export const deleteCartItem = item => ({
-  type: 'DELETE_CART_ITEM',
-  payload: item,
+  type: "DELETE_CART_ITEM",
+  payload: item
 });
 export const cleanCart = () => ({
-  type: 'CLEAN_CART_ITEMS',
+  type: "CLEAN_CART_ITEMS"
 });
 export const setSelectedStore = store => ({
-  type: 'SET_STORE',
-  payload: store,
+  type: "SET_STORE",
+  payload: store
 });
 
 export const updateFoodOption = (optionIndex, itemIndex) => ({
