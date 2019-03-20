@@ -134,6 +134,24 @@ class OrderDetailScreen extends Component {
                                             <Text numberOfLines={2} style={styles.foodName}>{item.name}</Text>
                                             <Text numberOfLines={1} style={styles.price}>$ {item.originalPrice}</Text>
                                         </View>
+
+                                        {/* start extra detail */}
+                                        <FlatList
+                                            data={item.attributes}
+                                            showsVerticalScrollIndicator={false}
+                                            renderItem={({ item }) =>
+                                                <View>
+                                                    <Text>{item.name}:</Text>
+                                                    <FlatList
+                                                        data={item.options}
+                                                        renderItem={({ item }) =>
+                                                            <Text numberOfLines={1} style={styles.quantity}>{item.name} x ${item.price}</Text>
+                                                        }
+                                                    />
+                                                </View>
+                                            }
+                                        />
+                                        {/* end extra detail */}
                                         <TouchableOpacity style={styles.iconButtonWrapper}
                                             onPress={() => {
                                                 Alert.alert(

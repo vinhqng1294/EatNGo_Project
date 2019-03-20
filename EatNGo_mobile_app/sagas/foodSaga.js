@@ -99,7 +99,7 @@ function* updateFoodOptions(action) {
     const currentFood = yield select(foodSelector)
     const newAttributes = [...currentFood.attributes]
     let optionTotalPrice = 0
-    if (currentFood.attributes.length) {
+    if (currentFood.attributes && currentFood.attributes.length) {
       currentFood.attributes.map(attr => {
         attr.options.map(item => {
           if (item.isChecked) optionTotalPrice += item.price
