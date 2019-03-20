@@ -10,6 +10,7 @@ import {
     StatusBar,
     Alert,
     Image,
+    BackHandler,
     Dimensions,
 } from 'react-native';
 
@@ -92,7 +93,11 @@ class OrderDetailScreen extends Component {
         const totalPrice = cart.reduce((acc, item) => { return acc + (parseFloat(item.originalPrice) * item.quantity) }, 0.0)
         return totalPrice.toFixed(2)
     }
-
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', () => {
+            this.props.navigation.state.params.onGoBack();
+        })
+    }
     render() {
         const { cart } = this.props
         console.log(cart)

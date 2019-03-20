@@ -79,7 +79,6 @@ class WelcomeScreen extends Component {
     render() {
         const { loginError, user } = this.props
         if (loginError) {
-            console.log(this.state.phoneNumber)
             this.props.navigation.navigate('Register', { phoneNumber: this.state.phoneNumber, facebookId: this.state.facebookId })
         }
         if (user) {

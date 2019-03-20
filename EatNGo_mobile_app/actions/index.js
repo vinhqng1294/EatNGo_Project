@@ -57,10 +57,6 @@ export const doCancelOrder = () => ({
   type: 'CANCEL_ORDER',
 });
 
-export const updateFoodOption = () => ({
-
-})
-
 export const updateFoodQuantity = (quantity) => ({
   type: 'UPDATE_FOOD_QUANTITY',
   payload: {
@@ -104,4 +100,14 @@ export const setSelectedStore = store => ({
   type: 'SET_STORE',
   payload: store,
 });
+
+export const updateFoodOption = (optionIndex, itemIndex) => ({
+  type: 'UPDATE_FOOD_OPTION',
+  payload: {
+    optionIndex,
+    itemIndex
+  },
+});
+
+
 

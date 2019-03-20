@@ -87,7 +87,7 @@ const AppNavigator = createStackNavigator(
         "OrderDetail": { screen: OrderDetailScreen },
     },
     {
-        initialRouteName: 'Welcome',
+        initialRouteName: 'Home',
     },
 );
 let Navigation = createAppContainer(AppNavigator);
