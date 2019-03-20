@@ -445,6 +445,7 @@ const styles = StyleSheet.create({
     },
 
 });
+
 function initMapStateToProps(state) {
     return {
         cart: state.cartReducer.cart

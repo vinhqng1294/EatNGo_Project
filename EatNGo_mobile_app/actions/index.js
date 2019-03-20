@@ -59,6 +59,13 @@ export const fetchOrders = memberId => ({
   }
 });
 
+export const fetchOrderById = orderId => ({
+  type: "FETCH_ORDER_BY_ID",
+  payload: {
+    orderId
+  }
+});
+
 export const doCancelOrder = () => ({
   type: "CANCEL_ORDER"
 });

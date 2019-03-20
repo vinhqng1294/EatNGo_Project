@@ -1,5 +1,6 @@
 const initialState = {
     orderList: [],
+    order: null,
     error: null
   };
   
@@ -9,6 +10,13 @@ const initialState = {
         return {
           ...state,
           orderList: payload,
+          error: null
+        }
+
+        case 'FETCH_ORDER_DETAIL_SUCCESS':
+        return {
+          ...state,
+          order: payload,
           error: null
         }
       default:

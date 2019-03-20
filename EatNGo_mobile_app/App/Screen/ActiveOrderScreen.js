@@ -10,28 +10,28 @@ import { fetchOrders } from "../../actions/index";
 class ActiveOrderScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      itemList: [
-        {
-          id: "#001",
-          name: "sushi tsunami",
-          status: "active",
-          date: "1/18/2019",
-          time: "3:15PM"
-        },
-        {
-          id: "#002",
-          name: "1080ti",
-          status: "active",
-          date: "1/18/2019",
-          time: "3:15PM"
-        }
-      ]
-    };
+    // this.state = {
+    //   itemList: [
+    //     {
+    //       id: "#001",
+    //       name: "sushi tsunami",
+    //       status: "active",
+    //       date: "1/18/2019",
+    //       time: "3:15PM"
+    //     },
+    //     {
+    //       id: "#002",
+    //       name: "1080ti",
+    //       status: "active",
+    //       date: "1/18/2019",
+    //       time: "3:15PM"
+    //     }
+    //   ]
+    // };
   }
 
   handleItemOnPress(item) {
-    console.log(item);
+    this.props.navigation.navigate("ActiveOrderDetail", { id: item.id });
   }
 
   renderActiveOrderListView = ({ itemList }) => (
