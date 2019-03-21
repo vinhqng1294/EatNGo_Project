@@ -116,6 +116,11 @@ export const setSelectedStore = store => ({
   payload: store
 });
 
+export const removeCreatedOrder = store => ({
+  type: "REMOVE_CREATED_ORDER",
+  payload: store
+});
+
 export const updateFoodOption = (optionIndex, itemIndex) => ({
   type: 'UPDATE_FOOD_OPTION',
   payload: {

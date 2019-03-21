@@ -8,7 +8,7 @@ const storeSelector = state => state.storeReducer.store || null;
 function* orderByMemberIdTask(action) {
   try {
     yield put({
-      type: "IS_FETCHING_ORDERS",      
+      type: "IS_FETCHING_ORDERS",
     });
     const { payload } = action;
     const user = yield select(userSelector);
@@ -107,11 +107,22 @@ function* createOrder(action) {
 }
 
 
+function* removeCreatedOrder(action) {
+  try {
+    yield put({
+      type: "REMOVE_CREATED_ORDER_SUCCESS",
+    });
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 
 function* orderSaga() {
   yield takeLatest('FETCH_ORDERS', orderByMemberIdTask)
   yield takeLatest('FETCH_ORDER_BY_ID', orderByIdTask)
   yield takeLatest('CREATE_ORDER', createOrder)
+  yield takeLatest('REMOVE_CREATED_ORDER', removeCreatedOrder)
 }
 
 export default orderSaga;

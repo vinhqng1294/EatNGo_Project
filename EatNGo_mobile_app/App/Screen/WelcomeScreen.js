@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { authLogin } from '../../actions/index'
 import { connect } from 'react-redux';
+import { StackActions, NavigationActions } from 'react-navigation';
 import {
     StyleSheet,
     View,
@@ -82,7 +83,12 @@ class WelcomeScreen extends Component {
             this.props.navigation.navigate('Register', { phoneNumber: this.state.phoneNumber, facebookId: this.state.facebookId })
         }
         if (user) {
-            this.props.navigation.navigate('Home')
+            const resetAction = StackActions.reset({
+                index: 0,
+                key: null,
+                actions: [NavigationActions.navigate({ routeName: 'Home' })],
+            });
+            this.props.navigation.dispatch(resetAction);
         }
         return (
             <View style={styles.container}>

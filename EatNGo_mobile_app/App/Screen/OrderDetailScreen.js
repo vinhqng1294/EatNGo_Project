@@ -17,7 +17,7 @@ import {
 import CheckBox from 'react-native-check-box';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Badge, Button, Divider } from 'react-native-elements';
-import { deleteCartItem, fetchCartItems, createOrder } from '../../actions/index'
+import { deleteCartItem, fetchCartItems, createOrder, removeCreatedOrder } from '../../actions/index'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -105,7 +105,10 @@ class OrderDetailScreen extends Component {
                 'Order',
                 'Your order has been created successfully',
                 [
-                    { text: 'OK', onPress: () => this.props.navigation.navigate('Home') },
+                    { text: 'OK', onPress: () => {
+                        this.props.removeCreatedOrder()
+                        this.props.navigation.navigate('Home')
+                    }},
                 ],
                 { cancelable: false }
             );
@@ -488,7 +491,8 @@ function initMapStateToProps(state) {
 function initMapDispatchToProps(dispatch) {
     return bindActionCreators({
         deleteCartItem,
-        createOrder
+        createOrder,
+        removeCreatedOrder
     }, dispatch);
 }
 
