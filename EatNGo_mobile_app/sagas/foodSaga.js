@@ -6,7 +6,6 @@ const foodSelector = state => state.foodReducer.foodInfo || null;
 function* foodByTypeTask(action) {
   try {
     const { payload } = action;
-    //   const authToken = yield select(authTokenSelector);
 
     const res = yield call(API.getStoreFoodGroupByType, payload.store.brandId);
     if (res.status === 200) {
@@ -73,14 +72,13 @@ function* updateFoodQuantityTask(action) {
     const { payload } = action;
     const currentFood = yield select(foodSelector)
     let optionTotalPrice = 0
-    if (currentFood.attributes.length) {
+    if (currentFood.attributes && currentFood.attributes.length) {
       currentFood.attributes.map(attr => {
         attr.options.map(item => {
           if (item.isChecked) optionTotalPrice += item.price
         })
       })
     }
-    console.log(optionTotalPrice)
     const newFood = { ...currentFood, quantity: payload.quantity, price: ((parseFloat(currentFood.originalPrice) + optionTotalPrice) * payload.quantity).toFixed(2) }
     yield put({
       type: 'UPDATE_FOOD_SUCCESS',

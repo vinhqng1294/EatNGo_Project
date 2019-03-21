@@ -1,11 +1,11 @@
 import request from "./request";
-import { ORDER_URL } from "./api_constants";
+import { ORDER_URL, MEMBER_URL } from "./api_constants";
 function getOrders(userId, headers) {
   const params = {
     userId
   };
   return request({
-    url: ORDER_URL,
+    url: MEMBER_URL + `/${userId}/` + 'orders',
     method: "GET",
     params,
     headers
@@ -13,11 +13,10 @@ function getOrders(userId, headers) {
 }
 
 function getOrderById(orderId, headers) {
-  console.log(orderId)
   const params = {
   };
   return request({
-    url: ORDER_URL+'/'+ orderId,
+    url: ORDER_URL + '/' + orderId,
     method: "GET",
     params,
     headers
@@ -25,7 +24,6 @@ function getOrderById(orderId, headers) {
 }
 
 function createOrder(data, headers) {
-  console.log(data);
   return request({
     url: ORDER_URL,
     method: "POST",

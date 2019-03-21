@@ -17,7 +17,7 @@ import {
 import CheckBox from 'react-native-check-box';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Badge, Button, Divider } from 'react-native-elements';
-import { deleteCartItem, fetchCartItems } from '../../actions/index'
+import { deleteCartItem, fetchCartItems, createOrder, removeCreatedOrder } from '../../actions/index'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -99,8 +99,20 @@ class OrderDetailScreen extends Component {
         })
     }
     render() {
-        const { cart } = this.props
-        console.log(cart)
+        const { cart, createdOrder } = this.props
+        if (createdOrder) {
+            Alert.alert(
+                'Order',
+                'Your order has been created successfully',
+                [
+                    { text: 'OK', onPress: () => {
+                        this.props.removeCreatedOrder()
+                        this.props.navigation.navigate('Home')
+                    }},
+                ],
+                { cancelable: false }
+            );
+        }
         if (cart.length) {
             return (
                 <View style={{ flex: 1 }}>
@@ -219,7 +231,7 @@ class OrderDetailScreen extends Component {
                         </View>
                     </ScrollView>
                     <TouchableOpacity style={styles.checkoutBtn}
-                        onPress={() => { this.props.navigation.navigate('Restaurants') }}>
+                        onPress={() => { this.props.createOrder(cart) }}>
                         <View style={styles.iconWrapper}>
                             <FontAwesome5
                                 style={styles.icons}
@@ -471,13 +483,16 @@ const styles = StyleSheet.create({
 
 function initMapStateToProps(state) {
     return {
-        cart: state.cartReducer.cart
+        cart: state.cartReducer.cart,
+        createdOrder: state.orderReducer.createdOrder
     };
 }
 
 function initMapDispatchToProps(dispatch) {
     return bindActionCreators({
         deleteCartItem,
+        createOrder,
+        removeCreatedOrder
     }, dispatch);
 }
 

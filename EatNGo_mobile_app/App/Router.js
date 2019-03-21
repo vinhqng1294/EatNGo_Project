@@ -89,7 +89,7 @@ const AppNavigator = createStackNavigator(
         "ActiveOrderDetail": { screen: ActiveOrderDetailScreen }
     },
     {
-        initialRouteName: 'Home',
+        initialRouteName: 'Welcome',
     },
 );
 let Navigation = createAppContainer(AppNavigator);

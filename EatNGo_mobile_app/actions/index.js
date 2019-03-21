@@ -79,11 +79,10 @@ export const updateFoodQuantity = quantity => ({
     quantity
   }
 });
-export const createOrder = (items, total) => ({
+export const createOrder = (data) => ({
   type: "CREATE_ORDER",
   payload: {
-    items,
-    total
+    data
   }
 });
 
@@ -114,6 +113,11 @@ export const cleanCart = () => ({
 });
 export const setSelectedStore = store => ({
   type: "SET_STORE",
+  payload: store
+});
+
+export const removeCreatedOrder = store => ({
+  type: "REMOVE_CREATED_ORDER",
   payload: store
 });
 

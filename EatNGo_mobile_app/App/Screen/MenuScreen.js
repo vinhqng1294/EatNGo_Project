@@ -16,6 +16,9 @@ import { connect } from 'react-redux';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Badge, Button } from 'react-native-elements';
 class MenuScreen extends Component {
+    constructor(props) {
+        super(props)
+    }
     static navigationOptions = ({ navigation }) => {
         return {
             headerTintColor: '#54b33d',
@@ -84,6 +87,9 @@ class MenuScreen extends Component {
     };
     componentDidMount() {
         const { navigation } = this.props;
+        navigation.setParams({
+            updateCartQuantity: this.updateCartQuantity.bind(this)
+        })
         const store = navigation.getParam('store', null);
         const checkNewStore = this.props.store && store.id !== this.props.store.id
         if (checkNewStore) {
@@ -94,7 +100,6 @@ class MenuScreen extends Component {
         navigation.setParams({
             cartLength: !checkNewStore ? this.props.cart.length : 0,
             storeName: store.name,
-            updateCartQuantity: this.updateCartQuantity.bind(this)
         })
     }
 

@@ -12,10 +12,10 @@ import {
 const StoreItem = ({ store, onPress }) => (
   <ImageBackground
     style={styles.row}
-    source={{ uri :store.image}}
-    imageStyle={{ resizeMode: 'contain' }}
+    source={{ uri: store.image }}
+    imageStyle={{ resizeMode: 'cover' }}
   >
-    <View style={styles.rowContentNoImage}>
+    <View style={store.image ? styles.rowContent : styles.rowContentNoImage}>
       <View style={styles.restaurantNameContainer}>
         <Text numberOfLines={1} style={styles.restaurantName}>
           {store.name}
