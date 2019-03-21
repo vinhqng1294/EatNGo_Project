@@ -10,24 +10,6 @@ import { fetchOrders } from "../../actions/index";
 class ActiveOrderScreen extends Component {
   constructor(props) {
     super(props);
-    // this.state = {
-    //   itemList: [
-    //     {
-    //       id: "#001",
-    //       name: "sushi tsunami",
-    //       status: "active",
-    //       date: "1/18/2019",
-    //       time: "3:15PM"
-    //     },
-    //     {
-    //       id: "#002",
-    //       name: "1080ti",
-    //       status: "active",
-    //       date: "1/18/2019",
-    //       time: "3:15PM"
-    //     }
-    //   ]
-    // };
   }
 
   handleItemOnPress(item) {
@@ -61,6 +43,11 @@ class ActiveOrderScreen extends Component {
       <View style={styles.container}>
         <FlatList
           data={this.props.orderList}
+          refreshing={this.props.isLoading}
+          onRefresh={() => {
+            this.props.fetchOrders()
+          }
+          }
           renderItem={({ item }) => (
             <ActiveOrderItems
               id={item.id}
@@ -140,7 +127,7 @@ class ActiveOrderScreen extends Component {
             }
             type="clear"
             title={null}
-            onPress={() => {}}
+            onPress={() => { }}
           />
         </View>
       ),
@@ -190,7 +177,8 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = state => {
   return {
-    orderList: state.orderReducer.orderList
+    orderList: state.orderReducer.orderList,
+    isLoading: state.orderReducer.isLoading
   };
 };
 

@@ -79,11 +79,10 @@ export const updateFoodQuantity = quantity => ({
     quantity
   }
 });
-export const createOrder = (items, total) => ({
+export const createOrder = (data) => ({
   type: "CREATE_ORDER",
   payload: {
-    items,
-    total
+    data
   }
 });
 
