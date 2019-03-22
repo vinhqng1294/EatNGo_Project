@@ -105,10 +105,12 @@ class OrderDetailScreen extends Component {
                 'Order',
                 'Your order has been created successfully',
                 [
-                    { text: 'OK', onPress: () => {
-                        this.props.removeCreatedOrder()
-                        this.props.navigation.navigate('Home')
-                    }},
+                    {
+                        text: 'OK', onPress: () => {
+                            this.props.removeCreatedOrder()
+                            this.props.navigation.navigate('Active Orders', { isRefreshing: true })
+                        }
+                    },
                 ],
                 { cancelable: false }
             );

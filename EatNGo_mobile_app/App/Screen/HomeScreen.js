@@ -75,16 +75,20 @@ class HomeScreen extends Component {
     }
     render() {
         return (
-            <ScrollView style={styles.container}>
+            <View style={styles.container}>
                 <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
-                <StoreList storeList={this.props.storeList} />
-            </ScrollView>
+                <StoreList 
+                isLoadingOrders={this.props.isLoadingOrders}
+                storeList={this.props.storeList}
+                fetchStore={this.props.fetchStore} />
+            </View>
         );
     }
 }
 const mapStateToProps = (state) => {
     return {
-        storeList: state.storeReducer.filteredStoreList
+        storeList: state.storeReducer.filteredStoreList,
+        isLoadingOrders: state.storeReducer.isLoadingOrders
     }
     // return {
     //     storeList: state.authReducer.registerMessage,

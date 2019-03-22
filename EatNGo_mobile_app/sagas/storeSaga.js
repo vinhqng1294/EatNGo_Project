@@ -4,6 +4,9 @@ import { changeAlias } from '../utils/index'
 const storeListSelector = state => state.storeReducer.storeList || null;
 function* storeTask(action) {
   try {
+    yield put({
+      type: "IS_LOADING_STORES",
+    });
     const { payload } = action;
 
     //   const authToken = yield select(authTokenSelector);
@@ -47,8 +50,8 @@ function* searchStore(action) {
     payload: filteredStoreList,
   });
 }
-function * setStore(action){
-  const { payload } = action;  
+function* setStore(action) {
+  const { payload } = action;
   yield put({
     type: 'SET_STORE_SUCCESS',
     payload: payload,

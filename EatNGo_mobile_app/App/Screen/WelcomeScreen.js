@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import { authLogin } from '../../actions/index'
 import { connect } from 'react-redux';
 import { StackActions, NavigationActions } from 'react-navigation';
+import { AsyncStorage } from 'react-native';
 import {
     StyleSheet,
     View,
@@ -29,9 +30,21 @@ class WelcomeScreen extends Component {
     componentWillMount() {
         this.configureAccountKit();
     }
-    // componentDidMount() {
+    componentDidMount() {
+        this.getUserAsync()
+    }
 
-    // }
+    getUserAsync = async () => {
+        try {
+            const json = await AsyncStorage.getItem('user')
+            if (json) {
+                const user = JSON.parse(json)
+                this.props.authLogin(user.phoneNumber, user.facebookId)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
     configureAccountKit() {
         AccountKit.configure({
             theme: {
@@ -39,28 +52,15 @@ class WelcomeScreen extends Component {
             defaultCountry: "VN",
             initialEmail: "example.com",
             initialPhoneCountryPrefix: "+84",
+            receiveSMS: false
         });
     }
-    // handlePhoneLoginButton = async () => {
-    //     try {
-    //         const payload = await RNAccountKit.loginWithPhone()
-    //         if (!payload) {
-    //             console.warn('Login cancelled', payload)
-    //         } else {
-    //             console.log(payload)
-    //             this.props.navigation.navigate('Register')
-    //         }
-    //     } catch (error) {
-    //         console.warn('Error', error.message)
-    //     }
-    // }
     onLogin(token) {
         if (!token) {
             console.warn("User canceled login");
             this.setState({});
         } else {
             AccountKit.getCurrentAccount().then(account => {
-                console.log(account)
                 const phoneNumber = this.getPhoneNumber(account.phoneNumber.number)
                 this.setState({ phoneNumber, facebookId: account.id })
                 this.props.authLogin(phoneNumber, account.id)

@@ -5,11 +5,18 @@ import { Badge, Button } from "react-native-elements";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import ActiveOrderItems from "../Components/ActiveOrderItems";
-import { fetchOrders } from "../../actions/index";
+import { fetchOrders, cleanCart } from "../../actions/index";
 
 class ActiveOrderScreen extends Component {
   constructor(props) {
     super(props);
+    this.navigationWillFocusListener = props.navigation.addListener('willFocus', () => {
+      const isRefreshing = props.navigation.dangerouslyGetParent().getParam('isRefreshing')
+      if (isRefreshing) {
+        props.fetchOrders()
+        props.cleanCart()
+      }
+    })
   }
 
   handleItemOnPress(item) {
@@ -169,7 +176,8 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
-      fetchOrders
+      fetchOrders,
+      cleanCart
     },
     dispatch
   );
@@ -178,7 +186,8 @@ const mapDispatchToProps = dispatch => {
 const mapStateToProps = state => {
   return {
     orderList: state.orderReducer.orderList,
-    isLoading: state.orderReducer.isLoading
+    isLoading: state.orderReducer.isLoading,
+    createdOrder: state.orderReducer.createdOrder
   };
 };
 

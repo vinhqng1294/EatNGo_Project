@@ -4,7 +4,6 @@ import Auth from "../services/login";
 const userSelector = state => state.authReducer.user || null;
 
 function* loginTask(action) {
-  console.log(action);
   try {
     yield put({
       type: "AUTH_LOGIN_LOADING"
@@ -17,7 +16,7 @@ function* loginTask(action) {
       payload.facebookId
     );
 
-    if (res.status === 200) {
+    if (res.status === 200) {      
       yield put({
         type: "AUTH_LOGIN_SUCCESS",
         payload: res.data

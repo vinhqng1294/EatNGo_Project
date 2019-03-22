@@ -18,6 +18,7 @@ export default (state = initialState, { type, payload }) => {
       return {
         ...state,
         orderList: payload,
+        createdOrder: null,
         isLoading: false,
         error: null
       }
