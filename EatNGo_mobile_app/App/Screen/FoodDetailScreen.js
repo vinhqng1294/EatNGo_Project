@@ -142,8 +142,10 @@ class FoodDetailScreen extends Component {
                     icon={<FontAwesome5 name={'plus'} size={20} color={'#EBEBEB'} solid />}
                 /> */}
 
-                        <Image style={styles.foodImg}
-                            source={{ uri: food.images[0].image }} />
+                        <Image style={food.images.length ? styles.foodImg : styles.foodNoImg}
+                            source={food.images.length ? { uri: food.images[0].image } : require('../../Assets/resDefault_0.png')} />
+                        {/* <Image style={styles.foodImg}
+                            source={{ uri: food.images[0].image }} /> */}
                         <View style={styles.miniHeader}>
                             <Text numberOfLines={2} style={styles.foodName}>{food.name}</Text>
                             <Text numberOfLines={1} style={styles.foodPrice}>$ {food.price}</Text>
@@ -210,7 +212,8 @@ class FoodDetailScreen extends Component {
                                 textColor='black'
                                 iconStyle={{ color: '#EBEBEB' }}
                                 rightButtonBackgroundColor='#54b33d'
-                                leftButtonBackgroundColor='#54b33d' />
+                                leftButtonBackgroundColor='#54b33d'
+                                editable={false} />
                         </View>
 
                     </ScrollView>
@@ -238,11 +241,19 @@ const styles = StyleSheet.create({
     },
     foodImg: {
         flex: 0,
-        backgroundColor: 'rgba(0, 0, 0, .6)',
+        backgroundColor: '#EBEBEB',
         height: 150,
         width: null,
         margin: null,
-        // resizeMode: 'contain',
+        resizeMode: 'cover',
+    },
+    foodNoImg: {
+        flex: 0,
+        backgroundColor: '#EBEBEB',
+        height: 150,
+        width: null,
+        margin: null,
+        resizeMode: 'contain',
     },
     miniHeader: {
         flex: 0,

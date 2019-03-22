@@ -134,7 +134,8 @@ class MenuScreen extends Component {
                                                     onGoBack: () => this.updateCartQuantity()
                                                 })
                                             }}>
-                                            <Image style={styles.foodImg} source={{ uri: item.images[0].image }} />
+
+                                            <Image style={styles.foodImg} source={item.images.length ? { uri: item.images[0].image } : require('../../Assets/resDefault_0.png')} />
                                             <View style={styles.itemDetail}>
                                                 <Text numberOfLines={1} style={styles.foodName}>{item.name}</Text>
                                                 <Text numberOfLines={1} style={styles.foodPrice}> $ {parseFloat(item.price).toFixed(2)}</Text>
