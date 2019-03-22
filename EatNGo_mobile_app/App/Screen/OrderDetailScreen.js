@@ -68,13 +68,13 @@ class OrderDetailScreen extends Component {
                 }}>
                     <Text numberOfLines={1} style={{
                         flex: 1,
-                        textAlign: 'center',
+                        textAlign: 'left',
                         fontFamily: 'Quicksand-Bold',
                         fontSize: 18,
                         color: '#757575',
                         // backgroundColor: 'yellow',
                     }}> ORDER</Text>
-                    {/* <Text numberOfLines={1} style={{
+                    <Text numberOfLines={1} style={{
                         flex: 2.7,
                         fontFamily: 'Quicksand-Medium',
                         fontSize: 18,
@@ -83,7 +83,7 @@ class OrderDetailScreen extends Component {
                         color: '#757575',
                         textAlignVertical: 'center',
                         // backgroundColor: 'black',
-                    }} > #A12345</Text> */}
+                    }} >{navigation.getParam('storeName', "")}</Text>
                 </View>
         };
     };
@@ -94,6 +94,10 @@ class OrderDetailScreen extends Component {
         return totalPrice.toFixed(2)
     }
     componentDidMount() {
+        const { currentStore } = this.props
+        this.props.navigation.setParams({
+            storeName: currentStore.name
+        })
         BackHandler.addEventListener('hardwareBackPress', () => {
             this.props.navigation.state.params.onGoBack();
         })
@@ -250,12 +254,25 @@ class OrderDetailScreen extends Component {
         }
         else {
             return (
-                <View>
+                <View style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
                     <Text style={{
                         textAlign: 'center',
-                        fontSize: 20,
-                        fontWeight: 'bold'
-                    }}> Your order is empty</Text>
+                        fontSize: 15,
+                        fontFamily: 'Quicksand-Regular',
+                    }}>Did you forget to order something?</Text>
+                    <TouchableOpacity
+                    onPress={() => {this.props.navigation.goBack()}}>
+                        <Text style={{
+                            textAlign: 'center',
+                            fontSize: 18,
+                            fontFamily: 'Quicksand-Bold',
+                            color: '#54b33d'
+                        }}>Go to Menu</Text>
+                    </TouchableOpacity>
                 </View>
             )
         }
@@ -486,7 +503,8 @@ const styles = StyleSheet.create({
 function initMapStateToProps(state) {
     return {
         cart: state.cartReducer.cart,
-        createdOrder: state.orderReducer.createdOrder
+        createdOrder: state.orderReducer.createdOrder,
+        currentStore: state.storeReducer.store
     };
 }
 
