@@ -2,6 +2,7 @@ package com.eatngo_mobile_app;
 
 import android.app.Application;
 
+import com.gettipsi.stripe.StripeReactPackage;
 import com.facebook.react.ReactApplication;
 import io.underscope.react.fbak.RNAccountKitPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -25,7 +26,8 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
+           new MainReactPackage(),
+           new StripeReactPackage(),
             new RNAccountKitPackage(),
             new VectorIconsPackage(),
             new RNGestureHandlerPackage()
