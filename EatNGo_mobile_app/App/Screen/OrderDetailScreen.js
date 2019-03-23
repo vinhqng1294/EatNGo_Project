@@ -20,6 +20,7 @@ import { Badge, Button, Divider } from 'react-native-elements';
 import { deleteCartItem, fetchCartItems, createOrder, removeCreatedOrder } from '../../actions/index'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import stripe from 'tipsi-stripe';
 
 class OrderDetailScreen extends Component {
     static navigationOptions = ({ navigation }) => {
@@ -102,6 +103,7 @@ class OrderDetailScreen extends Component {
         })
     }
     render() {
+
         const { cart, createdOrder } = this.props
         if (createdOrder) {
             Alert.alert(
@@ -119,6 +121,11 @@ class OrderDetailScreen extends Component {
             );
         }
         if (cart.length) {
+            stripe.setOptions({
+                publishableKey: 'pk_test_sj0ecFz74BDLoFjzUL6lGsTg001Is7vyiP',
+                // merchantId: 'MERCHANT_ID', // Optional
+                androidPayMode: 'test', // Android only
+            })
             return (
                 <View style={{ flex: 1 }}>
                     <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
@@ -250,7 +257,10 @@ class OrderDetailScreen extends Component {
                         </View>
                         <Divider style={styles.divider} />
 
-                        <TouchableOpacity style={styles.longBtn}>
+                        <TouchableOpacity style={styles.longBtn}
+                            onPress={() => {
+                                return stripe.paymentRequestWithCardForm();
+                            }}>
                             <View style={styles.iconWrapper}>
                                 <FontAwesome5
                                     style={styles.icons}
@@ -310,6 +320,7 @@ class OrderDetailScreen extends Component {
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}>
+                    <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
                     <Text style={{
                         textAlign: 'center',
                         fontSize: 15,
