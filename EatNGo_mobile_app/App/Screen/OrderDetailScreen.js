@@ -88,7 +88,6 @@ class OrderDetailScreen extends Component {
         };
     };
 
-
     getTotalPrice(cart) {
         const totalPrice = cart.reduce((acc, item) => { return acc + (parseFloat(item.originalPrice) * item.quantity) }, 0.0)
         return totalPrice.toFixed(2)
@@ -147,52 +146,104 @@ class OrderDetailScreen extends Component {
                                 showsVerticalScrollIndicator={false}
                                 renderItem={({ item }) =>
                                     <View style={styles.orderItemWrapper}>
-                                        <View style={styles.textWrapper}>
-                                            <Text numberOfLines={1} style={styles.quantity}>{item.quantity} x</Text>
-                                            <Text numberOfLines={2} style={styles.foodName}>{item.name}</Text>
-                                            <Text numberOfLines={1} style={styles.price}>$ {item.originalPrice}</Text>
+                                        <View style={styles.mainItemContainer}>
+                                            <View style={styles.quantityWrapper}>
+                                                <Text numberOfLines={1} style={styles.quantity}>{item.quantity} x</Text>
+                                            </View>
+                                            <View style={styles.foodNameWrapper}>
+                                                <Text numberOfLines={2} style={styles.foodName}>{item.name}</Text>
+                                            </View>
+                                            <View style={styles.priceWrapper}>
+                                                <Text numberOfLines={1} style={styles.price}>$ {item.originalPrice}</Text>
+                                            </View>
+                                            <TouchableOpacity style={styles.removeBtnContainer}
+                                                onPress={() => {
+                                                    Alert.alert(
+                                                        'Remove Item',
+                                                        'Are you sure you want to delete this item?',
+                                                        [
+                                                            {
+                                                                text: 'Cancel',
+                                                                onPress: () => console.log('Cancel Pressed'),
+                                                                style: 'cancel',
+                                                            },
+                                                            { text: 'OK', onPress: () => this.props.deleteCartItem(item) },
+                                                        ],
+                                                        { cancelable: false },
+                                                    );
+                                                }}>
+                                                <View style={styles.removeBtn}>
+                                                    <FontAwesome5
+                                                        name={'trash-alt'}
+                                                        color={'#54b33d'}
+                                                        size={12}
+                                                        solid
+                                                    />
+                                                </View>
+                                            </TouchableOpacity>
                                         </View>
-
-                                        {/* start extra detail */}
+                                        {/* extra item */}
                                         <FlatList
                                             data={item.attributes}
                                             showsVerticalScrollIndicator={false}
                                             renderItem={({ item }) =>
                                                 <View>
-                                                    <Text>{item.name}:</Text>
+                                                    <View style={styles.extraTitleWrapper}>
+                                                        <View style={{ flex: 1, paddingLeft: 3, }}></View>
+                                                        <Text numberOfLines={1} style={styles.extraTitle}>{item.name}</Text>
+                                                    </View>
                                                     <FlatList
                                                         data={item.options}
                                                         renderItem={({ item }) =>
-                                                            <Text numberOfLines={1} style={styles.quantity}>{item.name} x ${item.price}</Text>
+                                                            <View style={styles.extraItemContainer}>
+                                                                <View style={styles.extraQuantityWrapper}>
+                                                                </View>
+                                                                <View style={styles.extraDetailWrapper}>
+                                                                    <Text numberOfLines={1} style={styles.extraItem}>+ {item.name}</Text>
+                                                                </View>
+                                                                <View style={styles.priceWrapper}>
+                                                                    <Text numberOfLines={1} style={styles.extraPrice}>$ {item.price}</Text>
+                                                                </View>
+                                                                {/* NEW+++++ implement on press */}
+                                                                <TouchableOpacity style={styles.removeBtnContainer}>
+                                                                    <View style={styles.removeBtn}>
+                                                                        <FontAwesome5
+                                                                            name={'times'}
+                                                                            color={'#54b33d'}
+                                                                            size={12}
+                                                                            solid
+                                                                        />
+                                                                    </View>
+                                                                </TouchableOpacity>
+                                                            </View>
                                                         }
                                                     />
                                                 </View>
                                             }
                                         />
-                                        {/* end extra detail */}
-                                        <TouchableOpacity style={styles.iconButtonWrapper}
-                                            onPress={() => {
-                                                Alert.alert(
-                                                    'Remove Item',
-                                                    'Are you sure you want to delete this item?',
-                                                    [
-                                                        {
-                                                            text: 'Cancel',
-                                                            onPress: () => console.log('Cancel Pressed'),
-                                                            style: 'cancel',
-                                                        },
-                                                        { text: 'OK', onPress: () => this.props.deleteCartItem(item) },
-                                                    ],
-                                                    { cancelable: false },
-                                                );
-                                            }}>
-                                            <FontAwesome5
-                                                name={'trash-alt'}
-                                                color={'#54b33d'}
-                                                size={12}
-                                                solid
-                                            />
-                                        </TouchableOpacity>
+
+                                        {/* NEW ++++ comment */}
+                                        {/* <View>
+                                            <View style={styles.extraTitleWrapper}>
+                                                <Text numberOfLines={1} style={styles.extraTitle}>Special Requests</Text>
+                                            </View>
+                                            <View style={styles.extraItemContainer}>
+                                                <View style={styles.commentWrapper}>
+                                                    <Text numberOfLines={5} style={styles.extraItem}>nhieu da, nhieu ot, nhieu rau, sdas, asd, as,d a,sdasd, ,asd,as</Text>
+                                                </View>
+                                                <TouchableOpacity style={styles.removeBtnContainer}>
+                                                    <View style={styles.removeBtn}>
+                                                        <FontAwesome5
+                                                            name={'times'}
+                                                            color={'#54b33d'}
+                                                            size={12}
+                                                            solid
+                                                        />
+                                                    </View>
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View> */}
+
                                     </View>
                                 }
                             />
@@ -265,7 +316,7 @@ class OrderDetailScreen extends Component {
                         fontFamily: 'Quicksand-Regular',
                     }}>Did you forget to order something?</Text>
                     <TouchableOpacity
-                    onPress={() => {this.props.navigation.goBack()}}>
+                        onPress={() => { this.props.navigation.goBack() }}>
                         <Text style={{
                             textAlign: 'center',
                             fontSize: 18,
@@ -299,10 +350,7 @@ const styles = StyleSheet.create({
     },
     orderItemWrapper: {
         flex: 1,
-        flexDirection: 'row',
-        // backgroundColor: 'red',
-        // borderRadius: 10,
-        margin: 5,
+        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'stretch',
         borderBottomColor: '#54b33d',
@@ -310,10 +358,90 @@ const styles = StyleSheet.create({
         paddingBottom: 3,
         paddingTop: 3,
     },
-    textWrapper: {
-        flex: 8,
+    mainItemContainer: {
+        flex: 1,
         flexDirection: 'row',
-        // backgroundColor: 'yellow',
+    },
+    quantityWrapper: {
+        flex: 1,
+        paddingLeft: 5,
+    },
+    foodNameWrapper: {
+        flex: 8,
+        paddingLeft: 3,
+        paddingRight: 3,
+    },
+    priceWrapper: {
+        flex: 2,
+        paddingLeft: 10,
+    },
+    removeBtnContainer: {
+        flex: 1,
+        alignItems: 'center',
+    },
+    removeBtn: {
+        paddingTop: 5,
+    },
+    extraTitleWrapper: {
+        flex: 1,
+        flexDirection: 'row',
+    },
+    extraItemContainer: {
+        flex: 1,
+        flexDirection: 'row',
+    },
+    extraQuantityWrapper: {
+        flex: 1,
+        alignItems: 'flex-end',
+        paddingLeft: 3,
+    },
+    extraDetailWrapper: {
+        flex: 8,
+        paddingLeft: 3,
+        paddingRight: 3,
+    },
+    quantity: {
+        fontFamily: 'Quicksand-Medium',
+        fontSize: 15,
+        color: 'gray',
+    },
+    foodName: {
+        fontFamily: 'Quicksand-Medium',
+        fontSize: 15,
+        color: 'black',
+    },
+    price: {
+        fontFamily: 'Quicksand-Medium',
+        fontSize: 15,
+        color: 'gray',
+    },
+    extraTitle: {
+        flex: 11,
+        paddingLeft: 10,
+        paddingRight: 3,
+        fontFamily: 'Quicksand-Medium',
+        fontSize: 13,
+        color: 'gray',
+    },
+    extraItem: {
+        paddingLeft: 20,
+        fontFamily: 'Quicksand-Regular',
+        fontSize: 13,
+        color: 'gray',
+    },
+    extraPrice: {
+        fontFamily: 'Quicksand-Medium',
+        fontSize: 13,
+        color: 'gray',
+        paddingLeft: 3,
+    },
+    commentWrapper: {
+        flex: 11,
+        paddingLeft: 13,
+        paddingRight: 3,
+        fontFamily: 'Quicksand-Medium',
+        fontSize: 13,
+        color: 'gray',
     },
     iconWrapper: {
         flex: 0,
@@ -321,38 +449,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         textAlignVertical: 'center',
         // backgroundColor: 'green'
-    },
-    quantity: {
-        flex: 1,
-        // backgroundColor: 'green',
-        fontFamily: 'Quicksand-Medium',
-        fontSize: 15,
-        textAlignVertical: 'center',
-        color: 'gray',
-        paddingLeft: 3,
-    },
-    foodName: {
-        flex: 5,
-        fontFamily: 'Quicksand-Medium',
-        fontSize: 15,
-        textAlignVertical: 'center',
-        color: 'black',
-    },
-    price: {
-        flex: 2,
-        // backgroundColor: 'green',
-        fontFamily: 'Quicksand-Medium',
-        fontSize: 15,
-        textAlignVertical: 'center',
-        textAlign: 'center',
-        color: 'gray',
-    },
-    iconButtonWrapper: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        textAlignVertical: 'center',
-        // backgroundColor: 'green',
     },
     divider: {
         backgroundColor: '#54b33d',
