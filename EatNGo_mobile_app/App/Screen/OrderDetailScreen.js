@@ -114,51 +114,176 @@ export default class MenuScreen extends Component {
 
                         {/* Flat list items */}
                         <View style={styles.orderItemWrapper}>
-                            <View style={styles.textWrapper}>
-                                <Text numberOfLines={1} style={styles.quantity}>1 x</Text>
-                                <Text numberOfLines={2} style={styles.foodName}>Banh Trang Tron khong Trung</Text>
-                                <Text numberOfLines={1} style={styles.price}>$ 5.99</Text>
+                            <View style={styles.mainItemContainer}>
+                                <View style={styles.quantityWrapper}>
+                                    <Text numberOfLines={1} style={styles.quantity}>1 x</Text>
+                                </View>
+                                <View style={styles.foodNameWrapper}>
+                                    <Text numberOfLines={2} style={styles.foodName}>Banh Trang Tron khong Trung</Text>
+                                </View>
+                                <View style={styles.priceWrapper}>
+                                    <Text numberOfLines={1} style={styles.price}>$ 5.99</Text>
+                                </View>
+                                <TouchableOpacity style={styles.removeBtnContainer}>
+                                    <View style={styles.removeBtn}>
+                                        <FontAwesome5
+                                            name={'trash-alt'}
+                                            color={'#54b33d'}
+                                            size={12}
+                                            solid
+                                        />
+                                    </View>
+                                </TouchableOpacity>
                             </View>
-                            <TouchableOpacity style={styles.iconButtonWrapper}>
-                                <FontAwesome5
-                                    name={'trash-alt'}
-                                    color={'#54b33d'}
-                                    size={12}
-                                    solid
-                                />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.orderItemWrapper}>
-                            <View style={styles.textWrapper}>
-                                <Text numberOfLines={1} style={styles.quantity}>1 x</Text>
-                                <Text numberOfLines={1} style={styles.foodName}>Bun Bo Hue</Text>
-                                <Text numberOfLines={1} style={styles.price}>$ 13.99</Text>
+
+                            {/* extra item container*/}
+                            <View>
+                                {/* extra item */}
+                                <View style={styles.extraTitleWrapper}>
+                                    <View style={{ flex: 1, paddingLeft: 3, }}></View>
+                                    <Text numberOfLines={1} style={styles.extraTitle}>Size</Text>
+                                </View>
+                                <View style={styles.extraItemContainer}>
+                                    <View style={styles.extraQuantityWrapper}>
+                                    </View>
+                                    <View style={styles.extraDetailWrapper}>
+                                        <Text numberOfLines={1} style={styles.extraItem}>+ Small</Text>
+                                    </View>
+                                    <View style={styles.priceWrapper}>
+                                        <Text numberOfLines={1} style={styles.extraPrice}>$ 5.99</Text>
+                                    </View>
+                                    <TouchableOpacity style={styles.removeBtnContainer}>
+                                        <View style={styles.removeBtn}>
+                                            <FontAwesome5
+                                                name={'times'}
+                                                color={'#54b33d'}
+                                                size={12}
+                                                solid
+                                            />
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                                {/* extra item */}
+                                <View style={styles.extraTitleWrapper}>
+                                    <View style={{ flex: 1, paddingLeft: 3, }}></View>
+                                    <Text numberOfLines={1} style={styles.extraTitle}>Toppings</Text>
+                                </View>
+                                <View style={styles.extraItemContainer}>
+                                    <View style={styles.extraQuantityWrapper}>
+                                    </View>
+                                    <View style={styles.extraDetailWrapper}>
+                                        <Text numberOfLines={1} style={styles.extraItem}>+ Black pearls</Text>
+                                    </View>
+                                    <View style={styles.priceWrapper}>
+                                        <Text numberOfLines={1} style={styles.extraPrice}>$ 5.99</Text>
+                                    </View>
+                                    <TouchableOpacity style={styles.removeBtnContainer}>
+                                        <View style={styles.removeBtn}>
+                                            <FontAwesome5
+                                                name={'times'}
+                                                color={'#54b33d'}
+                                                size={12}
+                                                solid
+                                            />
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={styles.extraItemContainer}>
+                                    <View style={styles.extraQuantityWrapper}>
+                                    </View>
+                                    <View style={styles.extraDetailWrapper}>
+                                        <Text numberOfLines={1} style={styles.extraItem}>+ lychee jellys</Text>
+                                    </View>
+                                    <View style={styles.priceWrapper}>
+                                        <Text numberOfLines={1} style={styles.extraPrice}>$ 5.99</Text>
+                                    </View>
+                                    <TouchableOpacity style={styles.removeBtnContainer}>
+                                        <View style={styles.removeBtn}>
+                                            <FontAwesome5
+                                                name={'times'}
+                                                color={'#54b33d'}
+                                                size={12}
+                                                solid
+                                            />
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
-                            <TouchableOpacity style={styles.iconButtonWrapper}>
-                                <FontAwesome5
-                                    name={'trash-alt'}
-                                    color={'#54b33d'}
-                                    size={12}
-                                    solid
-                                />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.orderItemWrapper}>
-                            <View style={styles.textWrapper}>
-                                <Text numberOfLines={1} style={styles.quantity}>1 x</Text>
-                                <Text numberOfLines={1} style={styles.foodName}>Pho Bo</Text>
-                                <Text numberOfLines={1} style={styles.price}>$ 11.99</Text>
+
+                            {/* comments */}
+                            <View style={styles.extraTitleWrapper}>
+                                <Text numberOfLines={1} style={styles.extraTitle}>Special Requests</Text>
                             </View>
-                            <TouchableOpacity style={styles.iconButtonWrapper}>
-                                <FontAwesome5
-                                    name={'trash-alt'}
-                                    color={'#54b33d'}
-                                    size={12}
-                                    solid
-                                />
-                            </TouchableOpacity>
+                            <View style={styles.extraItemContainer}>
+                                <View style={styles.commentWrapper}>
+                                    <Text numberOfLines={5} style={styles.extraItem}>nhieu da, nhieu ot, nhieu rau, sdas, asd, as,d a,sdasd, ,asd,as</Text>
+                                </View>
+                                <TouchableOpacity style={styles.removeBtnContainer}>
+                                    <View style={styles.removeBtn}>
+                                        <FontAwesome5
+                                            name={'times'}
+                                            color={'#54b33d'}
+                                            size={12}
+                                            solid
+                                        />
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
                         </View>
 
+                        <View style={styles.orderItemWrapper}>
+                            <View style={styles.mainItemContainer}>
+                                <View style={styles.quantityWrapper}>
+                                    <Text numberOfLines={1} style={styles.quantity}>1 x</Text>
+                                </View>
+                                <View style={styles.foodNameWrapper}>
+                                    <Text numberOfLines={2} style={styles.foodName}>Banh Trang Tron khong Trung</Text>
+                                </View>
+                                <View style={styles.priceWrapper}>
+                                    <Text numberOfLines={1} style={styles.price}>$ 5.99</Text>
+                                </View>
+                                <TouchableOpacity style={styles.removeBtnContainer}>
+                                    <View style={styles.removeBtn}>
+                                        <FontAwesome5
+                                            name={'trash-alt'}
+                                            color={'#54b33d'}
+                                            size={12}
+                                            solid
+                                        />
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+
+                            {/* extra item */}
+
+                        </View>
+                        <View style={styles.orderItemWrapper}>
+                            <View style={styles.mainItemContainer}>
+                                <View style={styles.quantityWrapper}>
+                                    <Text numberOfLines={1} style={styles.quantity}>15 x</Text>
+                                </View>
+                                <View style={styles.foodNameWrapper}>
+                                    <Text numberOfLines={2} style={styles.foodName}>Banh Trang Tron khong Trung</Text>
+                                </View>
+                                <View style={styles.priceWrapper}>
+                                    <Text numberOfLines={1} style={styles.price}>$ 5.99</Text>
+                                </View>
+                                <TouchableOpacity style={styles.removeBtnContainer}>
+                                    <View style={styles.removeBtn}>
+                                        <FontAwesome5
+                                            name={'trash-alt'}
+                                            color={'#54b33d'}
+                                            size={12}
+                                            solid
+                                        />
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+
+                            {/* extra item */}
+
+                        </View>
+                    
                     </View>
                     <Divider style={styles.divider} />
 
@@ -222,6 +347,103 @@ export default class MenuScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+    orderItemWrapper: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'stretch',
+        borderBottomColor: '#54b33d',
+        borderBottomWidth: .57,
+        paddingBottom: 3,
+        paddingTop: 3,
+    },
+    mainItemContainer: {
+        flex: 1,
+        flexDirection: 'row',
+    },
+    quantityWrapper: {
+        flex: 1,
+        paddingLeft: 5,
+    },
+    foodNameWrapper: {
+        flex: 8,
+        paddingLeft: 3,
+        paddingRight: 3,
+    },
+    priceWrapper: {
+        flex: 2,
+        paddingLeft: 10,
+    },
+    removeBtnContainer: {
+        flex: 1,
+        alignItems: 'center',
+    },
+    removeBtn: {
+        paddingTop: 5,
+    },
+    extraTitleWrapper: {
+        flex: 1,
+        flexDirection: 'row',
+    },
+    extraItemContainer: {
+        flex: 1,
+        flexDirection: 'row',
+    },
+    extraQuantityWrapper: {
+        flex: 1,
+        alignItems: 'flex-end',
+        paddingLeft: 3,
+    },
+    extraDetailWrapper: {
+        flex: 8,
+        paddingLeft: 3,
+        paddingRight: 3,
+    },
+    quantity: {
+        fontFamily: 'Quicksand-Medium',
+        fontSize: 15,
+        color: 'gray',
+    },
+    foodName: {
+        fontFamily: 'Quicksand-Medium',
+        fontSize: 15,
+        color: 'black',
+    },
+    price: {
+        fontFamily: 'Quicksand-Medium',
+        fontSize: 15,
+        color: 'gray',
+    },
+    extraTitle: {
+        flex: 11,
+        paddingLeft: 10,
+        paddingRight: 3,
+        fontFamily: 'Quicksand-Medium',
+        fontSize: 13,
+        color: 'gray',
+    },
+    extraItem: {
+        paddingLeft: 20,
+        fontFamily: 'Quicksand-Regular',
+        fontSize: 13,
+        color: 'gray',
+    },
+    extraPrice: {
+        fontFamily: 'Quicksand-Medium',
+        fontSize: 13,
+        color: 'gray',
+        paddingLeft: 3,
+    },
+    commentWrapper: {
+        flex: 11,
+        paddingLeft: 13,
+        paddingRight: 3,
+        fontFamily: 'Quicksand-Medium',
+        fontSize: 13,
+        color: 'gray',
+    },
+
+
     container: {
         flex: 1,
         flexDirection: 'column',
@@ -238,62 +460,12 @@ const styles = StyleSheet.create({
         borderWidth: .3,
         borderColor: '#54b33d'
     },
-    orderItemWrapper: {
-        flex: 1,
-        flexDirection: 'row',
-        // backgroundColor: 'red',
-        // borderRadius: 10,
-        margin: 5,
-        justifyContent: 'center',
-        alignItems: 'stretch',
-        borderBottomColor: '#54b33d',
-        borderBottomWidth: .57,
-        paddingBottom: 3,
-        paddingTop: 3,
-    },
-    textWrapper: {
-        flex: 8,
-        flexDirection: 'row',
-        // backgroundColor: 'yellow',
-    },
     iconWrapper: {
         flex: 0,
         justifyContent: 'center',
         alignItems: 'center',
         textAlignVertical: 'center',
         // backgroundColor: 'green'
-    },
-    quantity: {
-        flex: 1,
-        // backgroundColor: 'green',
-        fontFamily: 'Quicksand-Medium',
-        fontSize: 15,
-        textAlignVertical: 'center',
-        color: 'gray',
-        paddingLeft: 3,
-    },
-    foodName: {
-        flex: 5,
-        fontFamily: 'Quicksand-Medium',
-        fontSize: 15,
-        textAlignVertical: 'center',
-        color: 'black',
-    },
-    price: {
-        flex: 2,
-        // backgroundColor: 'green',
-        fontFamily: 'Quicksand-Medium',
-        fontSize: 15,
-        textAlignVertical: 'center',
-        textAlign: 'center',
-        color: 'gray',
-    },
-    iconButtonWrapper: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        textAlignVertical: 'center',
-        // backgroundColor: 'green',
     },
     divider: {
         backgroundColor: '#54b33d',
@@ -438,5 +610,5 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlignVertical: 'center',
     },
-    
+
 });
