@@ -310,6 +310,7 @@ class OrderDetailScreen extends Component {
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}>
+                    <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
                     <Text style={{
                         textAlign: 'center',
                         fontSize: 15,
