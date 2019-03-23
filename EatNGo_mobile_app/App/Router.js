@@ -11,6 +11,7 @@ import MenuScreen from './Screen/MenuScreen';
 import FoodDetailScreen from './Screen/FoodDetailScreen';
 import OrderDetailScreen from './Screen/OrderDetailScreen';
 import ActiveOrderDetailScreen from './Screen/ActiveOrderDetailScreen';
+import AddCardScreen from './Screen/AddCardScreen';
 
 
 const HomeStack = createStackNavigator(
@@ -86,7 +87,8 @@ const AppNavigator = createStackNavigator(
         "Menu": { screen: MenuScreen },
         "FoodDetail": { screen: FoodDetailScreen },
         "OrderDetail": { screen: OrderDetailScreen },
-        "ActiveOrderDetail": { screen: ActiveOrderDetailScreen }
+        "ActiveOrderDetail": { screen: ActiveOrderDetailScreen },
+        "AddCard": { screen: AddCardScreen }
     },
     {
         initialRouteName: 'Welcome',

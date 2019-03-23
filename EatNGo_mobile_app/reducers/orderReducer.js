@@ -17,7 +17,7 @@ export default (state = initialState, { type, payload }) => {
     case 'FETCH_ORDERS_SUCCESS':
       return {
         ...state,
-        orderList: payload,
+        orderList: payload.reverse(),
         createdOrder: null,
         isLoading: false,
         error: null

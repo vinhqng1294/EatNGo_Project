@@ -6,17 +6,26 @@ import {
     FlatList,
     ImageBackground,
     Text,
-    ScrollView,
     StatusBar,
     Image,
 } from 'react-native';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Badge, Button, Divider } from 'react-native-elements';
-
+import { fetchOrders, cleanCart } from "../../actions/index";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { mapOrderStatusToName } from "../../services/constant";
 class ActiveOrderScreen extends Component {
     constructor(props) {
         super(props)
+        this.navigationWillFocusListener = props.navigation.addListener('willFocus', () => {
+            const isRefreshing = props.navigation.dangerouslyGetParent().getParam('isRefreshing')
+            if (isRefreshing) {
+                props.fetchOrders()
+                props.cleanCart()
+            }
+        })
     }
     static navigationOptions = ({ navigation }) => {
         return {
@@ -43,177 +52,135 @@ class ActiveOrderScreen extends Component {
                 </View>
         };
     };
+    componentDidMount() {
+        this.props.fetchOrders();
+    }
+
+    handleItemOnPress(item) {
+        this.props.navigation.navigate("ActiveOrderDetail", { id: item.id });
+    }
 
     render() {
         // this.props.navigation.setParams({
         //     cartLength: this.props.cart.length || 0,
-        // })
-
-
-        return (
-            // IF LIST IS EMPTY
-            // <View style={{
-            //     flex: 1,
-            //     justifyContent: 'center',
-            //     alignItems: 'center',
-            // }}>
-            //     <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
-            //     <Text style={{
-            //         textAlign: 'center',
-            //         fontSize: 15,
-            //         fontFamily: 'Quicksand-Regular',
-            //     }}>There is no active orders at the moment.</Text>
-            //     <Text style={{
-            //         textAlign: 'center',
-            //         fontSize: 15,
-            //         fontFamily: 'Quicksand-Regular',
-            //     }}>Help us to order somes.</Text>
-            //     <Text style={{
-            //         textAlign: 'center',
-            //         fontSize: 15,
-            //         fontFamily: 'Quicksand-Regular',
-            //     }}>Thank you!</Text>
-            //     <FontAwesome5
-            //         style={{
-            //             paddingTop: 10
-            //         }}
-            //         name={'hand-holding-heart'}
-            //         size={23}
-            //         color={'#54b33d'} />
-            // </View>
-
-
-            // IF LIST IS NOT EMPTY
-            <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0)' }}>
-                <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
-                <ScrollView style={styles.container}>
-                    {/* an order item */}
-                    <View style={styles.orderItemContainer}>
-                        <View style={styles.leftContentWrapper}>
-                            <View style={styles.restaurantNameWrapper}>
-                                <Text numberOfLines={2} style={styles.resName}>Eat'n'Go Food Store</Text>
-                            </View>
-                            <View style={styles.orderIdWrapper}>
-                                <Text numberOfLines={1} style={styles.orderId}>Order:
-                                <Text numberOfLines={1} style={{
-                                        fontFamily: 'Quicksand-Medium',
-                                        fontSize: 15,
-                                    }}>   11</Text></Text>
-                            </View>
-                            <View style={styles.orderIdWrapper}>
-                                <Text numberOfLines={1} style={styles.orderId}>Status:
-                                <Text numberOfLines={1} style={{
-                                        fontFamily: 'Quicksand-Medium',
-                                        fontSize: 15,
-                                        paddingLeft: 10,
-                                    }}>   Not checkout</Text></Text>
-                            </View>
-                            <View style={styles.viewDetailBtnWrapper}>
-                                <TouchableOpacity style={styles.viewDetailBtn}>
-                                    <View style={styles.iconWrapper}>
-                                        <FontAwesome5
-                                            style={styles.icons}
-                                            name={'receipt'}
-                                            size={23}
-                                            color={'white'}
-                                            solid
-                                        />
+        // })        
+        if (!this.props.orderList.length) {
+            return (
+                <View style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
+                    <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
+                    <Text style={{
+                        textAlign: 'center',
+                        fontSize: 15,
+                        fontFamily: 'Quicksand-Regular',
+                    }}>There is no active orders at the moment.</Text>
+                    <Text style={{
+                        textAlign: 'center',
+                        fontSize: 15,
+                        fontFamily: 'Quicksand-Regular',
+                    }}>Help us to order somes.</Text>
+                    <Text style={{
+                        textAlign: 'center',
+                        fontSize: 15,
+                        fontFamily: 'Quicksand-Regular',
+                    }}>Thank you!</Text>
+                    <FontAwesome5
+                        style={{
+                            paddingTop: 10
+                        }}
+                        name={'hand-holding-heart'}
+                        size={23}
+                        color={'#54b33d'} />
+                </View>
+            )
+        }
+        else {
+            return (
+                // IF LIST IS NOT EMPTY
+                <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0)' }}>
+                    <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
+                    <View style={styles.container}>
+                        {/* an order item */}
+                        <FlatList
+                            data={this.props.orderList}
+                            refreshing={this.props.isLoading}
+                            onRefresh={() => {
+                                this.props.fetchOrders()
+                            }}
+                            showsVerticalScrollIndicator={false}
+                            renderItem={({ item }) =>
+                                <View style={styles.orderItemContainer}>
+                                    <View style={styles.leftContentWrapper}>
+                                        <View style={styles.restaurantNameWrapper}>
+                                            <Text numberOfLines={2} style={styles.resName}>{item.store.name}</Text>
+                                        </View>
+                                        <View style={styles.orderIdWrapper}>
+                                            <Text numberOfLines={1} style={styles.orderId}>Order:
+                        <Text numberOfLines={1} style={{
+                                                    fontFamily: 'Quicksand-Medium',
+                                                    fontSize: 15,
+                                                }}>  {item.id}</Text></Text>
+                                        </View>
+                                        <View style={styles.orderIdWrapper}>
+                                            <Text numberOfLines={1} style={styles.orderId}>Status:
+                        <Text numberOfLines={1} style={{
+                                                    fontFamily: 'Quicksand-Medium',
+                                                    fontSize: 15,
+                                                    paddingLeft: 10,
+                                                }}>  {mapOrderStatusToName[item.status]}</Text></Text>
+                                        </View>
+                                        <View style={styles.viewDetailBtnWrapper}>
+                                            <TouchableOpacity style={styles.viewDetailBtn}
+                                                onPress={() => {
+                                                    this.handleItemOnPress(item)
+                                                }}>
+                                                <View style={styles.iconWrapper}>
+                                                    <FontAwesome5
+                                                        style={styles.icons}
+                                                        name={'receipt'}
+                                                        size={23}
+                                                        color={'white'}
+                                                        solid
+                                                    />
+                                                </View>
+                                                <Text numberOfLines={1} style={styles.buttonTitle}>Review Order</Text>
+                                            </TouchableOpacity>
+                                        </View>
                                     </View>
-                                    <Text numberOfLines={1} style={styles.buttonTitle}>Review Order</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                        <View style={styles.rightContentWrapper}>
-                            <View style={styles.dateTimeWrapper}>
-                                <View style={styles.dateWrapper}>
-                                    <Text numberOfLines={1} style={styles.shortDate}>23 Mar</Text>
-                                </View>
-                                <View style={styles.timeWrapper}>
-                                    <Text numberOfLines={1} style={styles.shortTime}>15:52</Text>
-                                </View>
-                            </View>
-                            <View style={styles.removeBtnWrapper}>
-                                <TouchableOpacity style={styles.removeBtn}>
-                                    <View style={styles.iconWrapper}>
-                                        <FontAwesome5
-                                            style={styles.icons}
-                                            name={'trash'}
-                                            size={23}
-                                            color={'#54b33d'}
-                                            solid
-                                        />
+                                    <View style={styles.rightContentWrapper}>
+                                        <View style={styles.dateTimeWrapper}>
+                                            <View style={styles.dateWrapper}>
+                                                <Text numberOfLines={1} style={styles.shortDate}>{timestampToString(item.date)}</Text>
+                                            </View>
+                                            <View style={styles.timeWrapper}>
+                                                <Text numberOfLines={1} style={styles.shortTime}>{timestampToTime(item.date)}</Text>
+                                            </View>
+                                        </View>
+                                        <View style={styles.removeBtnWrapper}>
+                                            <TouchableOpacity style={styles.removeBtn}>
+                                                <View style={styles.iconWrapper}>
+                                                    <FontAwesome5
+                                                        style={styles.icons}
+                                                        name={'trash'}
+                                                        size={23}
+                                                        color={'#54b33d'}
+                                                        solid
+                                                    />
+                                                </View>
+                                            </TouchableOpacity>
+                                        </View>
                                     </View>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
+                                </View>
+                            }
+                        />
+                        <Divider style={styles.divider} />
                     </View>
-
-                    {/* another order item */}
-                    <View style={styles.orderItemContainer}>
-                        <View style={styles.leftContentWrapper}>
-                            <View style={styles.restaurantNameWrapper}>
-                                <Text numberOfLines={2} style={styles.resName}>Eat'n'Go Food Store</Text>
-                            </View>
-                            <View style={styles.orderIdWrapper}>
-                                <Text numberOfLines={1} style={styles.orderId}>Order:
-                                <Text numberOfLines={1} style={{
-                                        fontFamily: 'Quicksand-Medium',
-                                        fontSize: 15,
-                                    }}>   11</Text></Text>
-                            </View>
-                            <View style={styles.orderIdWrapper}>
-                                <Text numberOfLines={1} style={styles.orderId}>Status:
-                                <Text numberOfLines={1} style={{
-                                        fontFamily: 'Quicksand-Medium',
-                                        fontSize: 15,
-                                        paddingLeft: 10,
-                                    }}>   Not checkout</Text></Text>
-                            </View>
-                            <View style={styles.viewDetailBtnWrapper}>
-                                <TouchableOpacity style={styles.viewDetailBtn}>
-                                    <View style={styles.iconWrapper}>
-                                        <FontAwesome5
-                                            style={styles.icons}
-                                            name={'receipt'}
-                                            size={23}
-                                            color={'white'}
-
-                                        />
-                                    </View>
-                                    <Text numberOfLines={1} style={styles.buttonTitle}>Review Order</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                        <View style={styles.rightContentWrapper}>
-                            <View style={styles.dateTimeWrapper}>
-                                <View style={styles.dateWrapper}>
-                                    <Text numberOfLines={1} style={styles.shortDate}>23 Mar</Text>
-                                </View>
-                                <View style={styles.timeWrapper}>
-                                    <Text numberOfLines={1} style={styles.shortTime}>15:52</Text>
-                                </View>
-                            </View>
-                            <View style={styles.removeBtnWrapper}>
-                                <TouchableOpacity style={styles.removeBtn}>
-                                    <View style={styles.iconWrapper}>
-                                        <FontAwesome5
-                                            style={styles.icons}
-                                            name={'trash'}
-                                            size={23}
-                                            color={'#54b33d'}
-                                            solid
-                                        />
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </View>
-
-                    {/* end of order */}
-                    <Divider style={styles.divider} />
-                </ScrollView>
-            </View>
-        );
+                </View>
+            );
+        }
     }
 }
 
@@ -339,4 +306,38 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ActiveOrderScreen;
+
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            fetchOrders,
+            cleanCart
+        },
+        dispatch
+    );
+};
+
+const mapStateToProps = state => {
+    return {
+        orderList: state.orderReducer.orderList,
+        isLoading: state.orderReducer.isLoading,
+        createdOrder: state.orderReducer.createdOrder
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ActiveOrderScreen);
+
+function timestampToString(timestamp) {
+    var date = new Date(timestamp)
+    var str = ('0' + date.getDate()).slice(-2) + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/' + date.getFullYear()
+    return str
+}
+function timestampToTime(timestamp) {
+    var d = new Date(timestamp)
+    var hour = d.getHours() < 10 ? '0' + d.getHours() : d.getHours()
+    var minute = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes()
+    return hour + ':' + minute
+}  

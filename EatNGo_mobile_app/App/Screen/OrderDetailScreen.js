@@ -90,7 +90,7 @@ class OrderDetailScreen extends Component {
     };
 
     getTotalPrice(cart) {
-        const totalPrice = cart.reduce((acc, item) => { return acc + (parseFloat(item.originalPrice) * item.quantity) }, 0.0)
+        const totalPrice = cart.reduce((acc, item) => { return acc + (parseFloat(item.price) * item.quantity) }, 0.0)
         return totalPrice.toFixed(2)
     }
     componentDidMount() {
@@ -104,7 +104,7 @@ class OrderDetailScreen extends Component {
     }
     render() {
 
-        const { cart, createdOrder } = this.props
+        const { cart, createdOrder, user } = this.props
         if (createdOrder) {
             Alert.alert(
                 'Order',
@@ -121,11 +121,6 @@ class OrderDetailScreen extends Component {
             );
         }
         if (cart.length) {
-            stripe.setOptions({
-                publishableKey: 'pk_test_sj0ecFz74BDLoFjzUL6lGsTg001Is7vyiP',
-                // merchantId: 'MERCHANT_ID', // Optional
-                androidPayMode: 'test', // Android only
-            })
             return (
                 <View style={{ flex: 1 }}>
                     <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
@@ -214,12 +209,12 @@ class OrderDetailScreen extends Component {
                                                                 {/* NEW+++++ implement on press */}
                                                                 <TouchableOpacity style={styles.removeBtnContainer}>
                                                                     <View style={styles.removeBtn}>
-                                                                        <FontAwesome5
+                                                                        {/* <FontAwesome5
                                                                             name={'times'}
                                                                             color={'#54b33d'}
                                                                             size={12}
                                                                             solid
-                                                                        />
+                                                                        /> */}
                                                                     </View>
                                                                 </TouchableOpacity>
                                                             </View>
@@ -258,8 +253,9 @@ class OrderDetailScreen extends Component {
                         <Divider style={styles.divider} />
 
                         <TouchableOpacity style={styles.longBtn}
+                            disabled={user.cardData}
                             onPress={() => {
-                                return stripe.paymentRequestWithCardForm();
+                                this.props.navigation.navigate('AddCard')
                             }}>
                             <View style={styles.iconWrapper}>
                                 <FontAwesome5
@@ -270,7 +266,7 @@ class OrderDetailScreen extends Component {
                                     solid
                                 />
                             </View>
-                            <Text numberOfLines={1} style={styles.iconText}>Add Credit Card</Text>
+                            <Text numberOfLines={1} style={user.cardData ? styles.cardText : styles.iconText}>{user.cardData ? `**** **** **** ${user.cardData.card.last4}` : 'Add your card'}</Text>
                         </TouchableOpacity>
                         {/* <TouchableOpacity style={styles.longBtn}>
                         <View style={styles.iconWrapper}>
@@ -491,6 +487,14 @@ const styles = StyleSheet.create({
         color: '#54b33d',
         textAlignVertical: 'center',
     },
+
+    cardText: {
+        marginLeft: 15,
+        fontFamily: 'Quicksand-Bold',
+        fontSize: 20,
+        color: '#54b33d',
+        textAlignVertical: 'center',
+    },
     addMoreItemContainer: {
         flex: 1,
         flexDirection: 'column',
@@ -611,7 +615,8 @@ function initMapStateToProps(state) {
     return {
         cart: state.cartReducer.cart,
         createdOrder: state.orderReducer.createdOrder,
-        currentStore: state.storeReducer.store
+        currentStore: state.storeReducer.store,
+        user: state.authReducer.user,
     };
 }
 

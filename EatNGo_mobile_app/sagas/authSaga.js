@@ -74,6 +74,43 @@ function* registerTask(action) {
   }
 }
 
+function* addCard(action) {
+  try {
+    const { payload } = action;
+    const user = yield select(userSelector)    
+    yield put({
+      type: "ADD_CARD_SUCCESS",
+      payload: payload
+    });
+
+
+    // const res = yield call(
+    //   Auth.addCart,
+    //   payload.data,
+    //   user.id
+    // );
+
+    // if (res.status === 200) {      
+    //   yield put({
+    //     type: "ADD_CARD_SUCCESS",
+    //     payload: res.data
+    //   });
+    // } else {
+    //   yield put({
+    //     type: "ADD_CARD_ERROR",
+    //     payload: res.data
+    //   });
+    // }
+  } catch (e) {
+    console.log(e);
+    const payload = typeof e === "string" ? { message: e } : e.data;
+    yield put({
+      type: "ADD_CARD_ERROR",
+      payload
+    });
+  }
+}
+
 function* logoutTask() {
   try {
     yield put({
@@ -86,10 +123,13 @@ function* logoutTask() {
   }
 }
 
+
+
 function* authSaga() {
   yield takeLatest("AUTH_LOGIN", loginTask);
   yield takeLatest("AUTH_REGISTER", registerTask);
   yield takeLatest("AUTH_LOGOUT", logoutTask);
+  yield takeLatest("ADD_CARD", addCard);
 }
 
 export default authSaga;

@@ -52,6 +52,12 @@ export default (state = initialState, { type, payload }) => {
       };
     case "AUTH_LOGOUT_RESET":
       return initialState;
+    case 'ADD_CARD_SUCCESS':
+      console.log(payload)
+      return {
+        ...state,
+        user: { ...state.user, cardData: payload }
+      }
     case "AUTH_LOGOUT_SUCCESS":
       AsyncStorage.removeItem('user')
       return {
