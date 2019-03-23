@@ -1,3 +1,4 @@
+import { AsyncStorage } from 'react-native';
 const initialState = {
   loginError: null,
   loginLoading: false,
@@ -14,14 +15,8 @@ export default (state = initialState, { type, payload }) => {
         ...state,
         loginLoading: true
       };
-    case "AUTH_HYDRATE_TOKEN":
-      return {
-        ...state,
-        loginLoading: false,
-        loginError: null,
-        user: payload
-      };
     case "AUTH_LOGIN_SUCCESS":
+      AsyncStorage.setItem('user', JSON.stringify(payload))
       return {
         ...state,
         loginLoading: false,
@@ -41,6 +36,7 @@ export default (state = initialState, { type, payload }) => {
         registerLoading: true
       };
     case "AUTH_REGISTER_SUCCESS":
+      AsyncStorage.setItem('user', JSON.stringify(payload))
       return {
         ...state,
         registerLoading: false,
@@ -56,7 +52,14 @@ export default (state = initialState, { type, payload }) => {
       };
     case "AUTH_LOGOUT_RESET":
       return initialState;
+    case 'ADD_CARD_SUCCESS':
+      console.log(payload)
+      return {
+        ...state,
+        user: { ...state.user, cardData: payload }
+      }
     case "AUTH_LOGOUT_SUCCESS":
+      AsyncStorage.removeItem('user')
       return {
         ...state,
         user: null

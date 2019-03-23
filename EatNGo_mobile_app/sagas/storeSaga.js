@@ -4,6 +4,9 @@ import { changeAlias } from '../utils/index'
 const storeListSelector = state => state.storeReducer.storeList || null;
 function* storeTask(action) {
   try {
+    yield put({
+      type: "IS_LOADING_STORES",
+    });
     const { payload } = action;
 
     //   const authToken = yield select(authTokenSelector);
@@ -41,14 +44,14 @@ function* storeTask(action) {
 function* searchStore(action) {
   const { payload } = action;
   const storeList = yield select(storeListSelector)
-  const filteredStoreList = storeList.filter(store => changeAlias(store.name).includes(payload.value))
+  const filteredStoreList = storeList.filter(store => changeAlias(store.name).includes(changeAlias(payload.value)))
   yield put({
     type: 'SEARCH_STORE_COMPLETED',
     payload: filteredStoreList,
   });
 }
-function * setStore(action){
-  const { payload } = action;  
+function* setStore(action) {
+  const { payload } = action;
   yield put({
     type: 'SET_STORE_SUCCESS',
     payload: payload,

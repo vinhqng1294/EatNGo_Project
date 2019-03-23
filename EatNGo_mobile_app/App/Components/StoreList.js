@@ -10,7 +10,7 @@ class StoreList extends Component {
         <StoreItem
           store={store}
           onPress={() => {
-            this.props.navigation.navigate('Menu', { store: store })
+            this.props.navigation.navigate('Menu', { store: store })            
           }}
         />
       );
@@ -22,8 +22,11 @@ class StoreList extends Component {
   renderStoreSection = () => (
     <FlatList
       data={this.props.storeList}
+      refreshing={this.props.isLoadingOrders}
+      onRefresh={() => {        
+        this.props.fetchStore();
+      }}
       showsHorizontalScrollIndicator={false}
-      bounces={false}
       renderItem={this.renderStoreList}
       keyExtractor={item => item.id}
     />

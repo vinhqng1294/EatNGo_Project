@@ -5439,6 +5439,11 @@ time-stamp@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/time-stamp/-/time-stamp-1.1.0.tgz#764a5a11af50561921b133f3b44e618687e0f5c3"
 
+tipsi-stripe@^7.4.0:
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/tipsi-stripe/-/tipsi-stripe-7.4.0.tgz#ddea184becad2e72b163f38ece561e87cd65cb70"
+  integrity sha512-GM9K10ahkcw42awSFsF/CHJnzmqEwzpR2Rr4ejy6g4TChYp+w2q0UNmPowvK+OmdPFNFK75D1SWJHTjsouS+pg==
+
 tmp@^0.0.33:
   version "0.0.33"
   resolved "https://registry.yarnpkg.com/tmp/-/tmp-0.0.33.tgz#6d34335889768d21b2bcda0aa277ced3b1bfadf9"

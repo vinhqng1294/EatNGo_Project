@@ -4,14 +4,22 @@ const initialState = {
   store: null,
   error: null,
   foodDetail: null,
+  isLoadingOrders: false
 };
 
 export default (state = initialState, { type, payload }) => {
   switch (type) {
+    case 'IS_LOADING_STORES':
+      return {
+        ...state,
+        isLoadingOrders: true,
+        error: null
+      }
     case 'FETCH_STORE_SUCCESS':
       return {
         ...state,
         storeList: payload,
+        isLoadingOrders: false,
         filteredStoreList: payload,
         store: null,
         error: null,

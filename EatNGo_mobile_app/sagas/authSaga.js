@@ -4,7 +4,6 @@ import Auth from "../services/login";
 const userSelector = state => state.authReducer.user || null;
 
 function* loginTask(action) {
-  console.log(action);
   try {
     yield put({
       type: "AUTH_LOGIN_LOADING"
@@ -17,7 +16,7 @@ function* loginTask(action) {
       payload.facebookId
     );
 
-    if (res.status === 200) {
+    if (res.status === 200) {      
       yield put({
         type: "AUTH_LOGIN_SUCCESS",
         payload: res.data
@@ -75,6 +74,43 @@ function* registerTask(action) {
   }
 }
 
+function* addCard(action) {
+  try {
+    const { payload } = action;
+    const user = yield select(userSelector)    
+    yield put({
+      type: "ADD_CARD_SUCCESS",
+      payload: payload
+    });
+
+
+    // const res = yield call(
+    //   Auth.addCart,
+    //   payload.data,
+    //   user.id
+    // );
+
+    // if (res.status === 200) {      
+    //   yield put({
+    //     type: "ADD_CARD_SUCCESS",
+    //     payload: res.data
+    //   });
+    // } else {
+    //   yield put({
+    //     type: "ADD_CARD_ERROR",
+    //     payload: res.data
+    //   });
+    // }
+  } catch (e) {
+    console.log(e);
+    const payload = typeof e === "string" ? { message: e } : e.data;
+    yield put({
+      type: "ADD_CARD_ERROR",
+      payload
+    });
+  }
+}
+
 function* logoutTask() {
   try {
     yield put({
@@ -87,10 +123,13 @@ function* logoutTask() {
   }
 }
 
+
+
 function* authSaga() {
   yield takeLatest("AUTH_LOGIN", loginTask);
   yield takeLatest("AUTH_REGISTER", registerTask);
   yield takeLatest("AUTH_LOGOUT", logoutTask);
+  yield takeLatest("ADD_CARD", addCard);
 }
 
 export default authSaga;

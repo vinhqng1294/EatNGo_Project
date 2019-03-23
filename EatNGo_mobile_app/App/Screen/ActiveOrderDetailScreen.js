@@ -503,7 +503,6 @@ const styles = StyleSheet.create({
 });
 
 function initMapStateToProps(state) {
-  console.log(state);
   return {
     order: state.orderReducer.order
   };
