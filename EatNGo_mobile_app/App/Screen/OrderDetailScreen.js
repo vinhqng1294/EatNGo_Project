@@ -17,7 +17,7 @@ import {
 import CheckBox from 'react-native-check-box';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Badge, Button, Divider } from 'react-native-elements';
-import { deleteCartItem, fetchCartItems, createOrder, removeCreatedOrder } from '../../actions/index'
+import { deleteCartItem, fetchCartItems, createOrder, removeCreatedOrder, addCard } from '../../actions/index'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import stripe from 'tipsi-stripe';
@@ -94,6 +94,7 @@ class OrderDetailScreen extends Component {
         return totalPrice.toFixed(2)
     }
     componentDidMount() {
+
         const { currentStore } = this.props
         this.props.navigation.setParams({
             storeName: currentStore.name
@@ -101,6 +102,26 @@ class OrderDetailScreen extends Component {
         BackHandler.addEventListener('hardwareBackPress', () => {
             this.props.navigation.state.params.onGoBack();
         })
+    }
+
+    async addPayment() {
+        try {
+            const token = await stripe.paymentRequestWithCardForm();
+            this.props.addCard(token)
+        } catch (error) {
+            Alert.alert(
+                'Add card error',
+                'Please try again!',
+                [
+                    {
+                        text: 'OK', onPress: () => {
+                        }
+                    },
+                ],
+                { cancelable: false }
+            );
+        }
+
     }
     render() {
 
@@ -121,6 +142,11 @@ class OrderDetailScreen extends Component {
             );
         }
         if (cart.length) {
+            stripe.setOptions({
+                publishableKey: 'pk_test_FjTiUmlJXMGLgWdO7noLuB7B00Ph8rXSdu',
+                // merchantId: 'MERCHANT_ID', // Optional
+                androidPayMode: 'test', // Android only
+            })
             return (
                 <View style={{ flex: 1 }}>
                     <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
@@ -253,9 +279,9 @@ class OrderDetailScreen extends Component {
                         <Divider style={styles.divider} />
 
                         <TouchableOpacity style={styles.longBtn}
-                            disabled={user.cardData}
+                            disabled={user.card}
                             onPress={() => {
-                                this.props.navigation.navigate('AddCard')
+                                this.addPayment()
                             }}>
                             <View style={styles.iconWrapper}>
                                 <FontAwesome5
@@ -266,7 +292,7 @@ class OrderDetailScreen extends Component {
                                     solid
                                 />
                             </View>
-                            <Text numberOfLines={1} style={user.cardData ? styles.cardText : styles.iconText}>{user.cardData ? `**** **** **** ${user.cardData.card.last4}` : 'Add your card'}</Text>
+                            <Text numberOfLines={1} style={user.card ? styles.cardText : styles.iconText}>{user.card ? `**** **** **** ${user.card.card.last4}` : 'Add your card'}</Text>
                         </TouchableOpacity>
                         {/* <TouchableOpacity style={styles.longBtn}>
                         <View style={styles.iconWrapper}>
@@ -294,7 +320,24 @@ class OrderDetailScreen extends Component {
                         </View>
                     </ScrollView>
                     <TouchableOpacity style={styles.checkoutBtn}
-                        onPress={() => { this.props.createOrder(cart) }}>
+                        onPress={() => {
+                            if (!user.card) {
+                                Alert.alert(
+                                    'No card Info!',
+                                    'Please provide your card',
+                                    [
+                                        {
+                                            text: 'OK', onPress: () => {
+                                                this.addPayment()
+                                            }
+                                        },
+                                    ],
+                                    { cancelable: false }
+                                );
+                            } else {
+                                this.props.createOrder(cart)
+                            }
+                        }}>
                         <View style={styles.iconWrapper}>
                             <FontAwesome5
                                 style={styles.icons}
@@ -624,7 +667,8 @@ function initMapDispatchToProps(dispatch) {
     return bindActionCreators({
         deleteCartItem,
         createOrder,
-        removeCreatedOrder
+        removeCreatedOrder,
+        addCard
     }, dispatch);
 }
 

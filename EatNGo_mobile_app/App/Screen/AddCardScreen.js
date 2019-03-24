@@ -61,10 +61,7 @@ class AddCardScreen extends Component {
         };
     };
     componentDidMount() {
-        stripe.setOptions({
-            publishableKey: 'pk_test_ZD2lam3ahH8lrLCVqyAOSdS3',
-            androidPayMode: 'test', // Android only
-        })
+
     }
     showAlert(message) {
         Alert.alert(
@@ -105,9 +102,10 @@ class AddCardScreen extends Component {
     }
 
     render() {
+   
         const { params } = this.state
-        const { cardData } = this.props.user
-        if(cardData){
+        const { card } = this.props.user
+        if (card) {
             this.props.navigation.goBack()
         }
         return (

@@ -9,14 +9,13 @@ function* loginTask(action) {
       type: "AUTH_LOGIN_LOADING"
     });
     const { payload } = action;
-
     const res = yield call(
       Auth.doLogin,
       payload.phoneNumber,
       payload.facebookId
     );
 
-    if (res.status === 200) {      
+    if (res.status === 200) {
       yield put({
         type: "AUTH_LOGIN_SUCCESS",
         payload: res.data
@@ -77,30 +76,28 @@ function* registerTask(action) {
 function* addCard(action) {
   try {
     const { payload } = action;
-    const user = yield select(userSelector)    
-    yield put({
-      type: "ADD_CARD_SUCCESS",
-      payload: payload
-    });
-
-
-    // const res = yield call(
-    //   Auth.addCart,
-    //   payload.data,
-    //   user.id
-    // );
-
-    // if (res.status === 200) {      
-    //   yield put({
-    //     type: "ADD_CARD_SUCCESS",
-    //     payload: res.data
-    //   });
-    // } else {
-    //   yield put({
-    //     type: "ADD_CARD_ERROR",
-    //     payload: res.data
-    //   });
-    // }
+    const user = yield select(userSelector)
+    // yield put({
+    //   type: "ADD_CARD_SUCCESS",
+    //   payload: payload
+    // });
+    console.log(user)
+    const res = yield call(
+      Auth.addCard,
+      payload.data,
+      user.id
+    );
+    if (res.status === 200) {      
+      yield put({
+        type: "ADD_CARD_SUCCESS",
+        payload: res.data.card
+      });
+    } else {
+      yield put({
+        type: "ADD_CARD_ERROR",
+        payload: res.data
+      });
+    }
   } catch (e) {
     console.log(e);
     const payload = typeof e === "string" ? { message: e } : e.data;
