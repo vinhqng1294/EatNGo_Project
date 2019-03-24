@@ -12,8 +12,8 @@ import {
 const StoreItem = ({ store, onPress }) => (
   <ImageBackground
     style={styles.row}
-    source={{ uri: store.image }}
-    imageStyle={{ resizeMode: 'cover' }}
+    source={store.image ? { uri: store.image } : require('../../Assets/resDefault_1.png')}
+    imageStyle={store.image ? { resizeMode: 'cover' } : { resizeMode: 'contain' }}
   >
     <View style={store.image ? styles.rowContent : styles.rowContentNoImage}>
       <View style={styles.restaurantNameContainer}>
