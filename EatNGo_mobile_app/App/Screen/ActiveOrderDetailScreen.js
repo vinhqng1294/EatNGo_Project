@@ -85,7 +85,7 @@ class OrderDetailScreen extends Component {
             }}
           >
             {" "}
-            ORDER #{navigation.getParam('id','')}
+            ORDER #{navigation.getParam('id', '')}
           </Text>
           {/* <Text numberOfLines={1} style={{
                         flex: 2.7,
@@ -105,7 +105,7 @@ class OrderDetailScreen extends Component {
   componentDidMount() {
     const id = this.props.navigation.getParam("id", null);
     this.props.navigation.setParams({
-        id 
+      id
     })
     this.props.fetchOrderById(id);
   }
@@ -126,24 +126,10 @@ class OrderDetailScreen extends Component {
           <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
           <ScrollView style={styles.container}>
             <View style={styles.addMoreItemContainer}>
-              <TouchableOpacity
-                style={styles.addMoreItemWrapper}
-                onPress={() => {
-                  this.props.navigation.navigate("Menu");
-                }}
-              >
+              <TouchableOpacity style={styles.addMoreItemWrapper}
+                onPress={() => { this.props.navigation.navigate('Menu') }}>
                 <View style={styles.iconWrapper}>
-                  <FontAwesome5
-                    style={styles.icons}
-                    name={"hand-point-right"}
-                    size={14}
-                    color={"#54b33d"}
-                    solid
-                  />
                 </View>
-                <Text numberOfLines={1} style={styles.addMoreItemTxt}>
-                  Order more here ...
-                </Text>
               </TouchableOpacity>
             </View>
 
@@ -152,116 +138,100 @@ class OrderDetailScreen extends Component {
               <FlatList
                 data={order.orderDetails}
                 showsVerticalScrollIndicator={false}
-                renderItem={({ item }) => (
+                renderItem={({ item }) =>
                   <View style={styles.orderItemWrapper}>
-                    <View style={styles.textWrapper}>
-                      <Text numberOfLines={1} style={styles.quantity}>
-                        {item.quantity} x
-                      </Text>
-                      <Text numberOfLines={2} style={styles.foodName}>
-                        {item.food.name}
-                      </Text>
-                      <Text numberOfLines={1} style={styles.price}>
-                        $ {item.price}
-                      </Text>
+                    <View style={styles.mainItemContainer}>
+                      <View style={styles.quantityWrapper}>
+                        <Text numberOfLines={1} style={styles.quantity}>{item.quantity} x</Text>
+                      </View>
+                      <View style={styles.foodNameWrapper}>
+                        <Text numberOfLines={2} style={styles.foodName}>{item.food.name}</Text>
+                      </View>
+                      <View style={styles.priceWrapper}>
+                        <Text numberOfLines={1} style={styles.price}>$ {item.price}</Text>
+                      </View>
                     </View>
-                    <TouchableOpacity
-                      style={styles.iconButtonWrapper}
-                      onPress={() => {
-                        Alert.alert(
-                          "Remove Item",
-                          "Are you sure you want to delete this item?",
-                          [
-                            {
-                              text: "Cancel",
-                              onPress: () => console.log("Cancel Pressed"),
-                              style: "cancel"
-                            },
-                            { text: "OK", onPress: null }
-                          ],
-                          { cancelable: false }
-                        );
-                      }}
-                    >
-                      <FontAwesome5
-                        name={"trash-alt"}
-                        color={"#54b33d"}
-                        size={12}
-                        solid
-                      />
-                    </TouchableOpacity>
+                    {/* extra item */}
+                    <FlatList
+                      data={item.attributes}
+                      showsVerticalScrollIndicator={false}
+                      renderItem={({ item }) =>
+                        <View>
+                          <View style={styles.extraTitleWrapper}>
+                            <View style={{ flex: 1, paddingLeft: 3, }}></View>
+                            <Text numberOfLines={1} style={styles.extraTitle}>{item.name}</Text>
+                          </View>
+                          <FlatList
+                            data={item.options}
+                            renderItem={({ item }) =>
+                              <View style={styles.extraItemContainer}>
+                                <View style={styles.extraQuantityWrapper}>
+                                </View>
+                                <View style={styles.extraDetailWrapper}>
+                                  <Text numberOfLines={1} style={styles.extraItem}>+ {item.name}</Text>
+                                </View>
+                                <View style={styles.priceWrapper}>
+                                  <Text numberOfLines={1} style={styles.extraPrice}>$ {item.price}</Text>
+                                </View>
+                                {/* NEW+++++ implement on press */}
+                                <TouchableOpacity style={styles.removeBtnContainer}>
+                                  <View style={styles.removeBtn}>
+                                    {/* <FontAwesome5
+                                                                name={'times'}
+                                                                color={'#54b33d'}
+                                                                size={12}
+                                                                solid
+                                                            /> */}
+                                  </View>
+                                </TouchableOpacity>
+                              </View>
+                            }
+                          />
+                        </View>
+                      }
+                    />
+
+                    {/* NEW ++++ comment */}
+                    {/* <View>
+                                <View style={styles.extraTitleWrapper}>
+                                    <Text numberOfLines={1} style={styles.extraTitle}>Special Requests</Text>
+                                </View>
+                                <View style={styles.extraItemContainer}>
+                                    <View style={styles.commentWrapper}>
+                                        <Text numberOfLines={5} style={styles.extraItem}>nhieu da, nhieu ot, nhieu rau, sdas, asd, as,d a,sdasd, ,asd,as</Text>
+                                    </View>
+                                    <TouchableOpacity style={styles.removeBtnContainer}>
+                                        <View style={styles.removeBtn}>
+                                            <FontAwesome5
+                                                name={'times'}
+                                                color={'#54b33d'}
+                                                size={12}
+                                                solid
+                                            />
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                            </View> */}
+
                   </View>
-                )}
+                }
               />
             </View>
             <Divider style={styles.divider} />
 
-            <TouchableOpacity style={styles.longBtn}>
-              <View style={styles.iconWrapper}>
-                <FontAwesome5
-                  style={styles.icons}
-                  name={"credit-card"}
-                  size={23}
-                  color={"#54b33d"}
-                  solid
-                />
-              </View>
-              <Text numberOfLines={1} style={styles.iconText}>
-                Add Credit Card
-              </Text>
-            </TouchableOpacity>
-            {/* <TouchableOpacity style={styles.longBtn}>
-                        <View style={styles.iconWrapper}>
-                            <FontAwesome5
-                                style={styles.icons}
-                                name={'gifts'}
-                                size={23}
-                                color={'#54b33d'}
-                                solid
-                            />
-                        </View>
-                        <Text numberOfLines={1} style={styles.iconText}>Apply Coupon Code</Text>
-                    </TouchableOpacity> */}
             <Divider style={styles.divider} />
 
             <View style={styles.priceSummaryContainer}>
               <View style={styles.priceSummaryWrapper}>
-                <Text numberOfLines={1} style={styles.priceInfoTxt}>
-                  Sub-total
-                </Text>
-                <Text numberOfLines={1} style={styles.priceInfo}>
-                  $ {this.getTotalPrice(order.orderDetails)}
-                </Text>
+                <Text numberOfLines={1} style={styles.priceInfoTxt}>Sub-total</Text>
+                <Text numberOfLines={1} style={styles.priceInfo}>$ {this.getTotalPrice(order.orderDetails)}</Text>
               </View>
               <View style={styles.totalWrapper}>
-                <Text numberOfLines={1} style={styles.totalTxt}>
-                  Total
-                </Text>
-                <Text numberOfLines={1} style={styles.total}>
-                  $ {this.getTotalPrice(order.orderDetails)}
-                </Text>
+                <Text numberOfLines={1} style={styles.totalTxt}>Total</Text>
+                <Text numberOfLines={1} style={styles.total}>$ {this.getTotalPrice(order.orderDetails)}</Text>
               </View>
             </View>
           </ScrollView>
-          <TouchableOpacity
-            style={styles.checkoutBtn}
-            onPress={() => {
-              this.props.navigation.navigate("Restaurants");
-            }}
-          >
-            <View style={styles.iconWrapper}>
-              <FontAwesome5
-                style={styles.icons}
-                name={"cash-register"}
-                size={23}
-                color={"white"}
-                solid
-              />
-            </View>
-            <Text numberOfLines={1} style={styles.buttonTitle}>
-              Checkout
-            </Text>
-          </TouchableOpacity>
         </View>
       );
     } else {
@@ -286,220 +256,274 @@ class OrderDetailScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column",
-    backgroundColor: "#EBEBEB"
+    flexDirection: 'column',
+    backgroundColor: '#EBEBEB',
     // height: 1000
   },
   orderItemsContainer: {
     flex: 1,
-    flexDirection: "column",
-    backgroundColor: "white",
+    flexDirection: 'column',
+    backgroundColor: 'white',
     borderRadius: 9,
     margin: 15,
     padding: 10,
-    borderWidth: 0.3,
-    borderColor: "#54b33d"
+    borderWidth: .3,
+    borderColor: '#54b33d'
   },
   orderItemWrapper: {
     flex: 1,
-    flexDirection: "row",
-    // backgroundColor: 'red',
-    // borderRadius: 10,
-    margin: 5,
-    justifyContent: "center",
-    alignItems: "stretch",
-    borderBottomColor: "#54b33d",
-    borderBottomWidth: 0.57,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'stretch',
+    borderBottomColor: '#54b33d',
+    borderBottomWidth: .57,
     paddingBottom: 3,
-    paddingTop: 3
+    paddingTop: 3,
   },
-  textWrapper: {
+  mainItemContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  quantityWrapper: {
+    flex: 1,
+    paddingLeft: 5,
+  },
+  foodNameWrapper: {
     flex: 8,
-    flexDirection: "row"
-    // backgroundColor: 'yellow',
+    paddingLeft: 3,
+    paddingRight: 3,
+  },
+  priceWrapper: {
+    flex: 2,
+    paddingLeft: 10,
+  },
+  removeBtnContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  removeBtn: {
+    paddingTop: 5,
+  },
+  extraTitleWrapper: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  extraItemContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  extraQuantityWrapper: {
+    flex: 1,
+    alignItems: 'flex-end',
+    paddingLeft: 3,
+  },
+  extraDetailWrapper: {
+    flex: 8,
+    paddingLeft: 3,
+    paddingRight: 3,
+  },
+  quantity: {
+    fontFamily: 'Quicksand-Medium',
+    fontSize: 15,
+    color: 'gray',
+  },
+  foodName: {
+    fontFamily: 'Quicksand-Medium',
+    fontSize: 15,
+    color: 'black',
+  },
+  price: {
+    fontFamily: 'Quicksand-Medium',
+    fontSize: 15,
+    color: 'gray',
+  },
+  extraTitle: {
+    flex: 11,
+    paddingLeft: 10,
+    paddingRight: 3,
+    fontFamily: 'Quicksand-Medium',
+    fontSize: 13,
+    color: 'gray',
+  },
+  extraItem: {
+    paddingLeft: 20,
+    fontFamily: 'Quicksand-Regular',
+    fontSize: 13,
+    color: 'gray',
+  },
+  extraPrice: {
+    fontFamily: 'Quicksand-Medium',
+    fontSize: 13,
+    color: 'gray',
+    paddingLeft: 3,
+  },
+  commentWrapper: {
+    flex: 11,
+    paddingLeft: 13,
+    paddingRight: 3,
+    fontFamily: 'Quicksand-Medium',
+    fontSize: 13,
+    color: 'gray',
   },
   iconWrapper: {
     flex: 0,
-    justifyContent: "center",
-    alignItems: "center",
-    textAlignVertical: "center"
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlignVertical: 'center',
     // backgroundColor: 'green'
   },
-  quantity: {
-    flex: 1,
-    // backgroundColor: 'green',
-    fontFamily: "Quicksand-Medium",
-    fontSize: 15,
-    textAlignVertical: "center",
-    color: "gray",
-    paddingLeft: 3
-  },
-  foodName: {
-    flex: 5,
-    fontFamily: "Quicksand-Medium",
-    fontSize: 15,
-    textAlignVertical: "center",
-    color: "black"
-  },
-  price: {
-    flex: 2,
-    // backgroundColor: 'green',
-    fontFamily: "Quicksand-Medium",
-    fontSize: 15,
-    textAlignVertical: "center",
-    textAlign: "center",
-    color: "gray"
-  },
-  iconButtonWrapper: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    textAlignVertical: "center"
-    // backgroundColor: 'green',
-  },
   divider: {
-    backgroundColor: "#54b33d",
-    height: 0.7,
-    marginBottom: 15
+    backgroundColor: '#54b33d',
+    height: .7,
+    marginBottom: 15,
   },
   longBtn: {
     flex: 1,
-    flexDirection: "row",
-    backgroundColor: "white",
+    flexDirection: 'row',
+    backgroundColor: 'white',
     borderRadius: 9,
     margin: 15,
     marginTop: 0,
     padding: 10,
-    borderWidth: 0.3,
-    borderColor: "#54b33d",
-    justifyContent: "flex-start"
+    borderWidth: .3,
+    borderColor: '#54b33d',
+    justifyContent: 'flex-start',
   },
   icons: {
     // backgroundColor: 'black',
     marginLeft: 10,
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   iconText: {
     marginLeft: 15,
-    fontFamily: "Quicksand-Bold",
+    fontFamily: 'Quicksand-Bold',
     fontSize: 15,
-    color: "#54b33d",
-    textAlignVertical: "center"
+    color: '#54b33d',
+    textAlignVertical: 'center',
+  },
+
+  cardText: {
+    marginLeft: 15,
+    fontFamily: 'Quicksand-Bold',
+    fontSize: 20,
+    color: '#54b33d',
+    textAlignVertical: 'center',
   },
   addMoreItemContainer: {
     flex: 1,
-    flexDirection: "column",
+    flexDirection: 'column',
     // backgroundColor: 'yellow',
-    justifyContent: "center",
+    justifyContent: 'center',
     margin: 15,
     marginBottom: 0,
-    alignItems: "flex-end"
+    alignItems: 'flex-end',
   },
   addMoreItemWrapper: {
     flex: 0,
-    flexDirection: "row"
+    flexDirection: 'row',
     // backgroundColor: 'red',
   },
   addMoreItemTxt: {
     flex: 0,
-    textAlignVertical: "center",
+    textAlignVertical: 'center',
     marginLeft: 15,
     marginRight: 15,
-    fontFamily: "Quicksand-Medium",
+    fontFamily: 'Quicksand-Medium',
     fontSize: 15,
-    color: "#54b33d"
+    color: '#54b33d',
   },
   btnContentWrapper: {
     flex: 0,
-    flexDirection: "row",
-    backgroundColor: "black"
+    flexDirection: 'row',
+    backgroundColor: 'black',
   },
   priceSummaryContainer: {
     flex: 1,
-    flexDirection: "column",
-    backgroundColor: "#EBEBEB",
+    flexDirection: 'column',
+    backgroundColor: '#EBEBEB',
     margin: 15,
     marginTop: 0,
-    padding: 10
+    padding: 10,
     // borderWidth: .3,
     // borderColor: '#54b33d',
   },
   priceSummaryWrapper: {
     flex: 1,
-    flexDirection: "row",
-    alignItems: "stretch",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'stretch',
+    justifyContent: 'center',
     // backgroundColor: 'green',
     marginLeft: 3,
-    marginRight: 3
+    marginRight: 3,
   },
   totalWrapper: {
     flex: 1,
-    flexDirection: "row",
-    alignItems: "stretch",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'stretch',
+    justifyContent: 'center',
     // backgroundColor: 'green',
     marginTop: 5,
-    borderTopWidth: 0.5,
-    borderTopColor: "#757575",
-    paddingTop: 3
+    borderTopWidth: .5,
+    borderTopColor: '#757575',
+    paddingTop: 3,
   },
   priceInfoTxt: {
     flex: 1,
-    fontFamily: "Quicksand-Regular",
+    fontFamily: 'Quicksand-Regular',
     fontSize: 15,
-    color: "#757575",
-    textAlign: "left"
+    color: '#757575',
+    textAlign: 'left',
   },
   priceInfo: {
     flex: 1,
-    fontFamily: "Quicksand-Regular",
+    fontFamily: 'Quicksand-Regular',
     fontSize: 15,
-    color: "#757575",
-    textAlign: "right"
+    color: '#757575',
+    textAlign: 'right',
   },
   totalTxt: {
     flex: 1,
-    fontFamily: "Quicksand-Medium",
+    fontFamily: 'Quicksand-Medium',
     fontSize: 18,
-    color: "black",
-    textAlign: "left"
+    color: 'black',
+    textAlign: 'left',
   },
   total: {
     flex: 1,
-    fontFamily: "Quicksand-Bold",
+    fontFamily: 'Quicksand-Bold',
     fontSize: 18,
-    color: "#54b33d",
-    textAlign: "right"
+    color: '#54b33d',
+    textAlign: 'right',
   },
   checkoutBtn: {
     flex: 1,
-    flexDirection: "row",
-    position: "absolute",
-    left: Dimensions.get("window").width / 2,
+    flexDirection: 'row',
+    position: 'absolute',
+    left: Dimensions.get('window').width / 2,
     bottom: 10,
     zIndex: 100,
-    transform: [{ translateX: -300 / 2 }],
-    backgroundColor: "rgba(84, 179, 61, .8)",
+    transform: [{ 'translateX': -300 / 2 }],
+    backgroundColor: 'rgba(84, 179, 61, .8)',
     width: 300,
     height: 40,
     borderRadius: 5,
-    justifyContent: "center",
-    alignItems: "center",
-    textAlignVertical: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlignVertical: 'center',
     padding: 10,
-    borderWidth: 0.3,
-    borderColor: "#54b33d"
+    borderWidth: .3,
+    borderColor: '#54b33d',
   },
   buttonTitle: {
     marginLeft: 15,
     marginRight: 10,
-    fontFamily: "Quicksand-Bold",
+    fontFamily: 'Quicksand-Bold',
     fontSize: 15,
-    color: "white",
-    textAlignVertical: "center"
-  }
+    color: 'white',
+    textAlignVertical: 'center',
+  },
+
 });
 
 function initMapStateToProps(state) {
