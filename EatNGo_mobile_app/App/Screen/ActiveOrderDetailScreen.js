@@ -16,10 +16,11 @@ import {
 import CheckBox from "react-native-check-box";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { Badge, Button, Divider } from "react-native-elements";
-import { fetchOrderById } from "../../actions/index";
+import { fetchOrderById, updateOrder } from "../../actions/index";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-
+import { mapOrderStatusToName } from "../../services/constant";
+import { ORDER_STATUS } from '../../services/constant'
 class OrderDetailScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -104,7 +105,6 @@ class OrderDetailScreen extends Component {
 
   render() {
     const { order } = this.props;
-    console.log(order);
     if (order) {
       return (
         <View style={{ flex: 1 }}>
@@ -114,12 +114,12 @@ class OrderDetailScreen extends Component {
             <View style={styles.orderInfoContainer}>
               <View style={styles.statusWrapper}>
                 <Text style={styles.statusTitle}>Status:
-                <Text style={styles.statusText}> Paid</Text></Text>
+                <Text style={styles.statusText}> {mapOrderStatusToName[order.status]}</Text></Text>
 
               </View>
               <View style={styles.datatimeWrapper}>
-                <Text style={styles.date}>Today</Text>
-                <Text style={styles.time}>23:05</Text>
+                <Text style={styles.date}>{timestampToString(order.date)}</Text>
+                <Text style={styles.time}>{timestampToTime(order.date)}</Text>
               </View>
             </View>
 
@@ -138,7 +138,7 @@ class OrderDetailScreen extends Component {
                         <Text numberOfLines={2} style={styles.foodName}>{item.food.name}</Text>
                       </View>
                       <View style={styles.priceWrapper}>
-                        <Text numberOfLines={1} style={styles.price}>$ {item.price}</Text>
+                        <Text numberOfLines={1} style={styles.price}>$ {parseFloat(item.price).toFixed(2)}</Text>
                       </View>
                     </View>
                     {/* extra item */}
@@ -221,19 +221,53 @@ class OrderDetailScreen extends Component {
               </View>
             </View>
           </ScrollView>
-          <TouchableOpacity style={styles.cancelBtn}
-            onPress={() => { }}>
-            <View style={styles.iconWrapper}>
-              <FontAwesome5
-                style={styles.icons}
-                name={'times'}
-                size={23}
-                color={'white'}
-                solid
-              />
-            </View>
-            <Text numberOfLines={1} style={styles.buttonTitle}>Cancel</Text>
-          </TouchableOpacity>
+          {order.status === ORDER_STATUS.PAID ?
+            <TouchableOpacity style={styles.cancelBtn}
+              onPress={() => {
+                Alert.alert(
+                  'Cancel Order',
+                  'Are you sure to cancel this order?',
+                  [
+                    {
+                      text: 'No',
+                      onPress: () => console.log('Cancel Pressed'),
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'Yes', onPress: () => {
+                        this.props.updateOrder(order.id, ORDER_STATUS.CANCELLED)
+                        Alert.alert(
+                          'Cancel Order',
+                          'Cancel Order Successfully',
+                          [
+                            {
+                              text: 'OK', onPress: () => {
+                                this.props.navigation.state.params.onGoBack();
+                                this.props.navigation.goBack()
+                              }
+                            },
+                          ],
+                          { cancelable: false }
+                        );
+                      }
+                    },
+                  ],
+                  { cancelable: true }
+                );
+              }}>
+              <View style={styles.iconWrapper}>
+                <FontAwesome5
+                  style={styles.icons}
+                  name={'times'}
+                  size={23}
+                  color={'white'}
+                  solid
+                />
+              </View>
+              <Text numberOfLines={1} style={styles.buttonTitle}>Cancel</Text>
+            </TouchableOpacity>
+            : null}
+
 
         </View>
       );
@@ -588,7 +622,8 @@ function initMapStateToProps(state) {
 function initMapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      fetchOrderById
+      fetchOrderById,
+      updateOrder
     },
     dispatch
   );
@@ -598,3 +633,38 @@ export default connect(
   initMapStateToProps,
   initMapDispatchToProps
 )(OrderDetailScreen);
+
+function timestampToString(timestamp) {
+  var date = new Date(timestamp)
+  if (isToday(date)) {
+    return 'Today'
+  } else if (isYesterday(date)) {
+    return 'Yesterday'
+  } else {
+    var str = ('0' + date.getDate()).slice(-2) + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/' + date.getFullYear()
+    return str
+  }
+}
+function timestampToTime(timestamp) {
+  var d = new Date(timestamp)
+  var hour = d.getHours() < 10 ? '0' + d.getHours() : d.getHours()
+  var minute = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes()
+  return hour + ':' + minute
+}
+
+const isToday = (someDate) => {
+  const today = new Date()
+  return someDate.getDate() == today.getDate() &&
+    someDate.getMonth() == today.getMonth() &&
+    someDate.getFullYear() == today.getFullYear()
+}
+
+const isYesterday = (someDate) => {
+  var today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const newSomeDate = new Date(someDate)
+  newSomeDate.setHours(0, 0, 0, 0)
+  var timeDiff = newSomeDate.getTime() - today.getTime()
+  var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+  return diffDays == -1
+}

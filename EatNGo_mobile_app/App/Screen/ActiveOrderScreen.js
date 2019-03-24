@@ -59,7 +59,10 @@ class ActiveOrderScreen extends Component {
     }
 
     handleItemOnPress(item) {
-        this.props.navigation.navigate("ActiveOrderDetail", { id: item.id });
+        this.props.navigation.navigate("ActiveOrderDetail", {
+            id: item.id,
+            onGoBack: () => this.props.fetchOrders()
+        });
     }
     scrollTop() {
         this.flatListRef.scrollToOffset({ animated: true, offset: 0 });
@@ -196,7 +199,7 @@ class ActiveOrderScreen extends Component {
                                                                         this.props.updateOrder(item.id, ORDER_STATUS.CANCELLED)
                                                                         Alert.alert(
                                                                             'Cancel Order',
-                                                                            'Cancel Order Success',
+                                                                            'Cancel Order Successfully',
                                                                             [
                                                                                 {
                                                                                     text: 'OK', onPress: () => {
@@ -204,7 +207,7 @@ class ActiveOrderScreen extends Component {
                                                                                     }
                                                                                 },
                                                                             ],
-                                                                            { cancelable: true }
+                                                                            { cancelable: false }
                                                                         );
                                                                     }
                                                                 },

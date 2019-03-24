@@ -18,7 +18,7 @@ function* orderByMemberIdTask(action) {
     if (res.status === 200) {
       yield put({
         type: "FETCH_ORDERS_SUCCESS",
-        payload: res.data
+        payload: res.data.sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
       });
     } else {
       yield put({
@@ -118,8 +118,8 @@ function* removeCreatedOrder(action) {
 }
 
 function* updateOrder(action) {
-  const { payload }= action
-  const user = yield select(userSelector)  
+  const { payload } = action
+  const user = yield select(userSelector)
   const res = yield call(API.updateOrder, payload.orderId, payload.status, {
     Authorization: `Bearer ${user.token}`
   });
