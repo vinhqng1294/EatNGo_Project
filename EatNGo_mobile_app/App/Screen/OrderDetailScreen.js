@@ -109,17 +109,20 @@ class OrderDetailScreen extends Component {
             const token = await stripe.paymentRequestWithCardForm();
             this.props.addCard(token)
         } catch (error) {
-            Alert.alert(
-                'Add card error',
-                'Please try again!',
-                [
-                    {
-                        text: 'OK', onPress: () => {
-                        }
-                    },
-                ],
-                { cancelable: false }
-            );
+            console.log(error)
+            if (!error.includes('Cancelled by user')) {
+                Alert.alert(
+                    'Add card error',
+                    'Please try again!',
+                    [
+                        {
+                            text: 'OK', onPress: () => {
+                            }
+                        },
+                    ],
+                    { cancelable: false }
+                );
+            }
         }
 
     }
