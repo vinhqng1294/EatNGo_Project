@@ -18,7 +18,7 @@ function* orderByMemberIdTask(action) {
     if (res.status === 200) {
       yield put({
         type: "FETCH_ORDERS_SUCCESS",
-        payload: res.data
+        payload: res.data.sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
       });
     } else {
       yield put({
@@ -117,12 +117,40 @@ function* removeCreatedOrder(action) {
   }
 }
 
+function* updateOrder(action) {
+  const { payload } = action
+  const user = yield select(userSelector)
+  const res = yield call(API.updateOrder, payload.orderId, payload.status, {
+    Authorization: `Bearer ${user.token}`
+  });
+  if (res.status === 200) {
+    yield put({
+      type: 'UPDATE_ORDER_SUCCESS',
+      payload: res.data,
+    });
+  } else {
+    yield put({
+      type: 'UPDATE_ORDER_ERROR',
+      payload: res.data,
+    });
+  }
+  try {
+    yield put({
+      type: "UPDATE_ORDER_SUCCESS",
+    });
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+
 
 function* orderSaga() {
   yield takeLatest('FETCH_ORDERS', orderByMemberIdTask)
   yield takeLatest('FETCH_ORDER_BY_ID', orderByIdTask)
   yield takeLatest('CREATE_ORDER', createOrder)
   yield takeLatest('REMOVE_CREATED_ORDER', removeCreatedOrder)
+  yield takeLatest('UPDATE_ORDER', updateOrder)
 }
 
 export default orderSaga;

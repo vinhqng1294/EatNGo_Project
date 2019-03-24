@@ -36,7 +36,7 @@ class MenuScreen extends Component {
                         containerStyle={{ position: 'absolute', top: -5, left: -5, zIndex: 10 }}
                     />
                     <Button
-                        icon={<FontAwesome5 name={'receipt'} size={23} color={'#54b33d'} solid />}
+                        icon={<FontAwesome5 name={'shopping-cart'} size={23} color={'#54b33d'} solid />}
                         type='clear'
                         title={null}
                         onPress={() => {
@@ -198,8 +198,9 @@ const styles = StyleSheet.create({
         borderRightColor: '#54b33d',
         borderTopWidth: .5,
         borderTopColor: 'rgb(157,157,157)',
-        borderLeftWidth: .5,
+        borderLeftWidth: .5,        
         borderLeftColor: 'rgb(157,157,157)',
+        borderRadius: 5
     },
     foodImg: {
         flex: 1,

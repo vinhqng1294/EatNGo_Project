@@ -41,6 +41,10 @@ export default (state = initialState, { type, payload }) => {
         createdOrder: null,
         error: null
       }
+    case 'UPDATE_ORDER_SUCCESS':
+      return {
+        ...state
+      }
     default:
       return state;
   }

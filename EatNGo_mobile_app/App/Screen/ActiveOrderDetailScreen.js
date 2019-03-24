@@ -16,89 +16,75 @@ import {
 import CheckBox from "react-native-check-box";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { Badge, Button, Divider } from "react-native-elements";
-import { fetchOrderById } from "../../actions/index";
+import { fetchOrderById, updateOrder } from "../../actions/index";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-
+import { mapOrderStatusToName } from "../../services/constant";
+import { ORDER_STATUS } from '../../services/constant'
 class OrderDetailScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTintColor: "#54b33d",
-      headerStyle: { backgroundColor: "white" },
-      headerRight: (
-        <View
-          style={{
-            height: 0,
-            width: 0,
-            borderBottomWidth: 28,
-            borderBottomColor: "#54b33d",
-            borderTopWidth: 28,
-            borderTopColor: "#54b33d",
-            borderLeftWidth: 28,
-            borderLeftColor: "white",
-            justifyContent: "center",
-            alignItems: "center",
-            marginRight: 0
-            // backgroundColor: 'black',
-          }}
-        />
-      ),
-      headerLeft: (
-        <View
-          style={{
-            height: 0,
-            width: 0,
-            borderBottomWidth: 28,
-            borderBottomColor: "#54b33d",
-            borderTopWidth: 28,
-            borderTopColor: "#54b33d",
-            borderRightWidth: 28,
-            borderRightColor: "white",
-            justifyContent: "center",
-            alignItems: "center",
-            marginRight: 0
-            // backgroundColor: 'black',
-          }}
-        />
-      ),
-      headerTitle: (
-        <View
-          style={{
-            // justifyContent: 'center',
-            alignItems: "flex-start",
+      headerTintColor: '#54b33d',
+      headerStyle: { backgroundColor: 'white' },
+      headerRight:
+        <View style={{
+          height: 0,
+          width: 0,
+          borderBottomWidth: 28,
+          borderBottomColor: '#54b33d',
+          borderTopWidth: 28,
+          borderTopColor: '#54b33d',
+          borderLeftWidth: 28,
+          borderLeftColor: 'white',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginRight: 0,
+          // backgroundColor: 'black',
+        }}></View>,
+      headerLeft:
+        <View style={{
+          height: 0,
+          width: 0,
+          borderBottomWidth: 28,
+          borderBottomColor: '#54b33d',
+          borderTopWidth: 28,
+          borderTopColor: '#54b33d',
+          borderRightWidth: 28,
+          borderRightColor: 'white',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginRight: 0,
+          // backgroundColor: 'black',
+        }}></View>,
+      headerTitle:
+        <View style={{
+          // justifyContent: 'center',
+          alignItems: 'flex-start',
+          flex: 1,
+          flexDirection: 'row',
+          borderBottomWidth: .7,
+          borderBottomColor: '#54b33d',
+          // backgroundColor: 'black',
+        }}>
+          <Text numberOfLines={1} style={{
             flex: 1,
-            flexDirection: "row",
-            borderBottomWidth: 0.7,
-            borderBottomColor: "#54b33d"
+            textAlign: 'left',
+            fontFamily: 'Quicksand-Bold',
+            fontSize: 18,
+            color: '#757575',
+            // backgroundColor: 'yellow',
+          }}> ORDER</Text>
+          <Text numberOfLines={1} style={{
+            flex: 2.7,
+            fontFamily: 'Quicksand-Medium',
+            fontSize: 18,
+            textAlign: 'center',
+            paddingRight: 10,
+            color: '#757575',
+            textAlignVertical: 'center',
             // backgroundColor: 'black',
-          }}
-        >
-          <Text
-            numberOfLines={1}
-            style={{
-              flex: 1,
-              textAlign: "center",
-              fontFamily: "Quicksand-Bold",
-              fontSize: 18,
-              color: "#757575"
-              // backgroundColor: 'yellow',
-            }}
-          >
-            {" "}
-            ORDER #{navigation.getParam('id', '')}
-          </Text>
-          {/* <Text numberOfLines={1} style={{
-                        flex: 2.7,
-                        fontFamily: 'Quicksand-Medium',
-                        fontSize: 18,
-                        textAlign: 'center',
-                        paddingRight: 10,
-                        color: '#757575',
-                        textAlignVertical: 'center',
-                        // backgroundColor: 'black',
-                    }} > #A12345</Text> */}
+          }} >#{navigation.getParam('id', "")}</Text>
         </View>
-      )
     };
   };
 
@@ -119,18 +105,22 @@ class OrderDetailScreen extends Component {
 
   render() {
     const { order } = this.props;
-    console.log(order);
     if (order) {
       return (
         <View style={{ flex: 1 }}>
           <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
           <ScrollView style={styles.container}>
-            <View style={styles.addMoreItemContainer}>
-              <TouchableOpacity style={styles.addMoreItemWrapper}
-                onPress={() => { this.props.navigation.navigate('Menu') }}>
-                <View style={styles.iconWrapper}>
-                </View>
-              </TouchableOpacity>
+
+            <View style={styles.orderInfoContainer}>
+              <View style={styles.statusWrapper}>
+                <Text style={styles.statusTitle}>Status:
+                <Text style={styles.statusText}> {mapOrderStatusToName[order.status]}</Text></Text>
+
+              </View>
+              <View style={styles.datatimeWrapper}>
+                <Text style={styles.date}>{timestampToString(order.date)}</Text>
+                <Text style={styles.time}>{timestampToTime(order.date)}</Text>
+              </View>
             </View>
 
             <View style={styles.orderItemsContainer}>
@@ -148,7 +138,7 @@ class OrderDetailScreen extends Component {
                         <Text numberOfLines={2} style={styles.foodName}>{item.food.name}</Text>
                       </View>
                       <View style={styles.priceWrapper}>
-                        <Text numberOfLines={1} style={styles.price}>$ {item.price}</Text>
+                        <Text numberOfLines={1} style={styles.price}>$ {parseFloat(item.price).toFixed(2)}</Text>
                       </View>
                     </View>
                     {/* extra item */}
@@ -174,16 +164,16 @@ class OrderDetailScreen extends Component {
                                   <Text numberOfLines={1} style={styles.extraPrice}>$ {item.price}</Text>
                                 </View>
                                 {/* NEW+++++ implement on press */}
-                                <TouchableOpacity style={styles.removeBtnContainer}>
+                                {/* <TouchableOpacity style={styles.removeBtnContainer}>
                                   <View style={styles.removeBtn}>
-                                    {/* <FontAwesome5
-                                                                name={'times'}
-                                                                color={'#54b33d'}
-                                                                size={12}
-                                                                solid
-                                                            /> */}
+                                    <FontAwesome5
+                                      name={'times'}
+                                      color={'#54b33d'}
+                                      size={12}
+                                      solid
+                                    />
                                   </View>
-                                </TouchableOpacity>
+                                </TouchableOpacity> */}
                               </View>
                             }
                           />
@@ -217,7 +207,6 @@ class OrderDetailScreen extends Component {
                 }
               />
             </View>
-            <Divider style={styles.divider} />
 
             <Divider style={styles.divider} />
 
@@ -232,21 +221,78 @@ class OrderDetailScreen extends Component {
               </View>
             </View>
           </ScrollView>
+          {order.status === ORDER_STATUS.PAID ?
+            <TouchableOpacity style={styles.cancelBtn}
+              onPress={() => {
+                Alert.alert(
+                  'Cancel Order',
+                  'Are you sure to cancel this order?',
+                  [
+                    {
+                      text: 'No',
+                      onPress: () => console.log('Cancel Pressed'),
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'Yes', onPress: () => {
+                        this.props.updateOrder(order.id, ORDER_STATUS.CANCELLED)
+                        Alert.alert(
+                          'Cancel Order',
+                          'Cancel Order Successfully',
+                          [
+                            {
+                              text: 'OK', onPress: () => {
+                                this.props.navigation.state.params.onGoBack();
+                                this.props.navigation.goBack()
+                              }
+                            },
+                          ],
+                          { cancelable: false }
+                        );
+                      }
+                    },
+                  ],
+                  { cancelable: true }
+                );
+              }}>
+              <View style={styles.iconWrapper}>
+                <FontAwesome5
+                  style={styles.icons}
+                  name={'times'}
+                  size={23}
+                  color={'white'}
+                  solid
+                />
+              </View>
+              <Text numberOfLines={1} style={styles.buttonTitle}>Cancel</Text>
+            </TouchableOpacity>
+            : null}
+
+
         </View>
       );
     } else {
       return (
-        <View>
-          <Text
-            style={{
-              textAlign: "center",
-              fontSize: 20,
-              fontWeight: "bold"
-            }}
-          >
-            {" "}
-            Your order is empty
-          </Text>
+        <View style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+          <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
+          <Text style={{
+            textAlign: 'center',
+            fontSize: 15,
+            fontFamily: 'Quicksand-Regular',
+          }}>Did you forget to order something?</Text>
+          <TouchableOpacity
+            onPress={() => { this.props.navigation.goBack() }}>
+            <Text style={{
+              textAlign: 'center',
+              fontSize: 18,
+              fontFamily: 'Quicksand-Bold',
+              color: '#54b33d'
+            }}>Go to Active Orders</Text>
+          </TouchableOpacity>
         </View>
       );
     }
@@ -254,6 +300,47 @@ class OrderDetailScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+  orderInfoContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    paddingTop: 15,
+  },
+  statusWrapper: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingRight: 10,
+  },
+  datatimeWrapper: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+    // paddingLeft: 10,
+  },
+  statusTitle: {
+    fontFamily: 'Quicksand-Regular',
+    fontSize: 15,
+    color: 'gray',
+  },
+  statusText: {
+    fontFamily: 'Quicksand-Medium',
+    fontSize: 20,
+    color: '#54b33d',
+  },
+  date: {
+    fontFamily: 'Quicksand-Medium',
+    fontSize: 15,
+    color: '#54b33d',
+    paddingRight: 20,
+  },
+  time: {
+    fontFamily: 'Quicksand-Regular',
+    fontSize: 15,
+    color: '#54b33d',
+    paddingRight: 20,
+  },
+
   container: {
     flex: 1,
     flexDirection: 'column',
@@ -289,12 +376,12 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
   },
   foodNameWrapper: {
-    flex: 8,
+    flex: 7,
     paddingLeft: 3,
     paddingRight: 3,
   },
   priceWrapper: {
-    flex: 2,
+    flex: 3,
     paddingLeft: 10,
   },
   removeBtnContainer: {
@@ -318,7 +405,7 @@ const styles = StyleSheet.create({
     paddingLeft: 3,
   },
   extraDetailWrapper: {
-    flex: 8,
+    flex: 7,
     paddingLeft: 3,
     paddingRight: 3,
   },
@@ -496,7 +583,7 @@ const styles = StyleSheet.create({
     color: '#54b33d',
     textAlign: 'right',
   },
-  checkoutBtn: {
+  cancelBtn: {
     flex: 1,
     flexDirection: 'row',
     position: 'absolute',
@@ -504,7 +591,7 @@ const styles = StyleSheet.create({
     bottom: 10,
     zIndex: 100,
     transform: [{ 'translateX': -300 / 2 }],
-    backgroundColor: 'rgba(84, 179, 61, .8)',
+    backgroundColor: 'rgba(169, 4, 4, .8)',
     width: 300,
     height: 40,
     borderRadius: 5,
@@ -513,7 +600,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     padding: 10,
     borderWidth: .3,
-    borderColor: '#54b33d',
+    borderColor: '#A90404',
   },
   buttonTitle: {
     marginLeft: 15,
@@ -535,7 +622,8 @@ function initMapStateToProps(state) {
 function initMapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      fetchOrderById
+      fetchOrderById,
+      updateOrder
     },
     dispatch
   );
@@ -545,3 +633,38 @@ export default connect(
   initMapStateToProps,
   initMapDispatchToProps
 )(OrderDetailScreen);
+
+function timestampToString(timestamp) {
+  var date = new Date(timestamp)
+  if (isToday(date)) {
+    return 'Today'
+  } else if (isYesterday(date)) {
+    return 'Yesterday'
+  } else {
+    var str = ('0' + date.getDate()).slice(-2) + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/' + date.getFullYear()
+    return str
+  }
+}
+function timestampToTime(timestamp) {
+  var d = new Date(timestamp)
+  var hour = d.getHours() < 10 ? '0' + d.getHours() : d.getHours()
+  var minute = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes()
+  return hour + ':' + minute
+}
+
+const isToday = (someDate) => {
+  const today = new Date()
+  return someDate.getDate() == today.getDate() &&
+    someDate.getMonth() == today.getMonth() &&
+    someDate.getFullYear() == today.getFullYear()
+}
+
+const isYesterday = (someDate) => {
+  var today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const newSomeDate = new Date(someDate)
+  newSomeDate.setHours(0, 0, 0, 0)
+  var timeDiff = newSomeDate.getTime() - today.getTime()
+  var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+  return diffDays == -1
+}

@@ -129,6 +129,15 @@ export const addCard = (data, memberId) => ({
   }
 });
 
+
+export const updateOrder = (orderId, status) => ({
+  type: "UPDATE_ORDER",
+  payload: {
+   orderId,
+   status
+  }
+});
+
 export const updateFoodOption = (optionIndex, itemIndex) => ({
   type: 'UPDATE_FOOD_OPTION',
   payload: {
