@@ -374,12 +374,12 @@ const styles = StyleSheet.create({
         paddingLeft: 5,
     },
     foodNameWrapper: {
-        flex: 8,
+        flex: 7,
         paddingLeft: 3,
         paddingRight: 3,
     },
     priceWrapper: {
-        flex: 2,
+        flex: 3,
         paddingLeft: 10,
     },
     removeBtnContainer: {
@@ -403,7 +403,7 @@ const styles = StyleSheet.create({
         paddingLeft: 3,
     },
     extraDetailWrapper: {
-        flex: 8,
+        flex: 7,
         paddingLeft: 3,
         paddingRight: 3,
     },
