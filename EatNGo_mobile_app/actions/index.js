@@ -121,9 +121,12 @@ export const removeCreatedOrder = store => ({
   payload: store
 });
 
-export const addCard = data => ({
+export const addCard = (data, memberId) => ({
   type: "ADD_CARD",
-  payload: data
+  payload: {
+    data,
+    memberId
+  }
 });
 
 export const updateFoodOption = (optionIndex, itemIndex) => ({

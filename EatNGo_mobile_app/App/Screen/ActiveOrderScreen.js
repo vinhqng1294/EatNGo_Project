@@ -59,6 +59,9 @@ class ActiveOrderScreen extends Component {
     handleItemOnPress(item) {
         this.props.navigation.navigate("ActiveOrderDetail", { id: item.id });
     }
+    scrollTop() {
+        this.flatListRef.scrollToOffset({ animated: true, offset: 0 });
+    }
 
     render() {
         // this.props.navigation.setParams({
@@ -105,10 +108,12 @@ class ActiveOrderScreen extends Component {
                     <View style={styles.container}>
                         {/* an order item */}
                         <FlatList
+                            ref={(ref) => { this.flatListRef = ref; }}
                             data={this.props.orderList}
                             refreshing={this.props.isLoading}
                             onRefresh={() => {
                                 this.props.fetchOrders()
+                                this.scrollTop()
                             }}
                             showsVerticalScrollIndicator={false}
                             renderItem={({ item }) =>

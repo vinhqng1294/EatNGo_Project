@@ -20,15 +20,15 @@ function doRegister(phoneNumber, email, name, facebookId) {
 }
 
 
-function addCart(cardData, memberId) {
+function addCard(card, memberId) {
   const data = {
-    cardData
+    card
   };
-  return request({ url: MEMBER_URL+ '/'+ memberId, method: 'PUT', data });
+  return request({ url: MEMBER_URL + '/' + memberId, method: 'PUT', data });
 }
 
 export default {
   doLogin,
   doRegister,
-  addCart
+  addCard
 };
