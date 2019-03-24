@@ -32,8 +32,22 @@ function createOrder(data, headers) {
   });
 }
 
+function updateOrder(orderId, status, headers) {
+  const data = {
+    status
+  };
+  console.log(data)
+  return request({
+    url: ORDER_URL + '/' + orderId,
+    method: "PATCH",
+    data,
+    headers
+  });
+}
+
 export default {
   getOrders,
   createOrder,
-  getOrderById
+  getOrderById,
+  updateOrder
 };

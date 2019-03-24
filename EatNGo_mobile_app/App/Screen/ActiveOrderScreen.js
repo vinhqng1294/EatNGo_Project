@@ -6,14 +6,15 @@ import {
     FlatList,
     ImageBackground,
     Text,
+    Alert,
     StatusBar,
     Image,
     ActivityIndicator,
 } from 'react-native';
-
+import { ORDER_STATUS } from '../../services/constant'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Badge, Button, Divider } from 'react-native-elements';
-import { fetchOrders, cleanCart } from "../../actions/index";
+import { fetchOrders, cleanCart, updateOrder } from "../../actions/index";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { mapOrderStatusToName } from "../../services/constant";
@@ -68,19 +69,19 @@ class ActiveOrderScreen extends Component {
         // this.props.navigation.setParams({
         //     cartLength: this.props.cart.length || 0,
         // }) 
-        if(this.props.isLoading && !this.props.orderList.length){
+        if (this.props.isLoading && !this.props.orderList.length) {
             return (
                 <View style={{
                     flex: 1,
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}>
-                <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
-                <ActivityIndicator size="large" color="#54b33d" />
+                    <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
+                    <ActivityIndicator size="large" color="#54b33d" />
                 </View>
             )
-        }       
-       if (!this.props.orderList.length) {
+        }
+        if (!this.props.orderList.length) {
             return (
                 <View style={{
                     flex: 1,
@@ -178,17 +179,52 @@ class ActiveOrderScreen extends Component {
                                             </View>
                                         </View>
                                         <View style={styles.removeBtnWrapper}>
-                                            <TouchableOpacity style={styles.removeBtn}>
-                                                <View style={styles.iconWrapper}>
-                                                    <FontAwesome5
-                                                        style={styles.icons}
-                                                        name={'times-circle'}
-                                                        size={23}
-                                                        color={'#54b33d'}
-                                                        solid
-                                                    />
-                                                </View>
-                                            </TouchableOpacity>
+                                            {item.status === ORDER_STATUS.PAID ?
+                                                <TouchableOpacity
+                                                    onPress={() => {
+                                                        Alert.alert(
+                                                            'Cancel Order',
+                                                            'Are you sure to cancel this order?',
+                                                            [
+                                                                {
+                                                                    text: 'No',
+                                                                    onPress: () => console.log('Cancel Pressed'),
+                                                                    style: 'cancel',
+                                                                },
+                                                                {
+                                                                    text: 'Yes', onPress: () => {
+                                                                        this.props.updateOrder(item.id, ORDER_STATUS.CANCELLED)
+                                                                        Alert.alert(
+                                                                            'Cancel Order',
+                                                                            'Cancel Order Success',
+                                                                            [
+                                                                                {
+                                                                                    text: 'OK', onPress: () => {
+                                                                                        this.props.fetchOrders()
+                                                                                    }
+                                                                                },
+                                                                            ],
+                                                                            { cancelable: true }
+                                                                        );
+                                                                    }
+                                                                },
+                                                            ],
+                                                            { cancelable: true }
+                                                        );
+                                                    }}
+                                                    style={styles.removeBtn}>
+                                                    <View style={styles.iconWrapper}>
+                                                        <FontAwesome5
+                                                            style={styles.icons}
+                                                            name={'times-circle'}
+                                                            size={23}
+                                                            color={'#54b33d'}
+                                                            solid
+                                                        />
+                                                    </View>
+                                                </TouchableOpacity>
+                                                : null}
+
                                         </View>
                                     </View>
                                 </View>
@@ -329,7 +365,8 @@ const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
             fetchOrders,
-            cleanCart
+            cleanCart,
+            updateOrder
         },
         dispatch
     );
@@ -350,12 +387,35 @@ export default connect(
 
 function timestampToString(timestamp) {
     var date = new Date(timestamp)
-    var str = ('0' + date.getDate()).slice(-2) + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/' + date.getFullYear()
-    return str
+    if (isToday(date)) {
+        return 'Today'
+    } else if (isYesterday(date)) {
+        return 'Yesterday'
+    } else {
+        var str = ('0' + date.getDate()).slice(-2) + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/' + date.getFullYear()
+        return str
+    }
 }
 function timestampToTime(timestamp) {
     var d = new Date(timestamp)
     var hour = d.getHours() < 10 ? '0' + d.getHours() : d.getHours()
     var minute = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes()
     return hour + ':' + minute
-}  
+}
+
+const isToday = (someDate) => {
+    const today = new Date()
+    return someDate.getDate() == today.getDate() &&
+        someDate.getMonth() == today.getMonth() &&
+        someDate.getFullYear() == today.getFullYear()
+}
+
+const isYesterday = (someDate) => {
+    var today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const newSomeDate = new Date(someDate)
+    newSomeDate.setHours(0, 0, 0, 0)
+    var timeDiff = newSomeDate.getTime() - today.getTime()
+    var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    return diffDays == -1
+}

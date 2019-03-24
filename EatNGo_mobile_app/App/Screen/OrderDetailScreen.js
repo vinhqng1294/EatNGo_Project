@@ -282,9 +282,24 @@ class OrderDetailScreen extends Component {
                         <Divider style={styles.divider} />
 
                         <TouchableOpacity style={styles.longBtn}
-                            disabled={user.card}
                             onPress={() => {
-                                this.addPayment()
+                                if (!user.card) {
+                                    this.addPayment()
+                                } else {
+                                    Alert.alert(
+                                        'Card',
+                                        'Do you want to update your card info?',
+                                        [
+                                            {
+                                                text: 'No',
+                                                onPress: () => console.log('Cancel Pressed'),
+                                                style: 'cancel',
+                                            },
+                                            { text: 'Yes', onPress: () =>{ this.addPayment() }},
+                                        ],
+                                        { cancelable: false },
+                                    );
+                                }
                             }}>
                             <View style={styles.iconWrapper}>
                                 <FontAwesome5
