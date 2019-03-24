@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
   },
   statusTitle: {
     fontFamily: 'Quicksand-Regular',
-    fontSize: 20,
+    fontSize: 15,
     color: 'gray',
   },
   statusText: {
