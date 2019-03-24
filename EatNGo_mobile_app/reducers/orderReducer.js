@@ -3,7 +3,8 @@ const initialState = {
   order: null,
   error: null,
   isLoading: false,
-  createdOrder: null
+  createdOrder: null,
+  isSavingOrder: false
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -33,12 +34,19 @@ export default (state = initialState, { type, payload }) => {
       return {
         ...state,
         createdOrder: payload,
+        isSavingOrder: false,
         error: null
       }
     case 'REMOVE_CREATED_ORDER_SUCCESS':
       return {
         ...state,
         createdOrder: null,
+        error: null
+      }
+    case 'IS_SAVING_ORDER':
+      return {
+        ...state,
+        isSavingOrder: true,
         error: null
       }
     case 'UPDATE_ORDER_SUCCESS':
