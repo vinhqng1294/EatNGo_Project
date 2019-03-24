@@ -17,8 +17,8 @@ import AddCardScreen from './Screen/AddCardScreen';
 const HomeStack = createStackNavigator(
     {
         "Restaurants": { screen: HomeScreen },
-        // "Menu": { screen: MenuScreen },
-        // "FoodDetail": { screen: FoodDetailScreen },
+        "Menu": { screen: MenuScreen },
+        "FoodDetail": { screen: FoodDetailScreen },
     },
     {
         initialRouteName: 'Restaurants',
@@ -84,11 +84,11 @@ const AppNavigator = createStackNavigator(
         "Welcome": { screen: WelcomeScreen, navigationOptions: { header: null } },
         "Register": { screen: RegisterScreen },
         "Home": { screen: TabNavigator, navigationOptions: { header: null, } },
-        "Menu": { screen: MenuScreen },
-        "FoodDetail": { screen: FoodDetailScreen },
+        // "Menu": { screen: MenuScreen },
+        // "FoodDetail": { screen: FoodDetailScreen },
         "OrderDetail": { screen: OrderDetailScreen },
         "ActiveOrderDetail": { screen: ActiveOrderDetailScreen },
-        "AddCard": { screen: AddCardScreen }
+        // "AddCard": { screen: AddCardScreen }
     },
     {
         initialRouteName: 'Welcome',

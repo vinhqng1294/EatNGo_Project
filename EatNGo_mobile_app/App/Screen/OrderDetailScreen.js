@@ -552,7 +552,7 @@ const styles = StyleSheet.create({
     cardText: {
         marginLeft: 15,
         fontFamily: 'Quicksand-Bold',
-        fontSize: 20,
+        fontSize: 15,
         color: '#54b33d',
         textAlignVertical: 'center',
     },
