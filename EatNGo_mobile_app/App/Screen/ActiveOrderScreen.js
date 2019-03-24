@@ -8,6 +8,7 @@ import {
     Text,
     StatusBar,
     Image,
+    ActivityIndicator,
 } from 'react-native';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -66,8 +67,20 @@ class ActiveOrderScreen extends Component {
     render() {
         // this.props.navigation.setParams({
         //     cartLength: this.props.cart.length || 0,
-        // })        
-        if (!this.props.orderList.length) {
+        // }) 
+        if(this.props.isLoading && !this.props.orderList.length){
+            return (
+                <View style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
+                <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
+                <ActivityIndicator size="large" color="#54b33d" />
+                </View>
+            )
+        }       
+       if (!this.props.orderList.length) {
             return (
                 <View style={{
                     flex: 1,
@@ -169,7 +182,7 @@ class ActiveOrderScreen extends Component {
                                                 <View style={styles.iconWrapper}>
                                                     <FontAwesome5
                                                         style={styles.icons}
-                                                        name={'trash'}
+                                                        name={'times-circle'}
                                                         size={23}
                                                         color={'#54b33d'}
                                                         solid
