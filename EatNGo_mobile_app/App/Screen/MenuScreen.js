@@ -198,8 +198,9 @@ const styles = StyleSheet.create({
         borderRightColor: '#54b33d',
         borderTopWidth: .5,
         borderTopColor: 'rgb(157,157,157)',
-        borderLeftWidth: .5,
+        borderLeftWidth: .5,        
         borderLeftColor: 'rgb(157,157,157)',
+        borderRadius: 5
     },
     foodImg: {
         flex: 1,
