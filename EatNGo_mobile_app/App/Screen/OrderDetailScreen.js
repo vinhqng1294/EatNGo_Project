@@ -23,6 +23,12 @@ import { connect } from 'react-redux';
 import stripe from 'tipsi-stripe';
 
 class OrderDetailScreen extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            isSavingOrder: false
+        }
+    }
     static navigationOptions = ({ navigation }) => {
         return {
             headerTintColor: '#54b33d',
@@ -94,13 +100,17 @@ class OrderDetailScreen extends Component {
         return totalPrice.toFixed(2)
     }
     componentDidMount() {
-
         const { currentStore } = this.props
         this.props.navigation.setParams({
             storeName: currentStore.name
         })
         BackHandler.addEventListener('hardwareBackPress', () => {
             this.props.navigation.state.params.onGoBack();
+        })
+    }
+    componentWillReceiveProps() {
+        this.setState({
+            isSavingOrder: this.props.isSavingOrder
         })
     }
 
@@ -128,7 +138,7 @@ class OrderDetailScreen extends Component {
     }
     render() {
 
-        const { cart, createdOrder, user } = this.props
+        const { cart, createdOrder, user, isSavingOrder } = this.props
         if (createdOrder) {
             Alert.alert(
                 'Order',
@@ -295,7 +305,7 @@ class OrderDetailScreen extends Component {
                                                 onPress: () => console.log('Cancel Pressed'),
                                                 style: 'cancel',
                                             },
-                                            { text: 'Yes', onPress: () =>{ this.addPayment() }},
+                                            { text: 'Yes', onPress: () => { this.addPayment() } },
                                         ],
                                         { cancelable: false },
                                     );
@@ -337,7 +347,9 @@ class OrderDetailScreen extends Component {
                             </View>
                         </View>
                     </ScrollView>
-                    <TouchableOpacity style={styles.checkoutBtn}
+                    <TouchableOpacity
+                        disabled={this.state.isSavingOrder}
+                        style={styles.checkoutBtn}
                         onPress={() => {
                             if (!user.card) {
                                 Alert.alert(
@@ -352,7 +364,8 @@ class OrderDetailScreen extends Component {
                                     ],
                                     { cancelable: false }
                                 );
-                            } else {
+                            } else if (!this.state.isSavingOrder) {
+                                this.setState({ isSavingOrder: true })
                                 this.props.createOrder(cart)
                             }
                         }}>
@@ -435,12 +448,12 @@ const styles = StyleSheet.create({
         paddingLeft: 5,
     },
     foodNameWrapper: {
-        flex: 8,
+        flex: 7,
         paddingLeft: 3,
         paddingRight: 3,
     },
     priceWrapper: {
-        flex: 2,
+        flex: 3,
         paddingLeft: 10,
     },
     removeBtnContainer: {
@@ -464,7 +477,7 @@ const styles = StyleSheet.create({
         paddingLeft: 3,
     },
     extraDetailWrapper: {
-        flex: 8,
+        flex: 7,
         paddingLeft: 3,
         paddingRight: 3,
     },
@@ -676,8 +689,9 @@ function initMapStateToProps(state) {
     return {
         cart: state.cartReducer.cart,
         createdOrder: state.orderReducer.createdOrder,
+        isSavingOrder: state.orderReducer.isSavingOrder,
         currentStore: state.storeReducer.store,
-        user: state.authReducer.user,
+        user: state.authReducer.user
     };
 }
 

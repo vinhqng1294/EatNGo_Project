@@ -64,6 +64,9 @@ function* orderByIdTask(action) {
 
 function* createOrder(action) {
   try {
+    yield put({
+      type: 'IS_SAVING_ORDER'      
+    });
     const user = yield select(userSelector)
     const store = yield select(storeSelector)
     const { data } = action.payload;
