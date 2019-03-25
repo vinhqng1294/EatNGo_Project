@@ -27,8 +27,17 @@ function addCard(card, memberId) {
   return request({ url: MEMBER_URL + '/' + memberId, method: 'PUT', data });
 }
 
+function updateProfile(email, name, id) {
+  const data = {
+    email,
+    name
+  };
+  return request({ url: REGISTER_URL+ "/" + id, method: 'PUT', data });
+}
+
 export default {
   doLogin,
   doRegister,
-  addCard
+  addCard,
+  updateProfile
 };

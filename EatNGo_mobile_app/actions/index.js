@@ -19,6 +19,15 @@ export const authLogout = () => ({
   type: "AUTH_LOGOUT"
 });
 
+export const updateUserProfile = (email, name, id) => ({
+  type: "UPDATE_PROFILE_TASK",
+  payload: {
+    email,
+    name,
+    id
+  }
+});
+
 export const fetchCuisineTypes = () => ({
   type: "FETCH_CUISINE_TYPES"
 });

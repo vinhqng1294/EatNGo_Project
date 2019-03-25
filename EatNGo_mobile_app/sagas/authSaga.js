@@ -76,18 +76,14 @@ function* registerTask(action) {
 function* addCard(action) {
   try {
     const { payload } = action;
-    const user = yield select(userSelector)
+    const user = yield select(userSelector);
     // yield put({
     //   type: "ADD_CARD_SUCCESS",
     //   payload: payload
     // });
-    console.log(user)
-    const res = yield call(
-      Auth.addCard,
-      payload.data,
-      user.id
-    );
-    if (res.status === 200) {      
+    console.log(user);
+    const res = yield call(Auth.addCard, payload.data, user.id);
+    if (res.status === 200) {
       yield put({
         type: "ADD_CARD_SUCCESS",
         payload: res.data.card
@@ -120,13 +116,40 @@ function* logoutTask() {
   }
 }
 
+function* updateProfileTask(action) {
+  try {
+    const { payload } = action;
+    const user = yield select(userSelector);
 
+    const res = yield call(Auth.updateProfile,payload.email, payload.name, user.id);
+    console.log(res)
+    if (res.status === 200) {
+      yield put({
+        type: "UPDATE_PROFIE_SUCCESS",
+        payload: res.data
+      });
+    } else {
+      yield put({
+        type: "UPDATE_PROFILE_ERROR",
+        payload: res.data
+      });
+    }
+  } catch (e) {
+    console.log(e);
+    const payload = typeof e === "string" ? { message: e } : e.data;
+    yield put({
+      type: "UPDATE_PROFILE_ERROR",
+      payload
+    });
+  }
+}
 
 function* authSaga() {
   yield takeLatest("AUTH_LOGIN", loginTask);
   yield takeLatest("AUTH_REGISTER", registerTask);
   yield takeLatest("AUTH_LOGOUT", logoutTask);
   yield takeLatest("ADD_CARD", addCard);
+  yield takeLatest("UPDATE_PROFILE_TASK", updateProfileTask);
 }
 
 export default authSaga;
