@@ -19,7 +19,7 @@ export default (state = initialState, { type, payload }) => {
     case 'FETCH_FOOD_INFO_SUCCESS':
       return {
         ...state,
-        foodInfo: { ...payload, quantity: 1, originalPrice: parseFloat(payload.price).toFixed(2), price: parseFloat(payload.price).toFixed(2) },
+        foodInfo: { ...payload, originalPrice: parseFloat(payload.price).toFixed(2), price: (parseFloat(payload.price) * payload.quantity).toFixed(2)  },
         error: null
       }
     case 'UPDATE_FOOD_SUCCESS':

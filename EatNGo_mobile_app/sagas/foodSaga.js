@@ -36,6 +36,7 @@ function* foodInfoTask(action) {
     const res = yield call(API.getFood, payload.id);
     if (res.status === 200) {
       let food = res.data
+      food.quantity = payload.currentQuantity
       if (food.attributes) {
         food.attributes.map((attr) => {
           attr.options.map((option, index) => {

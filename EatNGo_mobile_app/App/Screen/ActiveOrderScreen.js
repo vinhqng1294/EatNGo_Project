@@ -24,8 +24,7 @@ class ActiveOrderScreen extends Component {
         this.navigationWillFocusListener = props.navigation.addListener('willFocus', () => {
             const isRefreshing = props.navigation.dangerouslyGetParent().getParam('isRefreshing')
             if (isRefreshing) {
-                props.fetchOrders()
-                props.cleanCart()
+                props.fetchOrders()                
             }
         })
     }
