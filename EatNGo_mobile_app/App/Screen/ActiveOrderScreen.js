@@ -84,7 +84,7 @@ class ActiveOrderScreen extends Component {
                 </View>
             )
         }
-        if (!this.props.orderList.length) {
+        else if (!this.props.orderList.length) {
             return (
                 <View style={{
                     flex: 1,

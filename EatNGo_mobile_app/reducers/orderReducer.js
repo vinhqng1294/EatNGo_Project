@@ -53,6 +53,12 @@ export default (state = initialState, { type, payload }) => {
       return {
         ...state
       }
+    case 'CREATE_ORDER_ERROR':
+      return {
+        ...state,
+        isSavingOrder: false,
+        error: payload
+      }
     default:
       return state;
   }
