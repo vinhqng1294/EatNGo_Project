@@ -60,6 +60,7 @@ class RegisterScreen extends Component {
       console.log(error);
     }
   };
+  
   handleSignUp(phoneNumber, email, name, facebookId) {
     this.props.authRegister(phoneNumber, email, name, facebookId);
 

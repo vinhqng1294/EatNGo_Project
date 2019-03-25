@@ -170,6 +170,7 @@ class EditProfileScreen extends Component {
                 this.state.name,
                 user.id
               );
+              this.props.navigation.navigate("Profile");
             }
           }}
           title="Apply Change"
