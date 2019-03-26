@@ -107,6 +107,9 @@ function* addCard(action) {
 function* logoutTask() {
   try {
     yield put({
+      type: "CLEAN_ORDERS"
+    });
+    yield put({
       type: "AUTH_LOGOUT_SUCCESS"
     });
   } catch (e) {

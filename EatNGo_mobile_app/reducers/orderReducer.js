@@ -24,6 +24,13 @@ export default (state = initialState, { type, payload }) => {
         error: null
       }
 
+    case 'CLEAN_ORDERS':
+      return {
+        ...state,
+        orderList: [],
+        error: null
+      }
+
     case 'FETCH_ORDER_DETAIL_SUCCESS':
       return {
         ...state,
