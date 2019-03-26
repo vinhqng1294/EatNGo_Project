@@ -83,7 +83,7 @@ class WelcomeScreen extends Component {
             this.props.navigation.navigate('Register', { phoneNumber: this.state.phoneNumber, facebookId: this.state.facebookId })
         }
         if (user) {
-            if (user.storesEmployedIn) {
+            if (user.storesEmployedIn.length) {
                 const resetAction = StackActions.reset({
                     index: 0,
                     key: null,
