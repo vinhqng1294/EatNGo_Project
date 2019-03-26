@@ -11,6 +11,7 @@ import MenuScreen from './Screen/MenuScreen';
 import FoodDetailScreen from './Screen/FoodDetailScreen';
 import OrderDetailScreen from './Screen/OrderDetailScreen';
 import ActiveOrderDetailScreen from './Screen/ActiveOrderDetailScreen';
+import RatingScreen from './Screen/RatingScreen';
 import AddCardScreen from './Screen/AddCardScreen';
 
 
@@ -88,6 +89,7 @@ const AppNavigator = createStackNavigator(
         // "FoodDetail": { screen: FoodDetailScreen },
         "OrderDetail": { screen: OrderDetailScreen },
         "ActiveOrderDetail": { screen: ActiveOrderDetailScreen },
+        "Rating": { screen: RatingScreen },
         // "AddCard": { screen: AddCardScreen }
     },
     {
