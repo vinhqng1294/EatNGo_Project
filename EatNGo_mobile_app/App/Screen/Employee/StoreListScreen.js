@@ -26,8 +26,8 @@ class StoreListScreen extends Component {
     return {
       headerTintColor: "#54b33d",
       headerStyle: { backgroundColor: "white" },
-      headerRight: <View />,
-      headerLeft: <View />,
+      headerRight: <View></View>,
+      headerLeft: <View></View>,
       headerTitle: (
         <View
           style={{

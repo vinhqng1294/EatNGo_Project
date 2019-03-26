@@ -40,9 +40,22 @@ const ActiveOrderStack = createStackNavigator(
     }
 );
 
-const ProfileStack = createStackNavigator({
-    "Profile": { screen: ProfileScreen },
-});
+const ProfileStack = createStackNavigator(
+    {
+        "Profile": { screen: ProfileScreen },
+    },
+    {
+        initialRouteName: 'Profile'
+    }
+);
+const StoreStack = createStackNavigator(
+    {
+        "StoreList": { screen: StoreListScreen },
+    },
+    {
+        initialRouteKey: 'StoreList'
+    }
+);
 
 
 
@@ -81,14 +94,14 @@ const TabNavigator = createBottomTabNavigator(
                 // You can return any component that you like here!
                 return <IconComponent name={iconName} size={20} color={tintColor} solid />;
             },
-
         }),
+        initialRouteName: "Restaurants",
     }
 );
 
 const EmployeeTabNavigator = createBottomTabNavigator(
     {
-        "Stores": StoreListScreen,
+        "Stores": StoreStack,
         "Profile": ProfileStack,
     },
     {
@@ -119,8 +132,8 @@ const EmployeeTabNavigator = createBottomTabNavigator(
                 // You can return any component that you like here!
                 return <IconComponent name={iconName} size={20} color={tintColor} solid />;
             },
-
         }),
+        initialRouteName: "Stores",
     }
 );
 
