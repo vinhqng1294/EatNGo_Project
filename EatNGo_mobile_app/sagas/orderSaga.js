@@ -84,7 +84,8 @@ function* createOrder(action) {
         foodId: item.id,
         price: parseFloat(item.originalPrice),
         quantity: item.quantity,
-        attributes: item.attributes
+        attributes: item.attributes,
+        comment: item.comment
       }
       order.orderDetails.push(orderItem)
     })
@@ -99,6 +100,7 @@ function* createOrder(action) {
         type: 'CREATE_ORDER_SUCCESS',
         payload: res.data,
       });
+      yield put({ type: 'UPDATE_PROMOTION_SUCCESS', payload: null });
     } else {
       yield put({
         type: 'CREATE_ORDER_ERROR',
