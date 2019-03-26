@@ -49,17 +49,10 @@ function* fetchMoreStoreTask(action) {
   });
   const res = yield call(API.getStore, null, page, pageSize);
   if (res.status === 200) {
-    if (res.data.length) {
-      yield put({
-        type: 'FETCH_MORE_STORES_SUCCESS',
-        payload: res.data,
-      });
-    } else {
-      yield put({
-        type: 'FETCH_MORE_STORES_ERROR',
-        payload: res.data,
-      });
-    }
+    yield put({
+      type: 'FETCH_MORE_STORES_SUCCESS',
+      payload: res.data,
+    });
   } else {
     yield put({
       type: 'FETCH_MORE_STORES_ERROR',

@@ -1,5 +1,6 @@
 const initialState = {
     cart: [],
+    promotionCode: null
   };
   
   export default (state = initialState, { type, payload = {} }) => {
@@ -8,6 +9,11 @@ const initialState = {
         return {
           ...state,
           cart: payload,
+        };
+        case 'UPDATE_PROMOTION_SUCCESS':
+        return {
+          ...state,
+          promotionCode: payload
         };
       case 'IN_PROGRESS':
         return {

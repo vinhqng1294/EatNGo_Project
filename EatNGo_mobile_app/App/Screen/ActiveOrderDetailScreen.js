@@ -106,6 +106,12 @@ class OrderDetailScreen extends Component {
   render() {
     const { order } = this.props;
     if (order) {
+      const totalPrice = this.getTotalPrice(order.orderDetails)
+      let discountPrice = 0
+      if (order.promotionCode) {
+        discountPrice = (totalPrice * (order.promotionCode.percentageDiscount / 100)).toFixed(2)
+      }
+      const totalPriceAfterDiscount = order.totalPrice.toFixed(2)
       return (
         <View style={{ flex: 1 }}>
           <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
@@ -209,15 +215,41 @@ class OrderDetailScreen extends Component {
             </View>
 
             <Divider style={styles.divider} />
+            {order.promotionCode ?
+              <View>
+                <View style={styles.longBtn}>
+                  <View style={styles.iconWrapper}>
+                    <FontAwesome5
+                      style={styles.icons}
+                      name={'gifts'}
+                      size={23}
+                      color={'#54b33d'}
+                      solid
+                    />
+                  </View>
+                  <Text numberOfLines={1} style={styles.iconText}>{order.promotionCode.code} - {order.promotionCode.percentageDiscount}% </Text>
+                </View>
+                <Divider style={styles.divider} />
+              </View>: null
+            }
+
+
+
 
             <View style={styles.priceSummaryContainer}>
               <View style={styles.priceSummaryWrapper}>
                 <Text numberOfLines={1} style={styles.priceInfoTxt}>Sub-total</Text>
-                <Text numberOfLines={1} style={styles.priceInfo}>$ {this.getTotalPrice(order.orderDetails)}</Text>
+                <Text numberOfLines={1} style={styles.priceInfo}>$ {totalPrice}</Text>
               </View>
+              {order.promotionCode ?
+                <View style={styles.priceSummaryWrapper}>
+                  <Text numberOfLines={1} style={styles.priceInfoTxt}>Discount</Text>
+                  <Text numberOfLines={1} style={styles.priceInfo}>- $ {discountPrice}</Text>
+                </View> : null
+              }
               <View style={styles.totalWrapper}>
                 <Text numberOfLines={1} style={styles.totalTxt}>Total</Text>
-                <Text numberOfLines={1} style={styles.total}>$ {this.getTotalPrice(order.orderDetails)}</Text>
+                <Text numberOfLines={1} style={styles.total}>$ {totalPriceAfterDiscount}</Text>
               </View>
             </View>
           </ScrollView>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import StoreList from '../Components/StoreList'
+import { Overlay, Button } from 'react-native-elements';
 import { bindActionCreators } from 'redux';
 import { fetchStore, fetchMoreStores, searchStore } from '../../actions/index'
 import {
@@ -9,11 +10,12 @@ import {
     View,
     Text,
     StatusBar,
-    ActivityIndicator
+    TouchableOpacity
 } from 'react-native';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { SearchBar } from 'react-native-elements';
+import { FlatList } from 'react-native-gesture-handler';
 
 class HomeScreen extends Component {
     constructor(props) {
@@ -78,8 +80,10 @@ class HomeScreen extends Component {
         this.props.searchStore(value)
     }
     render() {
+
         return (
             <View style={styles.container}>
+
                 <StatusBar style={{
                 }} backgroundColor="#54b33d" barStyle="light-content" />
                 <StoreList
@@ -95,7 +99,7 @@ class HomeScreen extends Component {
 }
 const mapStateToProps = (state) => {
     return {
-        storeList: state.storeReducer.filteredStoreList,
+        storeList: state.storeReducer.filteredStoreList,        
         isLoadingOrders: state.storeReducer.isLoadingOrders,
         isLoadingMoreStores: state.storeReducer.isLoadingMoreStores
     }
