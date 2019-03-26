@@ -7,7 +7,7 @@ import {
   Image,
   ToastAndroid,
   TouchableOpacity,
-  Alert 
+  Alert
 } from "react-native";
 
 import { ListItem, Button, Icon } from "react-native-elements";
@@ -15,11 +15,40 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { authLogout } from "../../actions/index";
 import { StackActions, NavigationActions } from "react-navigation";
+import ImagePicker from "react-native-image-picker";
 
 class ProfileScreen extends Component {
   constructor(props) {
     super(props);
     this.renderOptions = this.renderOptions.bind(this);
+    this.state = {
+      avatarSource:
+        null
+    };
+  }
+
+  pickImage() {
+    ImagePicker.showImagePicker(options, response => {
+      console.log("Response = ", response);
+
+      if (response.didCancel) {
+        console.log("User cancelled image picker");
+      } else if (response.error) {
+        console.log("ImagePicker Error: ", response.error);
+      } else if (response.customButton) {
+        console.log("User tapped custom button: ", response.customButton);
+      } else {
+        const source = { uri: response.uri };
+        console.log("URI: ", source);
+
+        // You can also display the image using data:
+        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+        this.setState({
+          avatarSource: source
+        });
+      }
+    });
   }
 
   renderContactHeader = () => {
@@ -27,13 +56,9 @@ class ProfileScreen extends Component {
     return (
       <View style={styles.headerContainer}>
         <View style={styles.userRow}>
-          <Image
-            style={styles.userImage}
-            source={{
-              uri:
-                "https://facebook.github.io/react-native/docs/assets/favicon.png"
-            }}
-          />
+          <TouchableOpacity onPress={() => this.pickImage()}>
+            <Image source={this.state.avatarSource} style={styles.userImage} />
+          </TouchableOpacity>
           <View style={styles.userNameRow}>
             <Text style={styles.userNameText}>{user.name}</Text>
           </View>
@@ -159,7 +184,7 @@ class ProfileScreen extends Component {
 const styles = StyleSheet.create({
   version: { fontFamily: "vincHand", fontSize: 13 },
   footerInfo: { flex: 1, alignItems: "center", marginTop: 20 },
-  logoutButton: { backgroundColor: "#54C242" },
+  logoutButton: { backgroundColor: "#54C242", marginHorizontal: 20 },
   cardContainer: {
     flex: 1
   },
@@ -252,14 +277,20 @@ const list = [
     icon: "payment"
   },
   {
-    title: "Address",
-    icon: "add-location"
-  },
-  {
     title: "Settings",
     icon: "settings"
   }
 ];
+
+const options = {
+  title: "Select Avatar",
+  customButtons: [{ name: "fb", title: "Choose Photo from Facebook" }],
+  storageOptions: {
+    skipBackup: true,
+    path: "images"
+  }
+};
+
 const mapStateToProps = state => {
   return {
     user: state.authReducer.user

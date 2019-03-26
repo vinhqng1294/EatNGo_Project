@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.gettipsi.stripe.StripeReactPackage;
 import com.facebook.react.ReactApplication;
+import com.imagepicker.ImagePickerPackage;
 import io.underscope.react.fbak.RNAccountKitPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
@@ -27,6 +28,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
            new MainReactPackage(),
+            new ImagePickerPackage(),
            new StripeReactPackage(),
             new RNAccountKitPackage(),
             new VectorIconsPackage(),
