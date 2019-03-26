@@ -15,6 +15,7 @@ import StoreListScreen from './Screen/Employee/StoreListScreen';
 import OrderListScreen from './Screen/Employee/OrderListScreen';
 import EmployeeOrderDetailScreen from './Screen/Employee/EmployeeOrderDetailScreen';
 import AddCardScreen from './Screen/AddCardScreen';
+import EditProfileScreen from './Screen/EditProfileScreen';
 
 
 const HomeStack = createStackNavigator(
@@ -139,6 +140,7 @@ const AppNavigator = createStackNavigator(
         "ActiveOrderDetail": { screen: ActiveOrderDetailScreen },
         "EmployeeOrderDetail": { screen: EmployeeOrderDetailScreen }
         // "AddCard": { screen: AddCardScreen }
+        "EditProfile": {screen: EditProfileScreen}
     },
     {
         initialRouteName: 'Welcome',
