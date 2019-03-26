@@ -20,6 +20,9 @@ import { FlatList } from 'react-native-gesture-handler';
 class StoreListScreen extends Component {
     constructor(props) {
         super(props)
+        this.state = {
+            storeList: []
+        }
     }
 
     static navigationOptions = ({ navigation }) => {
@@ -55,7 +58,11 @@ class StoreListScreen extends Component {
         })
     }
     componentDidMount() {
-        const { storeList } = this.props;
+        const { user } = this.props;
+        this.setState({
+            storeList: user.storesEmployedIn ? user.storesEmployedIn : []
+        })
+        // this.props.storeList = user.storesEmployedIn ? user.storesEmployedIn : []
         // if (!storeList || !storeList.length) {
         //     this.props.fetchStore();
         // }
@@ -75,7 +82,7 @@ class StoreListScreen extends Component {
                 <StatusBar style={{
                 }} backgroundColor="#54b33d" barStyle="light-content" />
                 <FlatList
-                    data={this.props.storeList}
+                    data={this.state.storeList}
                     showsHorizontalScrollIndicator={true}
                     renderItem={({ item }) =>
                         <ImageBackground
@@ -214,7 +221,7 @@ const styles = StyleSheet.create({
 });
 const mapStateToProps = (state) => {
     return {
-        storeList: state.authReducer.user.storesEmployedIn,
+        user: state.authReducer.user,
     }
 };
 const mapDispatchToProps = (dispatch) => {

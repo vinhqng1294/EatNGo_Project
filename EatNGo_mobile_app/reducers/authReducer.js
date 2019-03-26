@@ -5,6 +5,7 @@ const initialState = {
   user: null,
   registerLoading: false,
   registerError: null,
+  isLoadingStores: false,
   registerMessage: null
 };
 
@@ -67,12 +68,12 @@ export default (state = initialState, { type, payload }) => {
     case "UPDATE_PROFIE_SUCCESS":
       return {
         ...state,
-        user: {...state.user, email: payload.email, name: payload.name}
+        user: { ...state.user, email: payload.email, name: payload.name }
       };
     case "UPLOAD_AVATAR_SUCCESS":
       return {
         ...state,
-        user: {...state.user, avatar: payload.avatar}
+        user: { ...state.user, avatar: payload.avatar }
       };
     default:
       return state;
