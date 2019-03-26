@@ -26,7 +26,9 @@ import { connect } from 'react-redux';
 class FoodDetailScreen extends Component {
 
     state = {
-        checked: []
+        checked: [],
+        isUpdating: false,
+        updateItemQuantity: null
     }
     constructor() {
         super();
@@ -122,8 +124,17 @@ class FoodDetailScreen extends Component {
 
     componentDidMount() {
         const { navigation } = this.props;
-        const foodId = navigation.getParam('id', null);
-        this.props.fetchFoodInfo(foodId);
+        const isUpdating = navigation.getParam('isUpdating', false);
+        let foodId
+        if (isUpdating) {
+            const item = navigation.getParam('item', null);
+            foodId = item.id
+            this.setState({ isUpdating, updateItemQuantity: item.quantity })
+            this.props.fetchFoodInfo(foodId, item.quantity);
+        } else {
+            foodId = navigation.getParam('id', null);
+            this.props.fetchFoodInfo(foodId);
+        }
     }
     render() {
 
@@ -218,13 +229,13 @@ class FoodDetailScreen extends Component {
 
                     </ScrollView>
                     <TouchableOpacity style={styles.addFoodBtn}
-                        onPress={() => {
-                            this.props.updateCartItems(food)
+                        onPress={() => {                            
+                            this.props.updateCartItems(food, this.state.isUpdating)
                             this.props.navigation.state.params.onGoBack();
                             this.props.navigation.goBack()
                         }}>
                         <FontAwesome5 name={'cart-plus'} size={16} color={'white'} solid />
-                        <Text style={styles.txtAdd}>Add</Text>
+                        <Text style={styles.txtAdd}>{!this.state.isUpdating ? 'Add' : 'Update'}</Text>
                     </TouchableOpacity>
                 </View>
             );

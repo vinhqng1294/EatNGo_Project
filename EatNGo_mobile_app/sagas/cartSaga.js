@@ -6,6 +6,7 @@ const cartItemsSelector = state => state.cartReducer.cart || [];
 function* cartItemsAdd(action) {
   try {
     const { payload } = action
+    const { isModified } = payload
     let checkExtraItem = false
     const currentCart = yield select(cartItemsSelector);
     const duplicateItemIndex = currentCart.findIndex(item => item.id === payload.data.id)
@@ -24,7 +25,11 @@ function* cartItemsAdd(action) {
         }
       }
       if (!checkExtraItem) {
-        currentCart[duplicateItemIndex].quantity += payload.data.quantity
+        if (isModified) {
+          currentCart[duplicateItemIndex].quantity = payload.data.quantity
+        } else {
+          currentCart[duplicateItemIndex].quantity += payload.data.quantity
+        }
       } else {
         const attributes = [...payload.data.attributes]
         attributes.map(attr => {
@@ -77,6 +82,7 @@ function* cartItemsClean(action) {
     console.log(e);
   }
 }
+
 
 function* cartSaga() {
   yield takeLatest('UPDATE_CART_ITEMS', cartItemsAdd);

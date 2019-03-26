@@ -37,10 +37,11 @@ export const fetchFood = (store = null) => ({
   }
 });
 
-export const fetchFoodInfo = (id = null) => ({
+export const fetchFoodInfo = (id = null, currentQuantity = 1 ) => ({
   type: "FETCH_FOOD_INFO",
   payload: {
-    id
+    id,
+    currentQuantity
   }
 });
 
@@ -93,10 +94,11 @@ export const searchStore = value => ({
   }
 });
 
-export const updateCartItems = data => ({
+export const updateCartItems = (data, isModified) => ({
   type: "UPDATE_CART_ITEMS",
   payload: {
-    data
+    data,
+    isModified
   }
 });
 

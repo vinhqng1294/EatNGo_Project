@@ -17,7 +17,7 @@ import {
 import CheckBox from 'react-native-check-box';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Badge, Button, Divider } from 'react-native-elements';
-import { deleteCartItem, fetchCartItems, createOrder, removeCreatedOrder, addCard } from '../../actions/index'
+import { deleteCartItem, fetchCartItems, createOrder, removeCreatedOrder, addCard, cleanCart } from '../../actions/index'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import stripe from 'tipsi-stripe';
@@ -146,7 +146,9 @@ class OrderDetailScreen extends Component {
                 [
                     {
                         text: 'OK', onPress: () => {
+
                             this.props.removeCreatedOrder()
+                            this.props.cleanCart()
                             this.props.navigation.navigate('Active Orders', { isRefreshing: true })
                         }
                     },
@@ -197,6 +199,20 @@ class OrderDetailScreen extends Component {
                                             <View style={styles.priceWrapper}>
                                                 <Text numberOfLines={1} style={styles.price}>$ {item.originalPrice}</Text>
                                             </View>
+
+                                            <TouchableOpacity style={styles.removeBtnContainer}
+                                                onPress={() => {
+                                                    this.props.navigation.navigate('FoodDetail', { isUpdating: true, item: item, onGoBack: () => this.props.fetchCartItems() })
+                                                }}>
+                                                <View style={styles.removeBtn}>
+                                                    <FontAwesome5
+                                                        name={'sync-alt'}
+                                                        color={'#54b33d'}
+                                                        size={12}
+                                                        solid
+                                                    />
+                                                </View>
+                                            </TouchableOpacity>
                                             <TouchableOpacity style={styles.removeBtnContainer}
                                                 onPress={() => {
                                                     Alert.alert(
@@ -700,6 +716,8 @@ function initMapDispatchToProps(dispatch) {
         deleteCartItem,
         createOrder,
         removeCreatedOrder,
+        cleanCart,
+        fetchCartItems,
         addCard
     }, dispatch);
 }

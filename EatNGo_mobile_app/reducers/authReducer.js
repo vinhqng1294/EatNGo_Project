@@ -39,6 +39,7 @@ export default (state = initialState, { type, payload }) => {
       AsyncStorage.setItem('user', JSON.stringify(payload))
       return {
         ...state,
+        loginError: null,
         registerLoading: false,
         registerError: null,
         user: payload
