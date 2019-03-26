@@ -64,6 +64,14 @@ export const fetchOrders = memberId => ({
   }
 });
 
+
+export const fetchOrdersByStoreId = storeId => ({
+  type: "FETCH_STORE_ORDERS",
+  payload: {
+    storeId
+  }
+});
+
 export const fetchOrderById = orderId => ({
   type: "FETCH_ORDER_BY_ID",
   payload: {
