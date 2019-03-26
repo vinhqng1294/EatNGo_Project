@@ -18,7 +18,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import CheckBox from 'react-native-check-box';
 // import { CheckBox } from 'react-native-elements'
 import NumericInput from 'react-native-numeric-input';
-import { fetchFoodInfo, updateFoodQuantity, updateCartItems, updateFoodOption } from '../../actions/index'
+import { fetchFoodInfo, updateFoodQuantity, updateCartItems, updateFoodOption, updateFoodSpecialRequest } from '../../actions/index'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -201,7 +201,7 @@ class FoodDetailScreen extends Component {
                                     style={styles.specialRequestInputText}
                                     multiline={true}
                                     placeholder="eg. extra limes, extra chilis, etc."
-                                    onChangeText={() => { }} />
+                                    onChangeText={(text) => { this.props.updateFoodSpecialRequest(text) }} />
                             </View>
                         </View>
 
@@ -512,7 +512,8 @@ const mapDispatchToProps = (dispatch) => {
         fetchFoodInfo,
         updateFoodQuantity,
         updateCartItems,
-        updateFoodOption
+        updateFoodOption,
+        updateFoodSpecialRequest
     }, dispatch);
 }
 export default connect(mapStateToProps, mapDispatchToProps)(FoodDetailScreen);

@@ -84,7 +84,8 @@ function* createOrder(action) {
         foodId: item.id,
         price: parseFloat(item.originalPrice),
         quantity: item.quantity,
-        attributes: item.attributes
+        attributes: item.attributes,
+        comment: item.comment
       }
       order.orderDetails.push(orderItem)
     })

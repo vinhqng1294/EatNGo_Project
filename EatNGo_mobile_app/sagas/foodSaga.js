@@ -90,6 +90,20 @@ function* updateFoodQuantityTask(action) {
   }
 }
 
+function* updateFoodSpecialRequestTask(action) {
+  try {
+    const { payload } = action;
+    const currentFood = yield select(foodSelector)
+    const newFood = { ...currentFood, comment: payload.comment }
+    yield put({
+      type: 'UPDATE_FOOD_SUCCESS',
+      payload: newFood,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 function* updateFoodOptions(action) {
   try {
     const { payload } = action;
@@ -123,6 +137,7 @@ function* storeSaga() {
   yield takeLatest('FETCH_FOOD', foodByTypeTask);
   yield takeLatest('FETCH_FOOD_INFO', foodInfoTask);
   yield takeEvery('UPDATE_FOOD_QUANTITY', updateFoodQuantityTask);
+  yield takeEvery('UPDATE_FOOD_SPECIAL_REQUEST', updateFoodSpecialRequestTask);
   yield takeLatest('UPDATE_FOOD_OPTION', updateFoodOptions);
 }
 export default storeSaga
