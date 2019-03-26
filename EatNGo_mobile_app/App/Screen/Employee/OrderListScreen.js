@@ -72,7 +72,6 @@ class OrderListScreen extends Component {
     };
     componentDidMount() {
         const store = this.props.navigation.getParam('store')
-        console.log(store)
         this.props.fetchOrdersByStoreId(store.id);
         this.setState({ store })
     }
@@ -161,7 +160,7 @@ class OrderListScreen extends Component {
                                     <View style={styles.leftContentWrapper}>
                                         <View style={styles.restaurantNameWrapper}>
                                             <Text numberOfLines={2} style={styles.resName}>
-                                                {this.state.store.name}
+                                                {this.state.store ? this.state.store.name : ''}
                                             </Text>
                                         </View>
                                         <View style={styles.orderIdWrapper}>

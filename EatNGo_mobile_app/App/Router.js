@@ -10,13 +10,13 @@ import ProfileScreen from './Screen/ProfileScreen';
 import MenuScreen from './Screen/MenuScreen';
 import FoodDetailScreen from './Screen/FoodDetailScreen';
 import OrderDetailScreen from './Screen/OrderDetailScreen';
+import ActiveOrderDetailScreen from './Screen/ActiveOrderDetailScreen';
 import StoreListScreen from './Screen/Employee/StoreListScreen';
 import OrderListScreen from './Screen/Employee/OrderListScreen';
 import EmployeeOrderDetailScreen from './Screen/Employee/EmployeeOrderDetailScreen';
-import RatingScreen from './Screen/RatingScreen';
 import AddCardScreen from './Screen/AddCardScreen';
-import ActiveOrderDetailScreen from './Screen/ActiveOrderDetailScreen';
 import EditProfileScreen from './Screen/EditProfileScreen';
+
 
 const HomeStack = createStackNavigator(
     {
@@ -40,9 +40,22 @@ const ActiveOrderStack = createStackNavigator(
     }
 );
 
-const ProfileStack = createStackNavigator({
-    "Profile": { screen: ProfileScreen },
-});
+const ProfileStack = createStackNavigator(
+    {
+        "Profile": { screen: ProfileScreen },
+    },
+    {
+        initialRouteName: 'Profile'
+    }
+);
+const StoreStack = createStackNavigator(
+    {
+        "StoreList": { screen: StoreListScreen },
+    },
+    {
+        initialRouteKey: 'StoreList'
+    }
+);
 
 
 
@@ -81,14 +94,14 @@ const TabNavigator = createBottomTabNavigator(
                 // You can return any component that you like here!
                 return <IconComponent name={iconName} size={20} color={tintColor} solid />;
             },
-
         }),
+        initialRouteName: "Restaurants",
     }
 );
 
 const EmployeeTabNavigator = createBottomTabNavigator(
     {
-        "Stores": StoreListScreen,
+        "Stores": StoreStack,
         "Profile": ProfileStack,
     },
     {
@@ -119,8 +132,8 @@ const EmployeeTabNavigator = createBottomTabNavigator(
                 // You can return any component that you like here!
                 return <IconComponent name={iconName} size={20} color={tintColor} solid />;
             },
-
         }),
+        initialRouteName: "Stores",
     }
 );
 
@@ -139,9 +152,7 @@ const AppNavigator = createStackNavigator(
         "OrderDetail": { screen: OrderDetailScreen },
         "ActiveOrderDetail": { screen: ActiveOrderDetailScreen },
         "EmployeeOrderDetail": { screen: EmployeeOrderDetailScreen },
-        "EditProfile": { screen: EditProfileScreen },
-        "Rating": { screen: RatingScreen },
-        // "AddCard": { screen: AddCardScreen }
+        "EditProfile": { screen: EditProfileScreen }
     },
     {
         initialRouteName: 'Welcome',

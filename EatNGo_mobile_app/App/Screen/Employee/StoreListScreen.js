@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Overlay, Button } from 'react-native-elements';
 import { bindActionCreators } from 'redux';
+import { authLogin } from '../../../actions/index'
 // import { fetchStore, fetchMoreStores, searchStore } from '../../actions/index'
 import {
     StyleSheet,
@@ -10,18 +11,19 @@ import {
     Text,
     StatusBar,
     ImageBackground,
-    TouchableOpacity
+    TouchableOpacity,
+    FlatList
 } from 'react-native';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-import { FlatList } from 'react-native-gesture-handler';
+
 
 class StoreListScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            storeList: []
+            storeList: [],
         }
     }
 
@@ -72,6 +74,12 @@ class StoreListScreen extends Component {
         //     handleSearch: this.handleSearch.bind(this)
         // });
     }
+    componentWillReceiveProps() {
+        const { user } = this.props;
+        this.setState({
+            storeList: user.storesEmployedIn ? user.storesEmployedIn : []
+        })
+    }
 
     // handleSearch(value) {
     //     this.props.searchStore(value)
@@ -83,6 +91,10 @@ class StoreListScreen extends Component {
                 }} backgroundColor="#54b33d" barStyle="light-content" />
                 <FlatList
                     data={this.state.storeList}
+                    refreshing={this.props.isLoadingStores}
+                    onRefresh={() => {
+                        this.props.authLogin(this.props.user.phoneNumber, this.props.user.facebookId)
+                    }}
                     showsHorizontalScrollIndicator={true}
                     renderItem={({ item }) =>
                         <ImageBackground
@@ -222,10 +234,12 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
     return {
         user: state.authReducer.user,
+        isLoadingStores: state.authReducer.isLoadingStores,
     }
 };
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
+        authLogin
     }, dispatch);
 }
 export default connect(mapStateToProps, mapDispatchToProps)(StoreListScreen);
