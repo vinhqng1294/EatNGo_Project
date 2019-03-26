@@ -28,6 +28,14 @@ export const updateUserProfile = (email, name, id) => ({
   }
 });
 
+export const uploadAvatar = (avatar, id) => ({
+  type: "UPLOAD_AVATAR_TASK",
+  payload: {
+    avatar,
+    id
+  }
+});
+
 export const fetchCuisineTypes = () => ({
   type: "FETCH_CUISINE_TYPES"
 });

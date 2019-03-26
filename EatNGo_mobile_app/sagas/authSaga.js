@@ -121,8 +121,13 @@ function* updateProfileTask(action) {
     const { payload } = action;
     const user = yield select(userSelector);
 
-    const res = yield call(Auth.updateProfile,payload.email, payload.name, user.id);
-    console.log(res)
+    const res = yield call(
+      Auth.updateProfile,
+      payload.email,
+      payload.name,
+      user.id
+    );
+    console.log(res);
     if (res.status === 200) {
       yield put({
         type: "UPDATE_PROFIE_SUCCESS",
@@ -144,12 +149,42 @@ function* updateProfileTask(action) {
   }
 }
 
+function* uploadAvatarTask(action) {
+  try {
+    const { payload } = action;
+    console.log(payload)
+    const user = yield select(userSelector);
+
+    const res = yield call(Auth.uploadAvatar, payload.avatar, user.id);
+    console.log(res);
+    if (res.status === 200) {
+      yield put({
+        type: "UPLOAD_AVATAR_SUCCESS",
+        payload: res.data
+      });
+    } else {
+      yield put({
+        type: "UPLOAD_AVATAR_ERROR",
+        payload: res.data
+      });
+    }
+  } catch (e) {
+    console.log(e);
+    const payload = typeof e === "string" ? { message: e } : e.data;
+    yield put({
+      type: "UPLOAD_AVATAR_ERROR",
+      payload
+    });
+  }
+}
+
 function* authSaga() {
   yield takeLatest("AUTH_LOGIN", loginTask);
   yield takeLatest("AUTH_REGISTER", registerTask);
   yield takeLatest("AUTH_LOGOUT", logoutTask);
   yield takeLatest("ADD_CARD", addCard);
   yield takeLatest("UPDATE_PROFILE_TASK", updateProfileTask);
+  yield takeLatest("UPLOAD_AVATAR_TASK", uploadAvatarTask);
 }
 
 export default authSaga;

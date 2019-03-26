@@ -35,9 +35,19 @@ function updateProfile(email, name, id) {
   return request({ url: REGISTER_URL+ "/" + id, method: 'PUT', data });
 }
 
+function uploadAvatar(avatar, id) {
+  const data = {
+    avatar
+  };
+  console.log(data)
+  console.log(id)
+  return request({ url: REGISTER_URL+ "/" + id, method: 'PUT', data });
+}
+
 export default {
   doLogin,
   doRegister,
   addCard,
-  updateProfile
+  updateProfile,
+  uploadAvatar
 };

@@ -68,6 +68,11 @@ export default (state = initialState, { type, payload }) => {
         ...state,
         user: {...state.user, email: payload.email, name: payload.name}
       };
+    case "UPLOAD_AVATAR_SUCCESS":
+      return {
+        ...state,
+        user: {...state.user, avatar: payload.avatar}
+      };
     default:
       return state;
   }
