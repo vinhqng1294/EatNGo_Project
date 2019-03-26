@@ -138,9 +138,8 @@ const AppNavigator = createStackNavigator(
         // "FoodDetail": { screen: FoodDetailScreen },
         "OrderDetail": { screen: OrderDetailScreen },
         "ActiveOrderDetail": { screen: ActiveOrderDetailScreen },
-        "EmployeeOrderDetail": { screen: EmployeeOrderDetailScreen }
-        // "AddCard": { screen: AddCardScreen }
-        "EditProfile": {screen: EditProfileScreen}
+        "EmployeeOrderDetail": { screen: EmployeeOrderDetailScreen },
+        "EditProfile": { screen: EditProfileScreen }
     },
     {
         initialRouteName: 'Welcome',
