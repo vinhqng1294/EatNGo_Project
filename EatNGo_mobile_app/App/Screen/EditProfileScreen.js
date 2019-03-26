@@ -24,97 +24,29 @@ class EditProfileScreen extends Component {
 
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTintColor: "#54b33d",
-      headerStyle: { backgroundColor: "white" },
-      headerRight: (
-        <View
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            flex: 1,
-            marginRight: 5
-          }}
-        >
-          <Badge
-            value={navigation.getParam("notiValue")}
-            status="primary"
-            containerStyle={{
-              position: "absolute",
-              top: -5,
-              left: -5,
-              zIndex: 10
-            }}
-          />
-          <Button
-            icon={
-              <FontAwesome5
-                name={"receipt"}
-                size={23}
-                color={"#54b33d"}
-                solid
-              />
-            }
-            type="clear"
-            title={null}
-            onPress={() => {
-              navigation.setParams({
-                notiValue: navigation.getParam("notiValue") + 1
-              });
-            }}
-          />
-        </View>
-      ),
-      headerLeft: (
-        <View
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            flex: 1,
-            marginLeft: 5
-          }}
-        >
-          <Button
-            icon={
-              <FontAwesome5
-                name={"info-circle"}
-                size={23}
-                color={"#54b33d"}
-                solid
-              />
-            }
-            type="clear"
-            title={null}
-            onPress={() => {}}
-          />
-        </View>
-      ),
-      headerTitle: (
-        <View
-          style={{
-            justifyContent: "center",
-            alignItems: "stretch",
-            flex: 1
-          }}
-        >
-          <Text
-            numberOfLines={1}
-            style={{
-              fontFamily: "Quicksand-Medium",
-              fontSize: 20,
-              textAlign: "center",
-              color: "#54b33d",
-              marginLeft: 10,
-              marginRight: 10,
-              borderBottomWidth: 0.7,
-              borderBottomColor: "#54b33d"
-            }}
-          >
-            Edit Profile
-          </Text>
-        </View>
-      )
+        headerTintColor: '#54b33d',
+        headerStyle: { backgroundColor: 'white' },
+        headerRight: <View></View>,
+        headerLeft: <View></View>,
+        headerTitle:
+            <View style={{
+                justifyContent: 'center',
+                alignItems: 'stretch',
+                flex: 1,
+            }}>
+                <Text numberOfLines={1} style={{
+                    fontFamily: 'Quicksand-Medium',
+                    fontSize: 20,
+                    textAlign: 'center',
+                    color: '#54b33d',
+                    marginLeft: 50,
+                    marginRight: 50,
+                    borderBottomWidth: .7,
+                    borderBottomColor: '#54b33d',
+                }} >Edit Profile</Text>
+            </View>
     };
-  };
+};
 
   changeInfo() {}
 

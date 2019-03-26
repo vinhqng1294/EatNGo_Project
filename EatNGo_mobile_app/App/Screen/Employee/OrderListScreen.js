@@ -16,6 +16,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Badge, Button, Divider } from 'react-native-elements';
 import { fetchOrdersByStoreId, updateOrder } from "../../../actions/index";
 import { connect } from "react-redux";
+import call from "react-native-phone-call";
 import { bindActionCreators } from "redux";
 import { mapOrderStatusToName } from "../../../services/constant";
 class OrderListScreen extends Component {
@@ -42,7 +43,7 @@ class OrderListScreen extends Component {
                 marginRight: 5,
             }}>
                 <Button
-                    icon={<FontAwesome5 name={'filter'} size={23} color={'#54b33d'} solid />}
+                    icon={<FontAwesome5 name={'shopping-cart'} size={23} color={'#54b33d'} solid />}
                     type='clear'
                     title={null}
                     onPress={() => {
@@ -85,158 +86,194 @@ class OrderListScreen extends Component {
     scrollTop() {
         this.flatListRef.scrollToOffset({ animated: true, offset: 0 });
     }
+    callUser = user => {
+        //handler to make a call
+        const args = {
+            number: user.phoneNumber,
+            prompt: false
+        };
+        call(args).catch(console.error);
+    };
 
     render() {
         if (this.props.isLoading && !this.props.orderList.length) {
             return (
-                <View style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}>
+                <View
+                    style={{
+                        flex: 1,
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}
+                >
                     <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
                     <ActivityIndicator size="large" color="#54b33d" />
                 </View>
-            )
-        }
-        else if (!this.props.orderList.length) {
+            );
+        } else if (!this.props.orderList.length) {
             return (
-                <View style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}>
+                <View
+                    style={{
+                        flex: 1,
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}
+                >
                     <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
-                    <Text style={{
-                        textAlign: 'center',
-                        fontSize: 15,
-                        fontFamily: 'Quicksand-Regular',
-                    }}>There is no active orders at the moment.</Text>
+                    <Text
+                        style={{
+                            textAlign: "center",
+                            fontSize: 15,
+                            fontFamily: "Quicksand-Regular"
+                        }}
+                    >
+                        There is no active orders at the moment.
+              </Text>
                     <FontAwesome5
                         style={{
                             paddingTop: 10
                         }}
-                        name={'hand-holding-heart'}
+                        name={"hand-holding-heart"}
                         size={23}
-                        color={'#54b33d'} />
+                        color={"#54b33d"}
+                    />
                 </View>
-            )
-        }
-        else {
+            );
+        } else {
             return (
-                // IF LIST IS NOT EMPTY                )
-                <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0)' }}>
+                // IF LIST IS NOT EMPTY
+                <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0)" }}>
                     <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
                     <View style={styles.container}>
                         {/* an order item */}
                         <FlatList
-                            ref={(ref) => { this.flatListRef = ref; }}
+                            ref={ref => {
+                                this.flatListRef = ref;
+                            }}
                             data={this.props.orderList}
                             refreshing={this.props.isLoading}
                             onRefresh={() => {
-                                this.props.fetchOrdersByStoreId(this.state.store.id)
-                                this.scrollTop()
+                                this.props.fetchOrdersByStoreId(this.state.store.id);
+                                this.scrollTop();
                             }}
                             showsVerticalScrollIndicator={false}
-                            renderItem={({ item }) =>
+                            renderItem={({ item }) => (
                                 <View style={styles.orderItemContainer}>
                                     <View style={styles.leftContentWrapper}>
                                         <View style={styles.restaurantNameWrapper}>
-                                            <Text numberOfLines={2} style={styles.resName}>{this.state.store ? this.state.store.name : ''}</Text>
+                                            <Text numberOfLines={2} style={styles.resName}>
+                                                {this.state.store.name}
+                                            </Text>
                                         </View>
                                         <View style={styles.orderIdWrapper}>
-                                            <Text numberOfLines={1} style={styles.orderId}>Order:
-                        <Text numberOfLines={1} style={{
-                                                    fontFamily: 'Quicksand-Medium',
-                                                    fontSize: 15,
-                                                }}>  {item.id}</Text></Text>
+                                            <Text numberOfLines={1} style={styles.orderId}>
+                                                Order:
+                            <Text
+                                                    numberOfLines={1}
+                                                    style={{
+                                                        fontFamily: "Quicksand-Medium",
+                                                        fontSize: 15
+                                                    }}
+                                                >
+                                                    {" "}
+                                                    {item.id}
+                                                </Text>
+                                            </Text>
                                         </View>
                                         <View style={styles.orderIdWrapper}>
-                                            <Text numberOfLines={1} style={styles.orderId}>Status:
-                        <Text numberOfLines={1} style={{
-                                                    fontFamily: 'Quicksand-Medium',
-                                                    fontSize: 15,
-                                                    paddingLeft: 10,
-                                                }}>  {mapOrderStatusToName[item.status]}</Text></Text>
+                                            <Text numberOfLines={1} style={styles.orderId}>
+                                                Status:
+                            <Text
+                                                    numberOfLines={1}
+                                                    style={{
+                                                        fontFamily: "Quicksand-Medium",
+                                                        fontSize: 15,
+                                                        paddingLeft: 10
+                                                    }}
+                                                >
+                                                    {" "}
+                                                    {mapOrderStatusToName[item.status]}
+                                                </Text>
+                                            </Text>
+                                        </View>
+                                        <View style={styles.orderIdWrapper}>
+                                            <Text numberOfLines={1} style={styles.orderId}>
+                                                Name:
+                            <Text
+                                                    numberOfLines={1}
+                                                    style={{
+                                                        fontFamily: "Quicksand-Medium",
+                                                        fontSize: 15,
+                                                        paddingLeft: 10
+                                                    }}
+                                                >
+                                                    {" "}
+                                                    {item.member.name}
+                                                </Text>
+                                            </Text>
                                         </View>
                                         <View style={styles.viewDetailBtnWrapper}>
-                                            <TouchableOpacity style={styles.viewDetailBtn}
+                                            <TouchableOpacity
+                                                style={styles.viewDetailBtn}
                                                 onPress={() => {
-                                                    this.handleItemOnPress(item)
-                                                }}>
+                                                    this.handleItemOnPress(item);
+                                                }}
+                                            >
                                                 <View style={styles.iconWrapper}>
                                                     <FontAwesome5
                                                         style={styles.icons}
-                                                        name={'receipt'}
+                                                        name={"receipt"}
                                                         size={23}
-                                                        color={'white'}
+                                                        color={"white"}
                                                         solid
                                                     />
                                                 </View>
-                                                <Text numberOfLines={1} style={styles.buttonTitle}>Review Order</Text>
+                                                <Text numberOfLines={1} style={styles.buttonTitle}>
+                                                    Review Order
+                            </Text>
                                             </TouchableOpacity>
                                         </View>
                                     </View>
                                     <View style={styles.rightContentWrapper}>
                                         <View style={styles.dateTimeWrapper}>
                                             <View style={styles.dateWrapper}>
-                                                <Text numberOfLines={1} style={styles.shortDate}>{timestampToString(item.date)}</Text>
+                                                <Text numberOfLines={1} style={styles.shortDate}>
+                                                    {timestampToString(item.date)}
+                                                </Text>
                                             </View>
                                             <View style={styles.timeWrapper}>
-                                                <Text numberOfLines={1} style={styles.shortTime}>{timestampToTime(item.date)}</Text>
+                                                <Text numberOfLines={1} style={styles.shortTime}>
+                                                    {timestampToTime(item.date)}
+                                                </Text>
+                                            </View>
+                                            <View style={styles.timeWrapper}>
+                                                <Text numberOfLines={1} style={styles.shortTime}>
+                                                    {item.member.phoneNumber}
+                                                </Text>
                                             </View>
                                         </View>
-                                        {/* <View style={styles.removeBtnWrapper}>
-                                            {item.status === ORDER_STATUS.PAID ?
+                                        <View style={styles.removeBtnWrapper}>
+                                            {item.status === ORDER_STATUS.PAID ? (
                                                 <TouchableOpacity
                                                     onPress={() => {
-                                                        Alert.alert(
-                                                            'Cancel Order',
-                                                            'Are you sure to cancel this order?',
-                                                            [
-                                                                {
-                                                                    text: 'No',
-                                                                    onPress: () => console.log('Cancel Pressed'),
-                                                                    style: 'cancel',
-                                                                },
-                                                                {
-                                                                    text: 'Yes', onPress: () => {
-                                                                        this.props.updateOrder(item.id, ORDER_STATUS.CANCELLED)
-                                                                        Alert.alert(
-                                                                            'Cancel Order',
-                                                                            'Cancel Order Successfully',
-                                                                            [
-                                                                                {
-                                                                                    text: 'OK', onPress: () => {
-                                                                                        this.props.fetchOrdersByStoreId(this.state.store.id)
-                                                                                    }
-                                                                                },
-                                                                            ],
-                                                                            { cancelable: false }
-                                                                        );
-                                                                    }
-                                                                },
-                                                            ],
-                                                            { cancelable: true }
-                                                        );
+                                                        this.callUser(item.member);
                                                     }}
-                                                    style={styles.removeBtn}>
+                                                    style={styles.removeBtn}
+                                                >
                                                     <View style={styles.iconWrapper}>
                                                         <FontAwesome5
                                                             style={styles.icons}
-                                                            name={'times-circle'}
+                                                            name={"phone"}
                                                             size={23}
-                                                            color={'#54b33d'}
+                                                            color={"#54b33d"}
                                                             solid
                                                         />
                                                     </View>
                                                 </TouchableOpacity>
-                                                : null}
-
-                                        </View> */}
+                                            ) : null}
+                                        </View>
                                     </View>
                                 </View>
-                            }
+                            )}
                         />
                         <Divider style={styles.divider} />
                     </View>
