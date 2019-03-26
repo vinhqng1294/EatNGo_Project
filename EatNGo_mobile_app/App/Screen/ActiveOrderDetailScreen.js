@@ -187,22 +187,22 @@ class OrderDetailScreen extends Component {
                                   </View>
                                 </TouchableOpacity> */}
 															</View>
-                            }
-                          
-													/>                        
+														}
+
+													/>
 												</View>
 
 											}
 										/>
-                    {
-                      item.comment && 
-                      <View style={styles.extraTitleWrapper}>
-                        <View style={{ flex: 1, paddingLeft: 3, }}></View>
-                        <Text numberOfLines={2} style={styles.extraTitle}><Text style={{
-                          fontWeight: 'bold'
-                        }}>Note</Text>: {item.comment}</Text>
-                      </View>
-                    }
+										{
+											item.comment &&
+											<View style={styles.extraTitleWrapper}>
+												<View style={{ flex: 1, paddingLeft: 3, }}></View>
+												<Text numberOfLines={2} style={styles.extraTitle}><Text style={{
+													fontWeight: 'bold'
+												}}>Note</Text>: {item.comment}</Text>
+											</View>
+										}
 
 										{/* NEW ++++ comment */}
 										{/* <View>
@@ -274,7 +274,12 @@ class OrderDetailScreen extends Component {
 
 						<View style={styles.addMoreItemContainer}>
 							<TouchableOpacity style={styles.addMoreItemWrapper}
-								onPress={() => { this.props.navigation.navigate('Rating') }}>
+								onPress={() => {
+									this.props.navigation.navigate('Rating', {
+										order,
+										onGoBack: id => this.props.fetchOrderById(id)
+									});
+								}}>
 								<View style={styles.iconWrapper}>
 									<FontAwesome5
 										style={styles.icons}
