@@ -1,5 +1,5 @@
 import request from "./request";
-import { ORDER_URL, MEMBER_URL } from "./api_constants";
+import { ORDER_URL, MEMBER_URL, STORE_URL } from "./api_constants";
 function getOrders(userId, headers) {
   const params = {
     userId
@@ -23,6 +23,17 @@ function getOrderById(orderId, headers) {
   });
 }
 
+function getOrdersByStoreId(storeId, headers) {
+  const params = {
+  };
+  return request({
+    url: STORE_URL + '/' + storeId + '/orders',
+    method: "GET",
+    params,
+    headers
+  });
+}
+
 function createOrder(data, headers) {
   return request({
     url: ORDER_URL,
@@ -36,7 +47,6 @@ function updateOrder(orderId, status, headers) {
   const data = {
     status
   };
-  console.log(data)
   return request({
     url: ORDER_URL + '/' + orderId,
     method: "PATCH",
@@ -49,5 +59,6 @@ export default {
   getOrders,
   createOrder,
   getOrderById,
-  updateOrder
+  updateOrder,
+  getOrdersByStoreId
 };

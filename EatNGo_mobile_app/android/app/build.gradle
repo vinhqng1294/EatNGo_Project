@@ -145,9 +145,14 @@ android {
             }
         }
     }
+    packagingOptions {
+       pickFirst '**/libjsc.so'
+   }
 }
 
 dependencies {
+    implementation project(':react-native-fetch-blob')
+    implementation project(':react-native-image-picker')
     implementation project(':react-native-facebook-account-kit')
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-gesture-handler')
@@ -162,4 +167,10 @@ dependencies {
 task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
+}
+
+configurations.all {
+    resolutionStrategy {
+        force 'org.webkit:android-jsc:r241213'
+    }
 }

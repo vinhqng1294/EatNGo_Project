@@ -83,12 +83,21 @@ class WelcomeScreen extends Component {
             this.props.navigation.navigate('Register', { phoneNumber: this.state.phoneNumber, facebookId: this.state.facebookId })
         }
         if (user) {
-            const resetAction = StackActions.reset({
-                index: 0,
-                key: null,
-                actions: [NavigationActions.navigate({ routeName: 'Home' })],
-            });
-            this.props.navigation.dispatch(resetAction);
+            if (user.storesEmployedIn) {
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    key: null,
+                    actions: [NavigationActions.navigate({ routeName: 'EmployeeHome' })],
+                });
+                this.props.navigation.dispatch(resetAction);
+            } else {
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    key: null,
+                    actions: [NavigationActions.navigate({ routeName: 'Home' })],
+                });
+                this.props.navigation.dispatch(resetAction);
+            }
         }
         return (
             <View style={styles.container}>

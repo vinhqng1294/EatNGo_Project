@@ -151,6 +151,36 @@ function* updateOrder(action) {
 }
 
 
+function * fetchOrdersByStoreId(action){
+  try {
+    yield put({
+      type: "IS_FETCHING_ORDERS",
+    });
+    const { payload } = action;
+    const user = yield select(userSelector);
+    const res = yield call(API.getOrdersByStoreId, payload.storeId, {
+      Authorization: `Bearer ${user.token}`
+    });
+    if (res.status === 200) {
+      yield put({
+        type: "FETCH_ORDERS_SUCCESS",
+        payload: res.data.sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
+      });
+    } else {
+      yield put({
+        type: "FETCH_ORDERS_ERROR",
+        payload: res.data
+      });
+    }
+  } catch (e) {
+    console.log(e);
+    yield put({
+      type: "FETCH_ORDERS_ERROR",
+      payload: e.data
+    });
+  }
+}
+
 
 function* orderSaga() {
   yield takeLatest('FETCH_ORDERS', orderByMemberIdTask)
@@ -158,6 +188,7 @@ function* orderSaga() {
   yield takeLatest('CREATE_ORDER', createOrder)
   yield takeLatest('REMOVE_CREATED_ORDER', removeCreatedOrder)
   yield takeLatest('UPDATE_ORDER', updateOrder)
+  yield takeLatest('FETCH_STORE_ORDERS', fetchOrdersByStoreId)
 }
 
 export default orderSaga;
