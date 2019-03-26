@@ -135,6 +135,13 @@ export const addCard = (data, memberId) => ({
   }
 });
 
+export const updatePromotion = (promotionCode) => ({
+  type: "UPDATE_PROMOTION",
+  payload: {
+    promotionCode
+  }
+});
+
 
 export const updateOrder = (orderId, status) => ({
   type: "UPDATE_ORDER",

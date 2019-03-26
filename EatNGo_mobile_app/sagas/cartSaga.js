@@ -83,11 +83,21 @@ function* cartItemsClean(action) {
   }
 }
 
+function* updatePromotion(action) {
+  try {
+    const { payload } = action
+    yield put({ type: 'UPDATE_PROMOTION_SUCCESS', payload: payload.promotionCode });
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 
 function* cartSaga() {
   yield takeLatest('UPDATE_CART_ITEMS', cartItemsAdd);
   yield takeLatest('DELETE_CART_ITEM', deleteCartItem);
   yield takeLatest('FETCH_CART_ITEMS', getCart);
   yield takeLatest('CLEAN_CART_ITEMS', cartItemsClean);
+  yield takeLatest('UPDATE_PROMOTION', updatePromotion);
 }
 export default cartSaga

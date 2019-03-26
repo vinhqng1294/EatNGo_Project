@@ -5,6 +5,7 @@ const userSelector = state => state.authReducer.user || null;
 
 const storeSelector = state => state.storeReducer.store || null;
 
+const promotionSelector = state => state.cartReducer.promotionCode || null;
 function* orderByMemberIdTask(action) {
   try {
     yield put({
@@ -65,15 +66,17 @@ function* orderByIdTask(action) {
 function* createOrder(action) {
   try {
     yield put({
-      type: 'IS_SAVING_ORDER'      
+      type: 'IS_SAVING_ORDER'
     });
     const user = yield select(userSelector)
     const store = yield select(storeSelector)
+    const promotionCode = yield select(promotionSelector)
     const { data } = action.payload;
     const order = {
       storeId: store.id,
       memberId: user.id,
       orderDetails: [],
+      promotionCode: promotionCode
     }
     data.map(item => {
       let orderItem = {
@@ -86,6 +89,7 @@ function* createOrder(action) {
     })
 
     // const authToken = yield select(authTokenSelector);
+    
     const res = yield call(API.createOrder, order, {
       Authorization: `Bearer ${user.token}`
     });

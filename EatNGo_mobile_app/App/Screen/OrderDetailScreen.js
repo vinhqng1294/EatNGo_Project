@@ -16,8 +16,8 @@ import {
 
 import CheckBox from 'react-native-check-box';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { Badge, Button, Divider } from 'react-native-elements';
-import { deleteCartItem, fetchCartItems, createOrder, removeCreatedOrder, addCard, cleanCart } from '../../actions/index'
+import { Badge, Button, Divider, Overlay } from 'react-native-elements';
+import { deleteCartItem, fetchCartItems, createOrder, removeCreatedOrder, addCard, cleanCart, updatePromotion } from '../../actions/index'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import stripe from 'tipsi-stripe';
@@ -26,6 +26,7 @@ class OrderDetailScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            isModalAppear: false,
             isSavingOrder: false
         }
     }
@@ -99,6 +100,12 @@ class OrderDetailScreen extends Component {
         const totalPrice = cart.reduce((acc, item) => { return acc + (parseFloat(item.price) * item.quantity) }, 0.0)
         return totalPrice.toFixed(2)
     }
+
+    // getDiscountPrice(cart, discount) {
+    //     const totalPrice = this.getTotalPrice(cart)
+    //     const discountPrice = parseFloat(totalPrice) * (discount.percentageDiscount / 100)
+    //     return discountPrice.toFixed(2)
+    // }
     componentDidMount() {
         const { currentStore } = this.props
         this.props.navigation.setParams({
@@ -137,8 +144,7 @@ class OrderDetailScreen extends Component {
 
     }
     render() {
-
-        const { cart, createdOrder, user, isSavingOrder } = this.props
+        const { cart, promotionCode, createdOrder, user, isSavingOrder } = this.props
         if (createdOrder) {
             Alert.alert(
                 'Order',
@@ -157,6 +163,12 @@ class OrderDetailScreen extends Component {
             );
         }
         if (cart.length) {
+            const totalPrice = this.getTotalPrice(cart)
+            let discountPrice = 0
+            if (promotionCode) {
+                discountPrice = (totalPrice * (promotionCode.percentageDiscount / 100)).toFixed(2)
+            }
+            const totalPriceAfterDiscount = (totalPrice - discountPrice).toFixed(2)
             stripe.setOptions({
                 publishableKey: 'pk_test_FjTiUmlJXMGLgWdO7noLuB7B00Ph8rXSdu',
                 // merchantId: 'MERCHANT_ID', // Optional
@@ -164,6 +176,43 @@ class OrderDetailScreen extends Component {
             })
             return (
                 <View style={{ flex: 1 }}>
+                    <Overlay
+                        isVisible={this.state.isModalAppear}
+                        overlayBackgroundColor="white"
+                        width={300}
+                        height={400}>
+                        <View style={{
+                            flex: 1,
+                            flexDirection: 'column'
+                        }}>
+                            <Text>Promotion Code!</Text>
+                            <FlatList
+                                data={this.props.currentStore.brand.promotionCodes}
+                                showsVerticalScrollIndicator={false}
+                                renderItem={({ item }) =>
+                                    <View>
+                                        <Text>{item.code}</Text>
+                                        <Text>{item.percentageDiscount} %</Text>
+                                        <TouchableOpacity style={{
+                                            flex: 1,
+                                            alignItems: 'center',
+                                            backgroundColor: 'green'
+                                        }}
+                                            onPress={() => {
+                                                this.props.updatePromotion(item)
+                                                this.setState({
+                                                    isModalAppear: false
+                                                })
+                                            }}>
+                                            <View style={styles.removeBtn}>
+                                                <Text>Apply</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </View>
+                                }
+                            />
+                        </View>
+                    </Overlay>
                     <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
                     <ScrollView style={styles.container}>
                         <View style={styles.addMoreItemContainer}>
@@ -338,28 +387,54 @@ class OrderDetailScreen extends Component {
                             </View>
                             <Text numberOfLines={1} style={user.card ? styles.cardText : styles.iconText}>{user.card ? `**** **** **** ${user.card.card.last4}` : 'Add your card'}</Text>
                         </TouchableOpacity>
-                        {/* <TouchableOpacity style={styles.longBtn}>
-                        <View style={styles.iconWrapper}>
-                            <FontAwesome5
-                                style={styles.icons}
-                                name={'gifts'}
-                                size={23}
-                                color={'#54b33d'}
-                                solid
-                            />
-                        </View>
-                        <Text numberOfLines={1} style={styles.iconText}>Apply Coupon Code</Text>
-                    </TouchableOpacity> */}
+                        <TouchableOpacity style={styles.longBtn}
+                            onPress={() => {
+                                if (!promotionCode) {
+                                    this.setState({ isModalAppear: true })
+                                } else {
+                                    Alert.alert(
+                                        'Promotion Code',
+                                        'Are you sure you want to remove this promotion code?',
+                                        [
+                                            {
+                                                text: 'Cancel',
+                                                onPress: () => console.log('Cancel Pressed'),
+                                                style: 'cancel',
+                                            },
+                                            { text: 'OK', onPress: () => this.props.updatePromotion(null) },
+                                        ],
+                                        { cancelable: true },
+                                    );
+                                }
+                            }}>
+                            <View style={styles.iconWrapper}>
+                                <FontAwesome5
+                                    style={styles.icons}
+                                    name={'gifts'}
+                                    size={23}
+                                    color={'#54b33d'}
+                                    solid
+                                />
+                            </View>
+                            <Text numberOfLines={1} style={styles.iconText}>{promotionCode ? `${promotionCode.code} - ${promotionCode.percentageDiscount}%` : 'Apply Coupon Code'} </Text>
+                        </TouchableOpacity>
                         <Divider style={styles.divider} />
 
                         <View style={styles.priceSummaryContainer}>
                             <View style={styles.priceSummaryWrapper}>
                                 <Text numberOfLines={1} style={styles.priceInfoTxt}>Sub-total</Text>
-                                <Text numberOfLines={1} style={styles.priceInfo}>$ {this.getTotalPrice(cart)}</Text>
+                                <Text numberOfLines={1} style={styles.priceInfo}>$ {totalPrice}</Text>
                             </View>
+                            {this.props.promotionCode ?
+                                <View style={styles.priceSummaryWrapper}>
+                                    <Text numberOfLines={1} style={styles.priceInfoTxt}>Discount</Text>
+                                    <Text numberOfLines={1} style={styles.priceInfo}>-$ {discountPrice}</Text>
+                                </View> : null
+                            }
+
                             <View style={styles.totalWrapper}>
                                 <Text numberOfLines={1} style={styles.totalTxt}>Total</Text>
-                                <Text numberOfLines={1} style={styles.total}>$ {this.getTotalPrice(cart)}</Text>
+                                <Text numberOfLines={1} style={styles.total}>$ {totalPriceAfterDiscount}</Text>
                             </View>
                         </View>
                     </ScrollView>
@@ -704,6 +779,7 @@ const styles = StyleSheet.create({
 function initMapStateToProps(state) {
     return {
         cart: state.cartReducer.cart,
+        promotionCode: state.cartReducer.promotionCode,
         createdOrder: state.orderReducer.createdOrder,
         isSavingOrder: state.orderReducer.isSavingOrder,
         currentStore: state.storeReducer.store,
@@ -718,6 +794,7 @@ function initMapDispatchToProps(dispatch) {
         removeCreatedOrder,
         cleanCart,
         fetchCartItems,
+        updatePromotion,
         addCard
     }, dispatch);
 }
