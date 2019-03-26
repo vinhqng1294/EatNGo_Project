@@ -30,6 +30,10 @@ export const fetchStore = (id = null) => ({
   }
 });
 
+export const fetchMoreStores = () => ({
+  type: "FETCH_MORE_STORES",
+});
+
 export const fetchFood = (store = null) => ({
   type: "FETCH_FOOD",
   payload: {
@@ -37,7 +41,7 @@ export const fetchFood = (store = null) => ({
   }
 });
 
-export const fetchFoodInfo = (id = null, currentQuantity = 1 ) => ({
+export const fetchFoodInfo = (id = null, currentQuantity = 1) => ({
   type: "FETCH_FOOD_INFO",
   payload: {
     id,
@@ -135,8 +139,8 @@ export const addCard = (data, memberId) => ({
 export const updateOrder = (orderId, status) => ({
   type: "UPDATE_ORDER",
   payload: {
-   orderId,
-   status
+    orderId,
+    status
   }
 });
 

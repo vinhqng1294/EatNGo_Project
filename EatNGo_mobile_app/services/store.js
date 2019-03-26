@@ -1,7 +1,7 @@
 import request from './request';
 import { STORE_URL } from './api_constants';
 
-function getStore(id = null, headers = null) {
+function getStore(id = null, page, pageSize, headers = null) {
   let params = {};
   if (id != null) {
     params = {
@@ -9,7 +9,7 @@ function getStore(id = null, headers = null) {
     };
   }
   return request({
-    url: STORE_URL, method: 'GET', params, headers,
+    url: STORE_URL + `?page=${page}&pageSize=${pageSize}`, method: 'GET', params, headers,
   });
 }
 
