@@ -14,7 +14,8 @@ export default (state = initialState, { type, payload }) => {
     case "AUTH_LOGIN_LOADING":
       return {
         ...state,
-        loginLoading: true
+        loginLoading: true,
+        isLoadingStores: true,
       };
     case "AUTH_LOGIN_SUCCESS":
       AsyncStorage.setItem("user", JSON.stringify(payload));
@@ -22,6 +23,7 @@ export default (state = initialState, { type, payload }) => {
         ...state,
         loginLoading: false,
         loginError: null,
+        isLoadingStores: false,
         user: payload
       };
     case "AUTH_LOGIN_ERROR":
