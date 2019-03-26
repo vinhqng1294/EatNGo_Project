@@ -187,11 +187,22 @@ class OrderDetailScreen extends Component {
                                   </View>
                                 </TouchableOpacity> */}
 															</View>
-														}
-													/>
+                            }
+                          
+													/>                        
 												</View>
+
 											}
 										/>
+                    {
+                      item.comment && 
+                      <View style={styles.extraTitleWrapper}>
+                        <View style={{ flex: 1, paddingLeft: 3, }}></View>
+                        <Text numberOfLines={2} style={styles.extraTitle}><Text style={{
+                          fontWeight: 'bold'
+                        }}>Note</Text>: {item.comment}</Text>
+                      </View>
+                    }
 
 										{/* NEW ++++ comment */}
 										{/* <View>

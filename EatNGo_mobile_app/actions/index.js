@@ -106,6 +106,14 @@ export const updateFoodQuantity = quantity => ({
 		quantity
 	}
 });
+
+export const updateFoodSpecialRequest = comment => ({
+	type: 'UPDATE_FOOD_SPECIAL_REQUEST',
+	payload: {
+		comment
+	}
+});
+
 export const createOrder = data => ({
 	type: 'CREATE_ORDER',
 	payload: {
