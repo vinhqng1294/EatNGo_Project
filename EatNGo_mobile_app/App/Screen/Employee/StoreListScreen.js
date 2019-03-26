@@ -60,10 +60,10 @@ class StoreListScreen extends Component {
         })
     }
     componentDidMount() {
-        const { user } = this.props;
-        this.setState({
-            storeList: user.storesEmployedIn ? user.storesEmployedIn : []
-        })
+        // const { user } = this.props;
+        // this.setState({
+        //     storeList: user.storesEmployedIn ? user.storesEmployedIn : []
+        // })
         // this.props.storeList = user.storesEmployedIn ? user.storesEmployedIn : []
         // if (!storeList || !storeList.length) {
         //     this.props.fetchStore();
@@ -74,12 +74,7 @@ class StoreListScreen extends Component {
         //     handleSearch: this.handleSearch.bind(this)
         // });
     }
-    componentWillReceiveProps() {
-        const { user } = this.props;
-        this.setState({
-            storeList: user.storesEmployedIn ? user.storesEmployedIn : []
-        })
-    }
+
 
     // handleSearch(value) {
     //     this.props.searchStore(value)
@@ -90,7 +85,7 @@ class StoreListScreen extends Component {
                 <StatusBar style={{
                 }} backgroundColor="#54b33d" barStyle="light-content" />
                 <FlatList
-                    data={this.state.storeList}
+                    data={this.props.user ? this.props.user.storesEmployedIn : []}
                     refreshing={this.props.isLoadingStores}
                     onRefresh={() => {
                         this.props.authLogin(this.props.user.phoneNumber, this.props.user.facebookId)

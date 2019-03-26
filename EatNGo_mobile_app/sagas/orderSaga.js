@@ -99,6 +99,7 @@ function* createOrder(action) {
         type: 'CREATE_ORDER_SUCCESS',
         payload: res.data,
       });
+      yield put({ type: 'UPDATE_PROMOTION_SUCCESS', payload: null });
     } else {
       yield put({
         type: 'CREATE_ORDER_ERROR',
