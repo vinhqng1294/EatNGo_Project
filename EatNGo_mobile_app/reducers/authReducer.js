@@ -5,6 +5,7 @@ const initialState = {
   user: null,
   registerLoading: false,
   registerError: null,
+  isLoadingStores: false,
   registerMessage: null
 };
 
