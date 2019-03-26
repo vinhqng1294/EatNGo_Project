@@ -13,8 +13,6 @@ import OrderDetailScreen from './Screen/OrderDetailScreen';
 import ActiveOrderDetailScreen from './Screen/ActiveOrderDetailScreen';
 import RatingScreen from './Screen/RatingScreen';
 import AddCardScreen from './Screen/AddCardScreen';
-import RatingScreen from './Screen/RatingScreen';
-
 
 const HomeStack = createStackNavigator(
     {
@@ -92,7 +90,6 @@ const AppNavigator = createStackNavigator(
         "ActiveOrderDetail": { screen: ActiveOrderDetailScreen },
         "Rating": { screen: RatingScreen },
         // "AddCard": { screen: AddCardScreen }
-        "Rating": { screen: RatingScreen },
     },
     {
         initialRouteName: 'Welcome',
