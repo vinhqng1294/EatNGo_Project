@@ -178,39 +178,59 @@ class OrderDetailScreen extends Component {
                 <View style={{ flex: 1 }}>
                     <Overlay
                         isVisible={this.state.isModalAppear}
-                        overlayBackgroundColor="white"
-                        width={300}
-                        height={400}>
+                        onBackdropPress={() => {
+                            this.setState({ isModalAppear: !this.state.isModalAppear });
+                        }}>
                         <View style={{
                             flex: 1,
                             flexDirection: 'column'
                         }}>
-                            <Text>Promotion Code!</Text>
-                            <FlatList
-                                data={this.props.currentStore.brand.promotionCodes}
-                                showsVerticalScrollIndicator={false}
-                                renderItem={({ item }) =>
-                                    <View>
-                                        <Text>{item.code}</Text>
-                                        <Text>{item.percentageDiscount} %</Text>
-                                        <TouchableOpacity style={{
-                                            flex: 1,
-                                            alignItems: 'center',
-                                            backgroundColor: 'green'
-                                        }}
-                                            onPress={() => {
-                                                this.props.updatePromotion(item)
-                                                this.setState({
-                                                    isModalAppear: false
-                                                })
-                                            }}>
-                                            <View style={styles.removeBtn}>
-                                                <Text>Apply</Text>
-                                            </View>
-                                        </TouchableOpacity>
-                                    </View>
-                                }
-                            />
+                            <View style={styles.promotionTitleWrapper}>
+                                <Text numberOfLines={1} style={styles.promotionTitle}>Promotion Code</Text>
+                            </View>
+                            <View style={styles.promotionCodeContainer}>
+                                <FlatList
+                                    data={this.props.currentStore.brand.promotionCodes}
+                                    showsVerticalScrollIndicator={false}
+                                    renderItem={({ item }) =>
+                                        <View style={styles.promotionCodeWrapper}>
+                                            <Text numberOfLines={1} style={{
+                                                flex: 3,
+                                                fontFamily: 'Quicksand-Medium',
+                                                fontSize: 15,
+                                            }}>{item.code}</Text>
+                                            <Text numberOfLines={1} style={{
+                                                flex: 1,
+                                                fontFamily: 'Quicksand-Regular',
+                                                fontSize: 15,
+                                            }}>{item.percentageDiscount}%</Text>
+                                            <TouchableOpacity style={{
+                                                flex: 1,
+                                                alignItems: 'center',
+                                                justifyContent: 'space-evenly',
+                                                backgroundColor: '#54b33d',
+                                                borderRadius: 999,
+                                                paddingBottom: 3,
+                                            }}
+                                                onPress={() => {
+                                                    this.props.updatePromotion(item)
+                                                    this.setState({
+                                                        isModalAppear: !this.state.isModalAppear
+                                                    })
+                                                }}>
+                                                <View>
+                                                    <Text numberOfLines={1} style={{
+                                                        textAlignVertical: 'center',
+                                                        fontFamily: 'Quicksand-Medium',
+                                                        fontSize: 13,
+                                                        color: 'white',
+                                                    }} >Apply</Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                        </View>
+                                    }
+                                />
+                            </View>
                         </View>
                     </Overlay>
                     <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
@@ -504,6 +524,33 @@ class OrderDetailScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+    promotionTitleWrapper: {
+        flex: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 3,
+    },
+    promotionTitle: {
+        fontFamily: 'Quicksand-Medium',
+        fontSize: 17,
+        // backgroundColor: 'black',
+        color: '#54b33d',
+    },
+    promotionCodeContainer: {
+        flex: 0,
+        flexDirection: 'column',
+        margin: 3,
+    },
+    promotionCodeWrapper: {
+        flex: 0,
+        flexDirection: 'row',
+        padding: 3,
+        paddingBottom: 5,
+        paddingTop: 5,
+        borderBottomColor: 'gray',
+        borderBottomWidth: 0.5,
+    },
+
     container: {
         flex: 1,
         flexDirection: 'column',
