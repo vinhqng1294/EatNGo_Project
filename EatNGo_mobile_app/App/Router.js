@@ -10,13 +10,13 @@ import ProfileScreen from './Screen/ProfileScreen';
 import MenuScreen from './Screen/MenuScreen';
 import FoodDetailScreen from './Screen/FoodDetailScreen';
 import OrderDetailScreen from './Screen/OrderDetailScreen';
-import ActiveOrderDetailScreen from './Screen/ActiveOrderDetailScreen';
 import StoreListScreen from './Screen/Employee/StoreListScreen';
 import OrderListScreen from './Screen/Employee/OrderListScreen';
 import EmployeeOrderDetailScreen from './Screen/Employee/EmployeeOrderDetailScreen';
+import RatingScreen from './Screen/RatingScreen';
 import AddCardScreen from './Screen/AddCardScreen';
+import ActiveOrderDetailScreen from './Screen/ActiveOrderDetailScreen';
 import EditProfileScreen from './Screen/EditProfileScreen';
-
 
 const HomeStack = createStackNavigator(
     {
@@ -139,7 +139,9 @@ const AppNavigator = createStackNavigator(
         "OrderDetail": { screen: OrderDetailScreen },
         "ActiveOrderDetail": { screen: ActiveOrderDetailScreen },
         "EmployeeOrderDetail": { screen: EmployeeOrderDetailScreen },
-        "EditProfile": { screen: EditProfileScreen }
+        "EditProfile": { screen: EditProfileScreen },
+        "Rating": { screen: RatingScreen },
+        // "AddCard": { screen: AddCardScreen }
     },
     {
         initialRouteName: 'Welcome',
