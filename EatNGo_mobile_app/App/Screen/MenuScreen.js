@@ -39,7 +39,7 @@ class MenuScreen extends Component {
     }
     
     filter() {
-        this.props.filterFoods(this.state.search, this.state.filterCuisine);
+        this.props.filterFoods(this.state.search, this.state.filterCuisine, this.state.filterCuisineName);
     }
 
 	static navigationOptions = ({ navigation }) => {
@@ -169,7 +169,6 @@ class MenuScreen extends Component {
 		// this.props.navigation.setParams({
 		//     cartLength: this.props.cart.length || 0,
 		// })
-        const navigation = this.props.navigation;
         const { search, filterCuisine } = { ... this.state };
 		return (
 			<ScrollView style={styles.container}>

@@ -156,9 +156,18 @@ function* updateFoodOptions(action) {
 function* filterFoods(action) {
 	const { payload } = { ...action };
 	const foods = yield select(foodListSelector);
-	let filteredFoods = foods;
+	let filteredFoods = foods.map(({ type, foods }) => ({
+		type,
+		foods: foods.map(f => ({
+			...f
+		}))
+	}));
 	if (payload.filterCuisine) {
-		filteredFoods = foods.filter(f => f.type === payload.filterCuisineName);
+		console.log(payload.filterCuisineName);
+		filteredFoods = filteredFoods.filter(f => {
+			console.log(f);
+			return f.type === payload.filterCuisineName;
+		});
 	}
 	if (payload.search && payload.search.trim().length) {
 		filteredFoods.forEach(foodType => {
@@ -166,13 +175,13 @@ function* filterFoods(action) {
 				f.name.toLowerCase().includes(payload.search.trim().toLowerCase())
 			);
 		});
-  }
-  const finalFiltered = [];
-  filteredFoods.forEach(type => {
-    if (type.foods.length) {
-      finalFiltered.push(type);
-    }
-  });
+	}
+	let finalFiltered = [];
+	filteredFoods.forEach(type => {
+		if (type.foods.length) {
+			finalFiltered.push(type);
+		}
+	});
 	yield put({
 		type: 'FILTER_FOOD_SUCCESS',
 		payload: finalFiltered
