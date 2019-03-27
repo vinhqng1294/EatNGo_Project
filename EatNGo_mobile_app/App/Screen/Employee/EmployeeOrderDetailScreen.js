@@ -10,7 +10,8 @@ import {
   StatusBar,
   Alert,
   Image,
-  Dimensions
+  Dimensions,
+  TextInput,
 } from "react-native";
 
 import CheckBox from "react-native-check-box";
@@ -115,6 +116,26 @@ class OrderDetailScreen extends Component {
         <View style={{ flex: 1 }}>
           <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
           <ScrollView style={styles.container}>
+
+            {/* NEWWWW - 27-03-2019 */}
+            <View style={styles.orderInfoContainer}>
+              <View style={styles.statusWrapper}>
+                <Text style={styles.statusTitle}>Name:
+                <Text style={styles.nameText}> Vinh Nguyen</Text></Text>
+
+              </View>
+              <View style={styles.datatimeWrapper}>
+                {/* <Text style={styles.date}>{timestampToString(order.date)}</Text> */}
+                <Text style={styles.phoneText}>
+                  <FontAwesome5
+                    style={styles.icons}
+                    name={'mobile-alt'}
+                    size={15}
+                    color={'#54b33d'}
+                    solid
+                  /> 0906123456</Text>
+              </View>
+            </View>
 
             <View style={styles.orderInfoContainer}>
               <View style={styles.statusWrapper}>
@@ -251,6 +272,14 @@ class OrderDetailScreen extends Component {
                 <Text numberOfLines={1} style={styles.total}>$ {totalPriceAfterDiscount}</Text>
               </View>
             </View>
+
+            <Divider style={styles.divider} />
+            {/* NEWWWW - 27-03-2019 */}
+            <View style={styles.commentContainer}>
+              <Text numberOfLines={1} style={styles.priceInfoTxt}>Comment</Text>
+              <TextInput multiline={true} style={styles.comment}></TextInput>
+            </View>
+
           </ScrollView>
           {order.status === ORDER_STATUS.PAID ?
             <View>
@@ -380,6 +409,16 @@ class OrderDetailScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+  comment: {
+    fontFamily: 'Quicksand-Regular',
+    fontSize: 15,
+    borderWidth: .7,
+    borderColor: '#54b33d',
+    color: 'black',
+    backgroundColor: 'white',
+    padding: 5,
+  },
+
   orderInfoContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -390,6 +429,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
+    paddingRight: 10,
+    paddingLeft: 10,
+  },
+  nameWrapper: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
     paddingRight: 10,
   },
   datatimeWrapper: {
@@ -405,8 +452,13 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontFamily: 'Quicksand-Medium',
-    fontSize: 20,
+    fontSize: 17,
     color: '#54b33d',
+  },
+  nameText: {
+    fontFamily: 'Quicksand-Medium',
+    fontSize: 20,
+    color: 'gray',
   },
   date: {
     fontFamily: 'Quicksand-Medium',
@@ -418,6 +470,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Quicksand-Regular',
     fontSize: 15,
     color: '#54b33d',
+    paddingRight: 20,
+  },
+  phoneText: {
+    fontFamily: 'Quicksand-Regular',
+    fontSize: 15,
+    color: 'gray',
     paddingRight: 20,
   },
 
@@ -612,6 +670,17 @@ const styles = StyleSheet.create({
     margin: 15,
     marginTop: 0,
     padding: 10,
+    // borderWidth: .3,
+    // borderColor: '#54b33d',
+  },
+  commentContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: '#EBEBEB',
+    margin: 15,
+    marginTop: 0,
+    padding: 10,
+    // marginBottom: 100,
     // borderWidth: .3,
     // borderColor: '#54b33d',
   },
