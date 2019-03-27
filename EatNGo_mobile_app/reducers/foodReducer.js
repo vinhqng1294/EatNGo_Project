@@ -4,16 +4,19 @@ const initialState = {
   error: null,
 };
 export default (state = initialState, { type, payload }) => {
+  console.log(type);
   switch (type) {
     case 'FETCH_FOOD_SUCCESS':
       return {
         ...state,
         foods: payload,
+        filteredFoods: payload
       }
     case 'FETCH_FOOD_ERROR':
       return {
         ...state,
         foods: null,
+        filteredFoods: null,
         error: payload
       }
     case 'FETCH_FOOD_INFO_SUCCESS':
@@ -27,6 +30,12 @@ export default (state = initialState, { type, payload }) => {
         ...state,
         foodInfo: payload,
         error: null,
+      }
+    case 'FILTER_FOOD_SUCCESS':
+      console.log(payload);
+      return {
+        ...state,
+        filteredFoods: payload
       }
     default:
       return state;
