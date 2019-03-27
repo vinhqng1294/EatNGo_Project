@@ -11,7 +11,7 @@ import {
     Image,
 } from 'react-native';
 import { bindActionCreators } from 'redux';
-import { fetchFood, setSelectedStore, cleanCart } from '../../actions/index'
+import { fetchFood, setSelectedStore, cleanCart, updatePromotion } from '../../actions/index'
 import { connect } from 'react-redux';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Badge, Button } from 'react-native-elements';
@@ -94,6 +94,7 @@ class MenuScreen extends Component {
         const checkNewStore = this.props.store && store.id !== this.props.store.id
         if (checkNewStore) {
             this.props.cleanCart()
+            this.props.updatePromotion(null)
         }
         this.props.setSelectedStore(store)
         this.props.fetchFood(store);
@@ -198,7 +199,7 @@ const styles = StyleSheet.create({
         borderRightColor: '#54b33d',
         borderTopWidth: .5,
         borderTopColor: 'rgb(157,157,157)',
-        borderLeftWidth: .5,        
+        borderLeftWidth: .5,
         borderLeftColor: 'rgb(157,157,157)',
         borderRadius: 5
     },
@@ -256,7 +257,8 @@ const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
         fetchFood,
         setSelectedStore,
-        cleanCart
+        cleanCart,
+        updatePromotion
     }, dispatch);
 }
 export default connect(mapStateToProps, mapDispatchToProps)(MenuScreen);
