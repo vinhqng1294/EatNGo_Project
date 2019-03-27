@@ -11,6 +11,7 @@ function* storeTask(action) {
       type: "IS_LOADING_STORES",
     });
     const { payload } = action;
+    console.log(payload)
     const page = yield select(pageSelector)
     const pageSize = yield select(pageSizeSelector)
     let res;
@@ -19,28 +20,22 @@ function* storeTask(action) {
     } else {
       res = yield call(API.getStore, payload.id, page, pageSize, payload.filterType);
     }
+    console.log(res)
     if (res.status === 200) {
-      if (payload.id === null) {
-        yield put({
-          type: 'FETCH_STORE_SUCCESS',
-          payload: res.data,
-        });
-      } else {
-        yield put({
-          type: 'FETCH_STORE_INFO_SUCCESS',
-          payload: res.data,
-        });
-      }
+      yield put({
+        type: 'FETCH_STORE_SUCCESS',
+        payload: res.data,
+      });
     } else {
       yield put({
-        type: 'FETCH_RESTAURANT_ERROR',
+        type: 'FETCH_STORE_ERROR',
         payload: res.data,
       });
     }
   } catch (e) {
     console.log(e);
     yield put({
-      type: 'FETCH_RESTAURANT_ERROR',
+      type: 'FETCH_STORE_ERROR',
       payload: e.data,
     });
   }
@@ -53,8 +48,9 @@ function* fetchMoreStoreTask(action) {
   yield put({
     type: "IS_LOADING_MORE_STORES",
   });
+
   const res = yield call(API.getStore, null, page, pageSize, null, filterType);
-  if (res.status === 200) {
+  if (res.status === 200 && res.data.length) {
     yield put({
       type: 'FETCH_MORE_STORES_SUCCESS',
       payload: res.data,
@@ -69,7 +65,7 @@ function* fetchMoreStoreTask(action) {
 
 function* searchStore(action) {
   const { payload } = action;
-  const { value, filterType } = { ... payload };
+  const { value, filterType } = { ...payload };
   const page = 1;
   const pageSize = yield select(pageSizeSelector)
   const res = yield call(API.getStore, null, page, pageSize, null, {

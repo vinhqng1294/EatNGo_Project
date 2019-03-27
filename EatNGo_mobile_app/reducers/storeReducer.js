@@ -18,8 +18,8 @@ const prune = stores => {
 			prunedStores.push(store);
 			ids[store.id] = store;
 		}
-  });
-  return prunedStores;
+	});
+	return prunedStores;
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -62,7 +62,11 @@ export default (state = initialState, { type, payload }) => {
 		case 'FETCH_MORE_STORES_ERROR':
 			return {
 				...state,
-				error: 'FETCH_MORE_STORES_ERROR'
+				storeList: [...state.storeList],
+				isLoadingMoreStores: false,
+				filteredStoreList: [...state.filteredStoreList],
+				store: null,
+				error: 'FETCH_MORES_STORE_ERROR'
 			};
 
 		case 'SET_STORE_SUCCESS':
