@@ -158,7 +158,7 @@ class OrderDetailScreen extends Component {
                   borderRadius: 999,
                   paddingRight: 10,
                   paddingLeft: 10,
-                }}>
+                }} onPress={()=> {this.props.navigation.navigate('ScanQR')}}>
                   <Text style={styles.cameraText}>Scan QR</Text>
                 </TouchableOpacity>
               </View>

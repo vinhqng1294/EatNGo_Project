@@ -2,6 +2,7 @@ package com.eatngo_mobile_app;
 
 import android.app.Application;
 
+import com.wix.RNCameraKit.RNCameraKitPackage;
 import com.gettipsi.stripe.StripeReactPackage;
 import com.facebook.react.ReactApplication;
 import com.RNFetchBlob.RNFetchBlobPackage;
@@ -34,7 +35,8 @@ public class MainApplication extends Application implements ReactApplication {
            new StripeReactPackage(),
             new RNAccountKitPackage(),
             new VectorIconsPackage(),
-            new RNGestureHandlerPackage()
+            new RNGestureHandlerPackage(),
+            new RNCameraKitPackage()
       );
     }
 
