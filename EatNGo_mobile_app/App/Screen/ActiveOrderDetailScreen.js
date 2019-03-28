@@ -20,7 +20,9 @@ import { fetchOrderById, updateOrder } from "../../actions/index";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { mapOrderStatusToName } from "../../services/constant";
-import { ORDER_STATUS } from '../../services/constant'
+import { ORDER_STATUS } from '../../services/constant';
+import QRCode from 'react-native-qrcode';
+
 class OrderDetailScreen extends Component {
 	constructor(props) {
 		super(props)
@@ -292,6 +294,19 @@ class OrderDetailScreen extends Component {
 								<Text numberOfLines={1} style={styles.addMoreItemTxt}>Rate your order here!</Text>
 							</TouchableOpacity>
 						</View>
+
+						{/* QR Code */}
+						<View style={styles.qrcodeContainer}>
+							<View style={styles.addMoreItemWrapper}>
+								<QRCode
+									value={'Love You Team'}
+									size={200}
+									bgColor='black'
+									fgColor='white' />
+							</View>
+						</View>
+						
+						<Divider style={styles.endDivider} />
 					</ScrollView>
 					{order.status === ORDER_STATUS.PAID ?
 						<TouchableOpacity style={styles.cancelBtn}
@@ -587,7 +602,12 @@ const styles = StyleSheet.create({
 	divider: {
 		backgroundColor: '#54b33d',
 		height: .7,
-		marginBottom: 15,
+		// marginBottom: 10,
+	},
+	endDivider: {
+		backgroundColor: '#54b33d',
+		height: .7,
+		marginBottom: 60,
 	},
 	longBtn: {
 		flex: 1,
@@ -624,6 +644,15 @@ const styles = StyleSheet.create({
 		margin: 15,
 		marginBottom: 0,
 		alignItems: 'flex-end',
+	},
+	qrcodeContainer: {
+		flex: 1,
+		flexDirection: 'column',
+		// backgroundColor: 'yellow',
+		justifyContent: 'center',
+		margin: 15,
+		// marginBottom: 0,
+		alignItems: 'center',
 	},
 	addMoreItemWrapper: {
 		flex: 0,
