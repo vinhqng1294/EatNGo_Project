@@ -40,21 +40,34 @@ export const fetchCuisineTypes = () => ({
 	type: 'FETCH_CUISINE_TYPES'
 });
 
-export const fetchStore = (id = null) => ({
+export const fetchStore = (id = null, filterType) => ({
 	type: 'FETCH_STORE',
 	payload: {
-		id
+		id,
+		filterType
 	}
 });
 
-export const fetchMoreStores = () => ({
-  type: "FETCH_MORE_STORES",
+export const fetchMoreStores = filterType => ({
+	type: "FETCH_MORE_STORES",
+	payload: {
+		filterType
+	}
 });
 
 export const fetchFood = (store = null) => ({
 	type: 'FETCH_FOOD',
 	payload: {
 		store
+	}
+});
+
+export const filterFoods = (search, filterCuisine, filterCuisineName) => ({
+	type: 'FILTER_FOOD',
+	payload: {
+		search,
+		filterCuisine,
+		filterCuisineName
 	}
 });
 
@@ -121,10 +134,11 @@ export const createOrder = data => ({
 	}
 });
 
-export const searchStore = value => ({
+export const searchStore = (value, filterType) => ({
 	type: 'SEARCH_STORE',
 	payload: {
-		value
+		value,
+		filterType
 	}
 });
 

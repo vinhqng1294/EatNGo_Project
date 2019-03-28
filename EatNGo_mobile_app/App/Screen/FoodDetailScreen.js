@@ -501,7 +501,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-    console.log(state)
     return {
         food: state.foodReducer.foodInfo,
         cart: state.cartReducer.cart

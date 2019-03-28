@@ -36,20 +36,7 @@ class OrderListScreen extends Component {
         return {
             headerTintColor: '#54b33d',
             headerStyle: { backgroundColor: 'white' },
-            headerRight: <View style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                flex: 1,
-                marginRight: 5,
-            }}>
-                <Button
-                    icon={<FontAwesome5 name={'shopping-cart'} size={23} color={'#54b33d'} solid />}
-                    type='clear'
-                    title={null}
-                    onPress={() => {
-                    }}
-                />
-            </View>,
+            headerRight: <View></View>,
             headerLeft: <View></View>,
             headerTitle:
                 <View style={{
