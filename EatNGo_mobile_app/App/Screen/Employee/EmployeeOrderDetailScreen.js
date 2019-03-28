@@ -435,6 +435,7 @@ const styles = StyleSheet.create({
     color: 'black',
     backgroundColor: 'white',
     padding: 5,
+    borderRadius: 10,
   },
 
   orderInfoContainer: {
@@ -443,11 +444,11 @@ const styles = StyleSheet.create({
     paddingTop: 15,
   },
   statusWrapper: {
-    flex: 1,
+    flex: 1.5,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingRight: 15,
+    // paddingRight: 15,
     // paddingLeft: 5,
   },
   nameWrapper: {
@@ -483,19 +484,19 @@ const styles = StyleSheet.create({
     fontFamily: 'Quicksand-Medium',
     fontSize: 15,
     color: '#54b33d',
-    paddingRight: 20,
+    // paddingRight: 20,
   },
   time: {
     fontFamily: 'Quicksand-Regular',
     fontSize: 15,
     color: '#54b33d',
-    paddingRight: 20,
+    // paddingRight: 20,
   },
   phoneText: {
     fontFamily: 'Quicksand-Regular',
     fontSize: 15,
     color: 'gray',
-    paddingRight: 20,
+    // paddingRight: 20,
   },
   cameraText: {
     fontFamily: 'Quicksand-Bold',
@@ -704,7 +705,7 @@ const styles = StyleSheet.create({
     margin: 15,
     marginTop: 0,
     padding: 10,
-    borderRadius: 10,
+    // borderRadius: 10,
     // marginBottom: 100,
     // borderWidth: .3,
     // borderColor: '#54b33d',
