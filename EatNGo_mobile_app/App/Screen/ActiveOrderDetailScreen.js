@@ -299,7 +299,11 @@ class OrderDetailScreen extends Component {
 						<View style={styles.qrcodeContainer}>
 							<View style={styles.addMoreItemWrapper}>
 								<QRCode
-									value={'Love You Team'}
+									value={JSON.stringify({
+										key: 'Eat&Go_Order',
+										orderId: order.id,
+										storeId: order.storeId
+									})}
 									size={200}
 									bgColor='black'
 									fgColor='white' />
