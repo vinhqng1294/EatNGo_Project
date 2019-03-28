@@ -5,6 +5,12 @@ const initialState = {
 };
 export default (state = initialState, { type, payload }) => {
 	switch (type) {
+		case 'FETCH_FOOD_SUCCESS':
+		return {
+			...state,
+			foods: [...payload],
+			filteredFoods: [...payload]
+		};
 		case 'FETCH_FOOD_ERROR':
 			return {
 				...state,
@@ -29,18 +35,10 @@ export default (state = initialState, { type, payload }) => {
 				error: null
 			};
 		case 'FILTER_FOOD_SUCCESS':
-			console.log('filtered foods', payload);
 			return {
 				...state,
 				filteredFoods: [...payload],
 				foods: [...state.foods]
-			};
-		case 'FETCH_FOOD_SUCCESS':
-			return {
-				...state,
-				foods: [...payload],
-				filteredFoods: [...payload],
-				immutableFoods: [...payload]
 			};
 		default:
 			return state;

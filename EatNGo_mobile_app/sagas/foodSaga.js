@@ -2,6 +2,7 @@ import { call, put, select, takeLatest, takeEvery } from 'redux-saga/effects';
 import API from '../services/food';
 
 const foodSelector = state => state.foodReducer.foodInfo || null;
+const foodListSelector = state => state.foodReducer.foods || null;
 
 function* foodByTypeTask(action) {
   try {
@@ -155,11 +156,7 @@ function* filterFoods(action) {
 		}))
 	}));
 	if (payload.filterCuisine) {
-		console.log(payload.filterCuisineName);
-		filteredFoods = filteredFoods.filter(f => {
-			console.log(f);
-			return f.type === payload.filterCuisineName;
-		});
+		filteredFoods = filteredFoods.filter(f => f.type === payload.filterCuisineName);
 	}
 	if (payload.search && payload.search.trim().length) {
 		filteredFoods.forEach(foodType => {
@@ -185,5 +182,6 @@ function* storeSaga() {
   yield takeEvery('UPDATE_FOOD_QUANTITY', updateFoodQuantityTask);
   yield takeEvery('UPDATE_FOOD_SPECIAL_REQUEST', updateFoodSpecialRequestTask);
   yield takeLatest('UPDATE_FOOD_OPTION', updateFoodOptions);
+  yield takeLatest('FILTER_FOOD', filterFoods);
 }
 export default storeSaga
