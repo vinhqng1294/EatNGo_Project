@@ -17,7 +17,29 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Badge, Button } from 'react-native-elements';
 class MenuScreen extends Component {
     constructor(props) {
-        super(props)
+        super(props);
+        this.state = {
+            showFilterModal: false,
+            filterCuisine: 0,
+            filterCuisineName: '',
+            search: ''
+        };
+    }
+
+    openFilterModal() {
+        this.setState({
+            showFilterModal: true
+        });
+    }
+
+    closeFilterModal() {
+        this.setState({
+            showFilterModal: false
+        });
+    }
+
+    filter() {
+        this.props.filterFoods(this.state.search, this.state.filterCuisine, this.state.filterCuisineName);
     }
     static navigationOptions = ({ navigation }) => {
         return {
@@ -85,6 +107,7 @@ class MenuScreen extends Component {
                 </View>
         };
     };
+
     componentDidMount() {
         const { navigation } = this.props;
         navigation.setParams({

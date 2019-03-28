@@ -62,6 +62,15 @@ export const fetchFood = (store = null) => ({
 	}
 });
 
+export const filterFoods = (search, filterCuisine, filterCuisineName) => ({
+	type: 'FILTER_FOOD',
+	payload: {
+		search,
+		filterCuisine,
+		filterCuisineName
+	}
+});
+
 export const fetchFoodInfo = (id = null, currentQuantity = 1) => ({
   type: "FETCH_FOOD_INFO",
   payload: {
