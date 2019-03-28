@@ -42,11 +42,12 @@ export const fetchCuisineTypes = () => ({
 	type: 'FETCH_CUISINE_TYPES'
 });
 
-export const fetchStore = (id = null, filterType) => ({
+export const fetchStore = (id = null, filterType, currentLocation) => ({
 	type: 'FETCH_STORE',
 	payload: {
 		id,
-		filterType
+		filterType,
+		currentLocation
 	}
 });
 

@@ -5,6 +5,7 @@ import android.app.Application;
 import com.gettipsi.stripe.StripeReactPackage;
 import com.facebook.react.ReactApplication;
 import io.invertase.firebase.RNFirebasePackage;
+import com.airbnb.android.react.maps.MapsPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.imagepicker.ImagePickerPackage;
 import io.underscope.react.fbak.RNAccountKitPackage;
@@ -34,6 +35,7 @@ public class MainApplication extends Application implements ReactApplication {
            new MainReactPackage(),
             new RNFirebasePackage(),
             new RNFirebaseMessagingPackage(),
+            new MapsPackage(),
             new RNFetchBlobPackage(),
             new ImagePickerPackage(),
             new RNFirebaseNotificationsPackage(),

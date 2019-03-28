@@ -7,8 +7,8 @@ const foodListSelector = state => state.foodReducer.foods || null;
 function* foodByTypeTask(action) {
   try {
     const { payload } = action;
-
-    const res = yield call(API.getStoreFoodGroupByType, payload.store.brandId);
+    const brandId = payload.store.brand && payload.store.brand.id;
+    const res = yield call(API.getStoreFoodGroupByType, brandId);
     if (res.status === 200) {
       yield put({
         type: 'FETCH_FOOD_SUCCESS',

@@ -8,39 +8,50 @@ import {
 	Text,
 	ScrollView,
 	StatusBar,
-    Image
+	Image
 } from 'react-native';
 import { bindActionCreators } from 'redux';
-import { fetchFood, setSelectedStore, cleanCart, filterFoods } from '../../actions/index';
+import {
+	fetchFood,
+	setSelectedStore,
+	cleanCart,
+	filterFoods
+} from '../../actions/index';
 import { connect } from 'react-redux';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Badge, Button, SearchBar, Icon, Overlay } from 'react-native-elements';
+import Map from '../Components/Map';
+
 class MenuScreen extends Component {
 	constructor(props) {
-        super(props);
-        this.state = {
-            showFilterModal: false,
-            filterCuisine: 0,
-            filterCuisineName: '',
-            search: ''
-        };
+		super(props);
+		this.state = {
+			showModal: {
+				filter: false,
+				map: false
+			},
+			filterCuisine: 0,
+			filterCuisineName: '',
+			search: ''
+		};
 	}
 
-	openFilterModal() {
+	setModalVisible(name, isVisible) {
 		this.setState({
-			showFilterModal: true
+			showModal: {
+				...this.state.showModal,
+				[name]: isVisible
+			}
 		});
 	}
 
-	closeFilterModal() {
-		this.setState({
-			showFilterModal: false
-		});
-    }
-    
-    filter() {
-        this.props.filterFoods(this.state.search, this.state.filterCuisine, this.state.filterCuisineName);
-    }
+	filter() {
+		this.props.filterFoods(
+			this.state.search,
+			this.state.filterCuisine,
+			this.state.filterCuisineName
+		);
+	}
 
 	static navigationOptions = ({ navigation }) => {
 		return {
@@ -101,15 +112,19 @@ class MenuScreen extends Component {
 					<Button
 						icon={
 							<FontAwesome5
-								name={'info-circle'}
+								name={'map-marker-alt'}
 								size={23}
 								color={'#54b33d'}
-								solid
 							/>
 						}
 						type="clear"
 						title={null}
-						onPress={() => {}}
+						onPress={() => {
+							const openMapModal = navigation.getParam('openMapModal');
+							if (openMapModal) {
+								openMapModal();
+							}
+						}}
 					/>
 				</View>
 			),
@@ -145,7 +160,8 @@ class MenuScreen extends Component {
 	componentDidMount() {
 		const { navigation } = this.props;
 		navigation.setParams({
-			updateCartQuantity: this.updateCartQuantity.bind(this)
+			updateCartQuantity: this.updateCartQuantity.bind(this),
+			openMapModal: this.setModalVisible.bind(this, 'map', true)
 		});
 		const store = navigation.getParam('store', null);
 		const checkNewStore = this.props.store && store.id !== this.props.store.id;
@@ -169,7 +185,8 @@ class MenuScreen extends Component {
 		// this.props.navigation.setParams({
 		//     cartLength: this.props.cart.length || 0,
 		// })
-        const { search, filterCuisine } = { ... this.state };
+		const store = this.props.navigation.getParam('store', null);
+		const { search, filterCuisine } = { ...this.state };
 		return (
 			<ScrollView style={styles.container}>
 				<View
@@ -204,21 +221,22 @@ class MenuScreen extends Component {
 							color: 'white'
 						}}
 						onChangeText={value => {
-                            this.setState({
-                                search: value
-                            }, () => {
-                                this.filter();
-                            });
-                        }}
+							this.setState(
+								{
+									search: value
+								},
+								() => {
+									this.filter();
+								}
+							);
+						}}
 					/>
 					<Icon
 						reverse
 						name="filter-list"
 						color="#54b33d"
 						size={22}
-						onPress={() => {
-							this.openFilterModal();
-						}}
+						onPress={() => this.setModalVisible('filter', true)}
 					/>
 				</View>
 
@@ -269,8 +287,8 @@ class MenuScreen extends Component {
 				/>
 				<View style={{ marginTop: 22 }}>
 					<Overlay
-						isVisible={this.state.showFilterModal}
-						onBackdropPress={() => this.closeFilterModal()}
+						isVisible={this.state.showModal.filter}
+						onBackdropPress={() => this.setModalVisible('filter', false)}
 					>
 						<View style={{ marginTop: 22 }}>
 							<View style={styles.filterHeaderWrapper}>
@@ -292,13 +310,16 @@ class MenuScreen extends Component {
 															: null
 													]}
 													onPress={() => {
-                                                        this.setState({
-                                                            filterCuisine: item.id,
-                                                            filterCuisineName: item.name
-                                                        }, () => {
-                                                            this.closeFilterModal();
-                                                            this.filter();
-                                                        });
+														this.setState(
+															{
+																filterCuisine: item.id,
+																filterCuisineName: item.name
+															},
+															() => {
+																this.closeFilterModal();
+																this.filter();
+															}
+														);
 													}}
 												>
 													<Text
@@ -321,13 +342,16 @@ class MenuScreen extends Component {
 								<TouchableOpacity
 									style={styles.button}
 									onPress={() => {
-                                        this.setState({
-                                            filterCuisine: 0,
-                                            filterCuisineName: ''
-                                        }, () => {
-                                            this.closeFilterModal();
-                                            this.filter();
-                                        });
+										this.setState(
+											{
+												filterCuisine: 0,
+												filterCuisineName: ''
+											},
+											() => {
+												this.closeFilterModal();
+												this.filter();
+											}
+										);
 									}}
 								>
 									<Text style={styles.btnTextSecondary}>Clear</Text>
@@ -336,6 +360,11 @@ class MenuScreen extends Component {
 						</View>
 					</Overlay>
 				</View>
+				<Map
+					isVisible={this.state.showModal.map}
+					onBackdropPress={() => this.setModalVisible('map', false)}
+					store={store}
+				/>
 			</ScrollView>
 		);
 	}
@@ -501,11 +530,11 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
 	return {
-        foods: state.foodReducer.filteredFoods,
-        filteredFoods: state.foodReducer.filteredFoods,
+		foods: state.foodReducer.filteredFoods,
+		filteredFoods: state.foodReducer.filteredFoods,
 		cart: state.cartReducer.cart,
-        store: state.storeReducer.store,
-        cuisineTypes: state.storeReducer.cuisineTypes || []
+		store: state.storeReducer.store,
+		cuisineTypes: state.storeReducer.cuisineTypes || []
 	};
 	// return {
 	//     storeList: state.authReducer.registerMessage,
@@ -516,8 +545,8 @@ const mapDispatchToProps = dispatch => {
 		{
 			fetchFood,
 			setSelectedStore,
-            cleanCart,
-            filterFoods
+			cleanCart,
+			filterFoods
 		},
 		dispatch
 	);
