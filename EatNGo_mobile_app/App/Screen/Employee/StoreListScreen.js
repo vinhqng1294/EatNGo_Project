@@ -16,8 +16,9 @@ import {
 } from 'react-native';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
-
+import firebase from 'react-native-firebase';
+import type { Notification, NotificationOpen } from 'react-native-firebase';
+import { getStatusString } from '../../../utils/index'
 
 class StoreListScreen extends Component {
     constructor(props) {
@@ -59,7 +60,14 @@ class StoreListScreen extends Component {
             store: store
         })
     }
+
+    componentWillUnmount() {
+        this.notificationListener();
+        this.notificationOpenedListener();
+    }
+
     componentDidMount() {
+        this.createNotificationListeners()
         // const { user } = this.props;
         // this.setState({
         //     storeList: user.storesEmployedIn ? user.storesEmployedIn : []
@@ -74,6 +82,52 @@ class StoreListScreen extends Component {
         //     handleSearch: this.handleSearch.bind(this)
         // });
     }
+
+    async createNotificationListeners() {
+
+        this.notificationListener = firebase.notifications().onNotification((notification: Notification) => {
+            console.log(notification)
+        });
+
+        this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
+            const notification = notificationOpen.notification;
+            if (notification.data.type === 'HAS_NEW_ORDER') {
+                this.props.navigation.navigate("EmployeeOrderDetail", {
+                    id: notification.data.orderId,
+                });
+            }
+            else {
+                this.props.navigation.navigate("ActiveOrderDetail", {
+                    id: notification.data.orderId,
+                });
+            }
+        });
+        this.messageListener = firebase.messaging().onMessage((message) => {
+            const channel = new firebase.notifications.Android.Channel(
+                'channelId',
+                'Channel Name',
+                firebase.notifications.Android.Importance.Max
+            ).setDescription('A natural description of the channel');
+            firebase.notifications().android.createChannel(channel);
+            const notification = new firebase.notifications.Notification({
+                sound: 'default',
+                show_in_foreground: true,
+            })
+                .setNotificationId('notificationId')
+                .setTitle('EatNGo')
+                .setData(message.data)
+                // .setBody(`Your order #${message.data.orderId} is ${getStatusString(message.data.type)}`)
+                .setBody(message.data.type === 'HAS_NEW_ORDER' ? 'You have new order' : `Your order #${message.data.orderId} is ${getStatusString(message.data.type)}`)
+                .android.setChannelId('test-channel')
+                .android.setSmallIcon('ic_launcher')
+                .android.setPriority(firebase.notifications.Android.Priority.High);
+
+            firebase.notifications()
+                .displayNotification(notification)
+                .catch(err => console.error(err));
+        });
+    }
+
 
 
     // handleSearch(value) {

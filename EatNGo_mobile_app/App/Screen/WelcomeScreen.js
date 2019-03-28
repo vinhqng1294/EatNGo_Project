@@ -8,7 +8,7 @@ import { StackActions, NavigationActions } from 'react-navigation';
 import { AsyncStorage } from 'react-native';
 import firebase from 'react-native-firebase';
 import type { Notification, NotificationOpen } from 'react-native-firebase';
-import { getStatusString } from '../../utils/index'
+
 import {
     StyleSheet,
     View,
@@ -30,10 +30,10 @@ class WelcomeScreen extends Component {
         deviceToken: null,
     };
 
-    componentWillUnmount() {
-        this.notificationListener();
-        this.notificationOpenedListener();
-    }
+    // componentWillUnmount() {
+    //     this.notificationListener();
+    //     this.notificationOpenedListener();
+    // }
 
     componentWillMount() {
         this.configureAccountKit();
@@ -43,8 +43,6 @@ class WelcomeScreen extends Component {
     async componentDidMount() {
 
         this.checkPermission()
-
-        this.createNotificationListeners()
         this.getUserAsync()
         const fcmToken = await firebase.messaging().getToken();
         console.log(fcmToken)
@@ -72,56 +70,6 @@ class WelcomeScreen extends Component {
         }
     }
 
-    async createNotificationListeners() {
-
-        this.notificationListener = firebase.notifications().onNotification((notification: Notification) => {
-            console.log(notification)
-
-        });
-
-        this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
-            const notification = notificationOpen.notification;
-            if (notification.data.type === 'HAS_NEW_ORDER') {
-                this.props.navigation.navigate("EmployeeOrderDetail", {
-                    id: notification.data.orderId,
-                });
-            }
-            else {
-                this.props.navigation.navigate("ActiveOrderDetail", {
-                    id: notification.data.orderId,
-                });
-            }
-        });
-
-
-        /*
-        * Triggered for data only payload in foreground
-        * */
-        this.messageListener = firebase.messaging().onMessage((message) => {
-            const channel = new firebase.notifications.Android.Channel(
-                'channelId',
-                'Channel Name',
-                firebase.notifications.Android.Importance.Max
-            ).setDescription('A natural description of the channel');
-            firebase.notifications().android.createChannel(channel);
-            const notification = new firebase.notifications.Notification({
-                sound: 'default',
-                show_in_foreground: true,
-            })
-                .setNotificationId('notificationId')
-                .setTitle('EatNGo')
-                .setData(message.data)
-                // .setBody(`Your order #${message.data.orderId} is ${getStatusString(message.data.type)}`)
-                .setBody(message.data.type === 'HAS_NEW_ORDER' ? 'You have new order' : `Your order #${message.data.orderId} is ${getStatusString(message.data.type)}`)
-                .android.setChannelId('test-channel')
-                .android.setSmallIcon('ic_launcher')
-                .android.setPriority(firebase.notifications.Android.Priority.High);
-
-            firebase.notifications()
-                .displayNotification(notification)
-                .catch(err => console.error(err));
-        });
-    }
 
     getUserAsync = async () => {
         try {
@@ -173,13 +121,12 @@ class WelcomeScreen extends Component {
         }
         if (user) {
             if (user.storesEmployedIn && user.storesEmployedIn.length) {
-                // const resetAction = StackActions.reset({
-                //     index: 0,
-                //     key: null,
-                //     actions: [NavigationActions.navigate({ routeName: 'EmployeeHome' })],
-                // });
-                // this.props.navigation.dispatch(resetAction);
-                this.props.navigation.navigate('Home', { ...this.state })
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    key: null,
+                    actions: [NavigationActions.navigate({ routeName: 'EmployeeHome' })],
+                });
+                this.props.navigation.dispatch(resetAction);
             } else {
                 const resetAction = StackActions.reset({
                     index: 0,
