@@ -6,6 +6,9 @@ import { authLogin } from '../../actions/index'
 import { connect } from 'react-redux';
 import { StackActions, NavigationActions } from 'react-navigation';
 import { AsyncStorage } from 'react-native';
+import firebase from 'react-native-firebase';
+import type { Notification, NotificationOpen } from 'react-native-firebase';
+import { getStatusString } from '../../utils/index'
 import {
     StyleSheet,
     View,
@@ -20,18 +23,104 @@ import AccountKit, {
     Color,
     StatusBarStyle,
 } from 'react-native-facebook-account-kit';
-import { RotationGestureHandler } from 'react-native-gesture-handler';
 class WelcomeScreen extends Component {
     state = {
         phoneNumber: null,
         facebookId: null,
+        deviceToken: null,
     };
+
+    componentWillUnmount() {
+        this.notificationListener();
+        this.notificationOpenedListener();
+    }
 
     componentWillMount() {
         this.configureAccountKit();
+
     }
-    componentDidMount() {
+
+    async componentDidMount() {
+
+        this.checkPermission()
+
+        this.createNotificationListeners()
         this.getUserAsync()
+        const fcmToken = await firebase.messaging().getToken();
+        console.log(fcmToken)
+        this.setState({
+            deviceToken: fcmToken
+        })
+    }
+
+    async requestPermission() {
+        try {
+            await firebase.messaging().requestPermission();
+            // User has authorised			
+        } catch (error) {
+            // User has rejected permissions
+            console.log('permission rejected');
+        }
+    }
+
+    async checkPermission() {
+        const enabled = await firebase.messaging().hasPermission();
+        if (enabled) {
+            console.log(enabled)
+        } else {
+            this.requestPermission();
+        }
+    }
+
+    async createNotificationListeners() {
+
+        this.notificationListener = firebase.notifications().onNotification((notification: Notification) => {
+            console.log(notification)
+
+        });
+
+        this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
+            const notification = notificationOpen.notification;
+            if (notification.data.type === 'HAS_NEW_ORDER') {
+                this.props.navigation.navigate("EmployeeOrderDetail", {
+                    id: notification.data.orderId,
+                });
+            }
+            else {
+                this.props.navigation.navigate("ActiveOrderDetail", {
+                    id: notification.data.orderId,
+                });
+            }
+        });
+
+
+        /*
+        * Triggered for data only payload in foreground
+        * */
+        this.messageListener = firebase.messaging().onMessage((message) => {
+            const channel = new firebase.notifications.Android.Channel(
+                'channelId',
+                'Channel Name',
+                firebase.notifications.Android.Importance.Max
+            ).setDescription('A natural description of the channel');
+            firebase.notifications().android.createChannel(channel);
+            const notification = new firebase.notifications.Notification({
+                sound: 'default',
+                show_in_foreground: true,
+            })
+                .setNotificationId('notificationId')
+                .setTitle('EatNGo')
+                .setData(message.data)
+                // .setBody(`Your order #${message.data.orderId} is ${getStatusString(message.data.type)}`)
+                .setBody(message.data.type === 'HAS_NEW_ORDER' ? 'You have new order' : `Your order #${message.data.orderId} is ${getStatusString(message.data.type)}`)
+                .android.setChannelId('test-channel')
+                .android.setSmallIcon('ic_launcher')
+                .android.setPriority(firebase.notifications.Android.Priority.High);
+
+            firebase.notifications()
+                .displayNotification(notification)
+                .catch(err => console.error(err));
+        });
     }
 
     getUserAsync = async () => {
@@ -39,7 +128,7 @@ class WelcomeScreen extends Component {
             const json = await AsyncStorage.getItem('user')
             if (json) {
                 const user = JSON.parse(json)
-                this.props.authLogin(user.phoneNumber, user.facebookId)
+                this.props.authLogin(user.phoneNumber, user.facebookId, this.state.deviceToken)
             }
         } catch (error) {
             console.log(error)
@@ -63,7 +152,7 @@ class WelcomeScreen extends Component {
             AccountKit.getCurrentAccount().then(account => {
                 const phoneNumber = this.getPhoneNumber(account.phoneNumber.number)
                 this.setState({ phoneNumber, facebookId: account.id })
-                this.props.authLogin(phoneNumber, account.id)
+                this.props.authLogin(phoneNumber, account.id, this.state.deviceToken)
                 // this.props.navigation.navigate('Register')
             });
         }
@@ -80,16 +169,17 @@ class WelcomeScreen extends Component {
     render() {
         const { loginError, user } = this.props
         if (loginError) {
-            this.props.navigation.navigate('Register', { phoneNumber: this.state.phoneNumber, facebookId: this.state.facebookId })
+            this.props.navigation.navigate('Register', { ...this.state })
         }
         if (user) {
             if (user.storesEmployedIn && user.storesEmployedIn.length) {
-                const resetAction = StackActions.reset({
-                    index: 0,
-                    key: null,
-                    actions: [NavigationActions.navigate({ routeName: 'EmployeeHome' })],
-                });
-                this.props.navigation.dispatch(resetAction);
+                // const resetAction = StackActions.reset({
+                //     index: 0,
+                //     key: null,
+                //     actions: [NavigationActions.navigate({ routeName: 'EmployeeHome' })],
+                // });
+                // this.props.navigation.dispatch(resetAction);
+                this.props.navigation.navigate('Home', { ...this.state })
             } else {
                 const resetAction = StackActions.reset({
                     index: 0,

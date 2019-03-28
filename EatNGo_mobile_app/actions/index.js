@@ -1,18 +1,20 @@
-export const authLogin = (phoneNumber, facebookId) => ({
+export const authLogin = (phoneNumber, facebookId, deviceToken) => ({
 	type: 'AUTH_LOGIN',
 	payload: {
 		phoneNumber,
-		facebookId
+		facebookId,
+		deviceToken
 	}
 });
 
-export const authRegister = (phoneNumber, email, name, facebookId) => ({
+export const authRegister = (phoneNumber, email, name, facebookId, deviceToken) => ({
 	type: 'AUTH_REGISTER',
 	payload: {
 		phoneNumber,
 		email,
 		name,
-		facebookId
+		facebookId,
+		deviceToken
 	}
 });
 export const authLogout = () => ({
