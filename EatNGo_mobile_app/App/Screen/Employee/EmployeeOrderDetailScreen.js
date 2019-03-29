@@ -147,7 +147,7 @@ class OrderDetailScreen extends Component {
                 <Text style={styles.statusText}> {mapOrderStatusToName[order.status]}</Text></Text>
 
               </View>
-              <View style={{
+              {/* <View style={{
                 flex: 1,
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -161,7 +161,7 @@ class OrderDetailScreen extends Component {
                 }} onPress={()=> {this.props.navigation.navigate('ScanQR')}}>
                   <Text style={styles.cameraText}>Scan QR</Text>
                 </TouchableOpacity>
-              </View>
+              </View> */}
 
             </View>
 
