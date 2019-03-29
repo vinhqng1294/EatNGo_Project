@@ -9,10 +9,12 @@ function* loginTask(action) {
       type: "AUTH_LOGIN_LOADING"
     });
     const { payload } = action;
+    console.log(payload)
     const res = yield call(
       Auth.doLogin,
       payload.phoneNumber,
-      payload.facebookId
+      payload.facebookId,
+      payload.deviceToken,
     );
 
     if (res.status === 200) {

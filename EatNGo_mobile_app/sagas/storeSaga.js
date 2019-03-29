@@ -11,16 +11,14 @@ function* storeTask(action) {
       type: "IS_LOADING_STORES",
     });
     const { payload } = action;
-    console.log(payload)
     const page = yield select(pageSelector)
     const pageSize = yield select(pageSizeSelector)
     let res;
     if (payload.id) {
-      res = yield call(API.getStore, payload.id, page, pageSize);
+      res = yield call(API.getStore, payload.id, page, pageSize, null, undefined, payload.currentLocation);
     } else {
-      res = yield call(API.getStore, payload.id, page, pageSize, payload.filterType);
+      res = yield call(API.getStore, payload.id, page, pageSize, null, payload.filterType, payload.currentLocation);
     }
-    console.log(res)
     if (res.status === 200) {
       yield put({
         type: 'FETCH_STORE_SUCCESS',

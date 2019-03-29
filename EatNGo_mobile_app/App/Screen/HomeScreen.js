@@ -11,20 +11,20 @@ import {
 } from '../../actions/index';
 import {
 	StyleSheet,
-	ScrollView,
 	View,
 	Text,
 	StatusBar,
 	TouchableOpacity,
-	Modal,
-	TouchableHighlight
+	PermissionsAndroid,
+	AsyncStorage
 } from 'react-native';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { SearchBar } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
-import CheckBox from 'react-native-check-box';
-
+import firebase from 'react-native-firebase';
+import type { Notification, NotificationOpen } from 'react-native-firebase';
+import { getStatusString } from '../../utils/index'
 class HomeScreen extends Component {
 	constructor(props) {
 		super(props);
@@ -43,6 +43,86 @@ class HomeScreen extends Component {
 		this.setState({
 			showFilterModal: false
 		});
+	}
+
+	componentWillUnmount() {
+		this.notificationListener();
+		this.notificationOpenedListener();
+	}
+
+	async createNotificationListeners() {
+
+		this.notificationListener = firebase.notifications().onNotification((notification: Notification) => {
+			console.log(notification)
+		});
+
+		this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
+			const notification = notificationOpen.notification;
+			if (notification.data.type === 'HAS_NEW_ORDER') {
+				this.props.navigation.navigate("EmployeeOrderDetail", {
+					id: notification.data.orderId,
+				});
+			}
+			else {
+				this.props.navigation.navigate("ActiveOrderDetail", {
+					id: notification.data.orderId,
+				});
+			}
+		});
+		this.messageListener = firebase.messaging().onMessage((message) => {
+			const channel = new firebase.notifications.Android.Channel(
+				'channelId',
+				'Channel Name',
+				firebase.notifications.Android.Importance.Max
+			).setDescription('A natural description of the channel');
+			firebase.notifications().android.createChannel(channel);
+			const notification = new firebase.notifications.Notification({
+				sound: 'default',
+				show_in_foreground: true,
+			})
+				.setNotificationId('notificationId')
+				.setTitle('EatNGo')
+				.setData(message.data)
+				// .setBody(`Your order #${message.data.orderId} is ${getStatusString(message.data.type)}`)
+				.setBody(message.data.type === 'HAS_NEW_ORDER' ? 'You have new order' : `Your order #${message.data.orderId} is ${getStatusString(message.data.type)}`)
+				.android.setChannelId('test-channel')
+				.android.setSmallIcon('ic_launcher')
+				.android.setPriority(firebase.notifications.Android.Priority.High);
+
+			firebase.notifications()
+				.displayNotification(notification)
+				.catch(err => console.error(err));
+		});
+	}
+
+
+
+	async requestLocationPermission() {
+		try {
+			return await PermissionsAndroid.request(
+				PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+				{
+					title: 'Eat&Go Location Permission',
+					message:
+						'Eat&Go needs access to your location to show you food shops near you.',
+					buttonNeutral: 'Ask Me Later',
+					buttonNegative: 'No',
+					buttonPositive: 'Grant Access'
+				}
+			);
+		} catch (err) {
+			return PermissionsAndroid.RESULTS.DENIED;
+		}
+	}
+	async checkLocationPermission() {
+		const hasPermission = await PermissionsAndroid.check(
+			PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+		);
+		if (!hasPermission) {
+			const granted = await this.requestLocationPermission();
+			return granted === PermissionsAndroid.RESULTS.GRANTED;
+		}
+		return true;
 	}
 
 	static navigationOptions = ({ navigation }) => {
@@ -107,15 +187,27 @@ class HomeScreen extends Component {
 		};
 	};
 
-	componentDidMount() {
+	async componentDidMount() {
+
 		const { storeList } = this.props;
-		if (!storeList || !storeList.length) {
-            const searchValue = this.props.navigation.getParam('searchValue');
-            const filterCuisine = this.props.navigation.getParam('filterCuisine');    
-			this.props.fetchStore(null, {
-                search: searchValue || '',
-                filterCuisine: filterCuisine || ''
-            });
+		this.createNotificationListeners()
+		const hasCurrentLocation = await this.checkLocationPermission();
+		let location;
+		if (hasCurrentLocation) {
+			navigator.geolocation.getCurrentPosition(async position => {
+				const { latitude, longitude } = { ...position.coords };
+				location = {
+					latitude,
+					longitude
+				};
+				await AsyncStorage.setItem('location', JSON.stringify(location));
+				this.loadStores(storeList, location);
+			}, async error => {
+				await AsyncStorage.removeItem('location');
+			});
+		} else {
+			this.loadStores(storeList);
+			await AsyncStorage.removeItem('location');
 		}
 
 		this.props.fetchCuisineTypes();
@@ -125,6 +217,21 @@ class HomeScreen extends Component {
 			handleSearch: this.handleSearch.bind(this),
 			openModal: this.openFilterModal.bind(this)
 		});
+	}
+
+	loadStores(storeList, location) {
+		if (!storeList || !storeList.length) {
+			const searchValue = this.props.navigation.getParam('searchValue');
+			const filterCuisine = this.props.navigation.getParam('filterCuisine');
+			this.props.fetchStore(
+				null,
+				{
+					search: searchValue || '',
+					filterCuisine: filterCuisine || ''
+				},
+				location
+			);
+		}
 	}
 
 	handleSearch(value = '', filterTypes) {
@@ -149,9 +256,9 @@ class HomeScreen extends Component {
 					isLoadingOrders={this.props.isLoadingOrders}
 					storeList={this.props.storeList}
 					fetchStore={this.props.fetchStore.bind(this, {
-                        search: searchValue,
+						search: searchValue,
 						filterCuisine
-                    })}
+					})}
 				/>
 				<View style={{ marginTop: 22 }}>
 					<Overlay
@@ -227,6 +334,7 @@ class HomeScreen extends Component {
 	}
 }
 const mapStateToProps = state => {
+	console.log(state)
 	return {
 		storeList: state.storeReducer.storeList,
 		isLoadingOrders: state.storeReducer.isLoadingOrders,

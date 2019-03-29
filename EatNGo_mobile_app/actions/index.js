@@ -1,18 +1,20 @@
-export const authLogin = (phoneNumber, facebookId) => ({
+export const authLogin = (phoneNumber, facebookId, deviceToken) => ({
 	type: 'AUTH_LOGIN',
 	payload: {
 		phoneNumber,
-		facebookId
+		facebookId,
+		deviceToken
 	}
 });
 
-export const authRegister = (phoneNumber, email, name, facebookId) => ({
+export const authRegister = (phoneNumber, email, name, facebookId, deviceToken) => ({
 	type: 'AUTH_REGISTER',
 	payload: {
 		phoneNumber,
 		email,
 		name,
-		facebookId
+		facebookId,
+		deviceToken
 	}
 });
 export const authLogout = () => ({
@@ -40,11 +42,12 @@ export const fetchCuisineTypes = () => ({
 	type: 'FETCH_CUISINE_TYPES'
 });
 
-export const fetchStore = (id = null, filterType) => ({
+export const fetchStore = (id = null, filterType, currentLocation) => ({
 	type: 'FETCH_STORE',
 	payload: {
 		id,
-		filterType
+		filterType,
+		currentLocation
 	}
 });
 
