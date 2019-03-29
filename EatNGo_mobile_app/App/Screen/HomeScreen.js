@@ -203,6 +203,7 @@ class HomeScreen extends Component {
 				await AsyncStorage.setItem('location', JSON.stringify(location));
 				this.loadStores(storeList, location);
 			}, async error => {
+				this.loadStores(storeList);
 				await AsyncStorage.removeItem('location');
 			});
 		} else {
