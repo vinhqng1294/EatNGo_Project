@@ -94,6 +94,7 @@ class StoreListScreen extends Component {
             if (notification.data.type === 'HAS_NEW_ORDER') {
                 this.props.navigation.navigate("EmployeeOrderDetail", {
                     id: notification.data.orderId,
+                    onGoBack: () => { }
                 });
             }
             else {
