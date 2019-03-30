@@ -26,6 +26,19 @@ buildscript {
 
 allprojects {
     repositories {
+        //start here
+        configurations.all {
+            resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            def requested = details.requested
+                if (requested.group == 'com.google.android.gms') {
+                    details.useVersion '12.0.1'
+                }
+                if (requested.group == 'com.google.firebase') {
+                details.useVersion '12.0.1'
+                }
+            }
+        }
+        //end
         mavenLocal()
         google()
         jcenter()
@@ -34,6 +47,7 @@ allprojects {
             url "$rootDir/../node_modules/react-native/android"
         }
         maven { url "https://jitpack.io" }
+        maven { url "https://maven.google.com" }
         maven {
           // Local Maven repo containing AARs with JSC library built for Android
          url "$rootDir/../node_modules/jsc-android/dist"

@@ -121,8 +121,7 @@ class OrderDetailScreen extends Component {
             <View style={styles.orderInfoContainer}>
               <View style={styles.statusWrapper}>
                 <Text style={styles.statusTitle}>Name:
-                <Text style={styles.nameText}> Vinh Nguyen</Text></Text>
-
+                <Text style={styles.nameText}> {order.member.name}</Text></Text>
               </View>
               <View style={styles.datatimeWrapper}>
                 {/* <Text style={styles.date}>{timestampToString(order.date)}</Text> */}
@@ -321,7 +320,10 @@ class OrderDetailScreen extends Component {
                               [
                                 {
                                   text: 'OK', onPress: () => {
-                                    this.props.navigation.state.params.onGoBack();
+                                    const onGoBack = this.props.navigation.getParam('onGoBack');
+                                    if (onGoBack) {
+                                      onGoBack();
+                                    }
                                     this.props.navigation.goBack()
                                   }
                                 },
@@ -365,7 +367,10 @@ class OrderDetailScreen extends Component {
                               [
                                 {
                                   text: 'OK', onPress: () => {
-                                    this.props.navigation.state.params.onGoBack();
+                                    const onGoBack = this.props.navigation.getParam('onGoBack');
+                                    if (onGoBack) {
+                                      onGoBack();
+                                    }
                                     this.props.navigation.goBack()
                                   }
                                 },

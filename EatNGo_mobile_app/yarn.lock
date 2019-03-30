@@ -5450,6 +5450,13 @@ react-native-camera-kit@^7.3.6:
   dependencies:
     lodash "^4.14.2"
 
+react-native-camera@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-camera/-/react-native-camera-2.1.1.tgz#437cc62613b386d648baabc4b77147ab33d84558"
+  integrity sha512-lcsV4Pt7Ex402Zof3EYaBhLxytU3wefyxpoSCvQyZ1LligdAmsYwyCZeODj1Otcjuxw3gH/skgr0rl/kRPOq8g==
+  dependencies:
+    prop-types "^15.6.2"
+
 react-native-check-box@^2.1.7:
   version "2.1.7"
   resolved "https://registry.yarnpkg.com/react-native-check-box/-/react-native-check-box-2.1.7.tgz#f349d3505a13c15d19949ec4cec40c7adc4f3626"

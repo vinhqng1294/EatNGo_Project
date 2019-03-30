@@ -2,27 +2,24 @@ import React, { Component } from 'react';
 import {
 	StyleSheet,
 	View,
-	TouchableOpacity,
-	FlatList,
-	ImageBackground,
 	Text,
-	ScrollView,
 	StatusBar,
 	Alert,
-	Image,
-	Dimensions,
-	TextInput
+	PermissionsAndroid,
+	TouchableOpacity
 } from 'react-native';
-import { CameraKitCameraScreen } from 'react-native-camera-kit';
 import { connect } from 'react-redux';
 import { fetchOrdersByStoreId } from '../../../actions/index';
 import { bindActionCreators } from 'redux';
+import { RNCamera } from 'react-native-camera';
+import getPermission from '../../../permissions';
 
 class ScanQRScreen extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			example: undefined
+			example: undefined,
+			isProcessingQR: false
 		};
 	}
 
@@ -61,53 +58,98 @@ class ScanQRScreen extends Component {
 	};
 
 	onBottomButtonPressed(event) {
-		const captureImages = JSON.stringify(event.captureImages);
-		Alert.alert(
-			`${event.type} button pressed`,
-			`${captureImages}`,
-			[{ text: 'OK', onPress: () => console.log('OK Pressed') }],
-			{ cancelable: false }
-		);
+		// const captureImages = JSON.stringify(event.captureImages);
+		// Alert.alert(
+		// 	`${event.type} button pressed`,
+		// 	`${captureImages}`,
+		// 	[{ text: 'OK', onPress: () => console.log('OK Pressed') }],
+		// 	{ cancelable: false }
+		// );
 	}
 
-	onReadQR(event) {
-		const json = event.nativeEvent.codeStringValue;
-		const data = JSON.parse(json);
-		if (data.key === 'Eat&Go_Order') {
-			this.props.navigation.navigate('EmployeeOrderDetail', {
-				id: data.orderId,
-				onGoBack: () => this.props.fetchOrdersByStoreId(data.storeId)
-			});
+	async onReadQR(barcodes) {
+		if (!this.isProcessingQR && barcodes.length) {
+			this.isProcessingQR = true;
+			const json = barcodes[0].data;
+			let readSuccessful = false;
+			try {
+				const data = JSON.parse(json);
+				if (data && data.key === 'Eat&Go_Order') {
+					readSuccessful = true;
+					this.props.navigation.navigate('EmployeeOrderDetail', {
+						id: data.orderId
+					});
+				}
+			} catch (e) {}
+			if (!readSuccessful) {
+				const startProcessingQR = () => {
+					setTimeout(() => {
+						this.isProcessingQR = false;
+					}, 1000);
+				};
+				Alert.alert(
+					'Invalid Eat&Go QR Code',
+					'Please make sure to scan a valid order QR code.',
+					[
+						{
+							text: 'OK',
+							onPress: startProcessingQR
+						}
+					],
+					{
+						onDismiss: startProcessingQR
+					}
+				);
+			}
 		}
 	}
 
 	render() {
-		if (this.state.example) {
-			const CameraScreen = this.state.example;
-			return <CameraScreen />;
-		}
 		return (
 			<View style={{ flex: 1 }}>
 				<StatusBar backgroundColor="#54b33d" barStyle="light-content" />
-				<CameraKitCameraScreen
-					actions={{ rightButtonText: 'Done', leftButtonText: 'Cancel' }}
-					onBottomButtonPressed={event => this.onBottomButtonPressed(event)}
-					scanBarcode={true}
-					laserColor={'blue'}
-					frameColor={'yellow'}
-					onReadQRCode={e => this.onReadQR(e)} //optional
-					hideControls={false} //(default false) optional, hide buttons and additional controls on top and bottom of screen
-					showFrame={true} //(default false) optional, show frame with transparent layer (qr code or barcode will be read on this area ONLY), start animation for scanner,that stoped when find any code. Frame always at center of the screen
-					offsetForScannerFrame={10} //(default 30) optional, offset from left and right side of the screen
-					heightForScannerFrame={300} //(default 200) optional, change height of the scanner frame
-					colorForScannerFrame={'red'} //(default white) optional, change colot of the scanner frame
+				<RNCamera
+					ref={ref => {
+						this.camera = ref;
+					}}
+					style={styles.preview}
+					captureAudio={false}
+					type={RNCamera.Constants.Type.back}
+					flashMode={RNCamera.Constants.FlashMode.on}
+					permissionDialogTitle={'Permission to use camera'}
+					permissionDialogMessage={
+						'Eat&Go needs access to your camera to scan QR code'
+					}
+					onGoogleVisionBarcodesDetected={({ barcodes }) =>
+						this.onReadQR(barcodes)
+					}
 				/>
 			</View>
 		);
 	}
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		flexDirection: 'column',
+		backgroundColor: 'black'
+	},
+	preview: {
+		flex: 1,
+		justifyContent: 'flex-end',
+		alignItems: 'center'
+	},
+	capture: {
+		flex: 0,
+		backgroundColor: '#fff',
+		borderRadius: 5,
+		padding: 15,
+		paddingHorizontal: 20,
+		alignSelf: 'center',
+		margin: 20
+	}
+});
 
 const mapDispatchToProps = dispatch => {
 	return bindActionCreators(
