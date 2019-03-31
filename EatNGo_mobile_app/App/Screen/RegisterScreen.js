@@ -60,9 +60,9 @@ class RegisterScreen extends Component {
       console.log(error);
     }
   };
-  
-  handleSignUp(phoneNumber, email, name, facebookId) {
-    this.props.authRegister(phoneNumber, email, name, facebookId);
+
+  handleSignUp(phoneNumber, email, name, facebookId, deviceToken) {
+    this.props.authRegister(phoneNumber, email, name, facebookId, deviceToken);
 
     // const { name, email } = this.state;
   }
@@ -75,6 +75,7 @@ class RegisterScreen extends Component {
   render() {
     const phoneNumber = this.props.navigation.getParam("phoneNumber", null);
     const facebookId = this.props.navigation.getParam("facebookId", null);
+    const deviceToken = this.props.navigation.getParam("deviceToken", null);
     const { user } = this.props;
     if (user) {
       const resetAction = StackActions.reset({
@@ -118,7 +119,8 @@ class RegisterScreen extends Component {
                 phoneNumber,
                 this.state.email,
                 this.state.name,
-                facebookId
+                facebookId,
+                deviceToken
               );
             }
           }}

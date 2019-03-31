@@ -1,10 +1,11 @@
 import request from './request';
 import { LOGIN_URL, REGISTER_URL, MEMBER_URL } from './api_constants';
 
-function doLogin(phoneNumber, facebookId) {
+function doLogin(phoneNumber, facebookId, deviceToken) {
   const data = {
     phoneNumber,
     facebookId,
+    deviceToken
   };
   return request({ url: LOGIN_URL, method: 'POST', data });
 }

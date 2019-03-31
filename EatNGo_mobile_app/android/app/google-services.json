@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "449555065359",
+    "firebase_url": "https://eatngo-a7c8f.firebaseio.com",
+    "project_id": "eatngo-a7c8f",
+    "storage_bucket": "eatngo-a7c8f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:449555065359:android:2fc15cb42f81adcd",
+        "android_client_info": {
+          "package_name": "com.eatngo_mobile_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "449555065359-omthnfoiv3ubo2vjp7mvoe1d2655v9ke.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlRd47ZLEKI49tCSMEyjo7x2NVj2t_7A4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
