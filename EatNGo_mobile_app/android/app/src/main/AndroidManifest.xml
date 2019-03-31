@@ -2,8 +2,18 @@
   package="com.eatngo_mobile_app">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <permission android:name="com.shop.shoppinglist.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature"/>
+    <uses-permission android:name="com.shop.addtask.permission.MAPS_RECEIVE"/>
+    <uses-permission
+        android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"
@@ -13,16 +23,27 @@
       android:theme="@style/AppTheme">
       <activity
         android:name=".MainActivity"
+        android:launchMode="singleTop"
         android:label="@string/app_name"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
         android:windowSoftInputMode="adjustResize">
         <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            <action android:name="android.intent.action.MAIN" />             
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
-      
+  <service android:name="io.invertase.firebase.messaging.RNFirebaseMessagingService">
+    <intent-filter>
+      <action android:name="com.google.firebase.MESSAGING_EVENT" />
+    </intent-filter>
+  </service>
+  <service android:name="io.invertase.firebase.messaging.RNFirebaseInstanceIdService">
+    <intent-filter>
+      <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+    </intent-filter>
+  </service>
+  <service android:name="io.invertase.firebase.messaging.RNFirebaseBackgroundMessagingService" />
       <meta-data
           android:name="com.facebook.sdk.ApplicationId"
           android:value="@string/app_id" />
@@ -32,6 +53,10 @@
       <meta-data
           android:name="com.facebook.accountkit.ClientToken"
           android:value="@string/client_token" />
+            <service android:name="io.invertase.firebase.messaging.RNFirebaseBackgroundMessagingService" />
+    <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="@string/geo_api_key"/>
     </application>
 
 </manifest>

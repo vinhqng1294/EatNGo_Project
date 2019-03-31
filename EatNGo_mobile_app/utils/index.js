@@ -14,7 +14,18 @@ function validateEmail(email) {
   var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 }
+const getStatusString = (status) => {
+  switch (status) {
+      case "ORDER_COMPLETED":
+          return 'completed';
+      case "ORDER_REJECTED":
+          return 'rejected';
+      default:
+          return '';
+  }
+}
 export {
   changeAlias,
-  validateEmail
+  validateEmail,
+  getStatusString
 }

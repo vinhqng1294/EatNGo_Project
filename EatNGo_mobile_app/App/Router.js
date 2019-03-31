@@ -11,13 +11,20 @@ import MenuScreen from './Screen/MenuScreen';
 import FoodDetailScreen from './Screen/FoodDetailScreen';
 import OrderDetailScreen from './Screen/OrderDetailScreen';
 import ActiveOrderDetailScreen from './Screen/ActiveOrderDetailScreen';
+import StoreListScreen from './Screen/Employee/StoreListScreen';
+import OrderListScreen from './Screen/Employee/OrderListScreen';
+import EmployeeOrderDetailScreen from './Screen/Employee/EmployeeOrderDetailScreen';
+import AddCardScreen from './Screen/AddCardScreen';
+import EditProfileScreen from './Screen/EditProfileScreen';
+import RatingScreen from './Screen/RatingScreen';
+import ScanQRScreen from './Screen/Employee/ScanQRScreen';
 
 
 const HomeStack = createStackNavigator(
     {
         "Restaurants": { screen: HomeScreen },
-        // "Menu": { screen: MenuScreen },
-        // "FoodDetail": { screen: FoodDetailScreen },
+        "Menu": { screen: MenuScreen },
+        "FoodDetail": { screen: FoodDetailScreen },
     },
     {
         initialRouteName: 'Restaurants',
@@ -35,9 +42,26 @@ const ActiveOrderStack = createStackNavigator(
     }
 );
 
-const ProfileStack = createStackNavigator({
-    "Profile": { screen: ProfileScreen },
-});
+const ProfileStack = createStackNavigator(
+    {
+        "Profile": { screen: ProfileScreen },
+    },
+    {
+        initialRouteName: 'Profile'
+    }
+);
+const StoreStack = createStackNavigator(
+    {
+        "StoreList": { screen: StoreListScreen },
+        "ScanQR": { screen: ScanQRScreen },
+    },
+    {
+        initialRouteKey: 'StoreList'
+    }
+);
+
+
+
 
 const TabNavigator = createBottomTabNavigator(
     {
@@ -73,20 +97,66 @@ const TabNavigator = createBottomTabNavigator(
                 // You can return any component that you like here!
                 return <IconComponent name={iconName} size={20} color={tintColor} solid />;
             },
-
         }),
+        initialRouteName: "Restaurants",
     }
 );
+
+const EmployeeTabNavigator = createBottomTabNavigator(
+    {
+        "Stores": StoreStack,
+        "Profile": ProfileStack,
+    },
+    {
+        tabBarOptions: {
+            activeTintColor: '#54b33d',
+            inactiveTintColor: 'gray',
+            labelStyle: {
+                fontSize: 13,
+                fontFamily: 'Quicksand-Medium',
+            },
+        },
+        defaultNavigationOptions: ({ navigation }) => ({
+            tabBarIcon: ({ tintColor }) => {
+                const { routeName } = navigation.state;
+                let IconComponent = FontAwesome5;
+                let iconName;
+                if (routeName === 'Stores') {
+                    iconName = 'store';
+                } else if (routeName === 'Profile') {
+                    iconName = `user`;
+                } else if (routeName === 'Active Orders') {
+                    iconName = `dolly`;
+                    // Sometimes we want to add badges to some icons. 
+                    // You can check the implementation below.
+                    // IconComponent = HomeIconWithBadge; 
+                }
+
+                // You can return any component that you like here!
+                return <IconComponent name={iconName} size={20} color={tintColor} solid />;
+            },
+        }),
+        initialRouteName: "Stores",
+    }
+);
+
+
+
 
 const AppNavigator = createStackNavigator(
     {
         "Welcome": { screen: WelcomeScreen, navigationOptions: { header: null } },
+        "EmployeeHome": { screen: EmployeeTabNavigator, navigationOptions: { header: null, } },
         "Register": { screen: RegisterScreen },
+        'EmployeeOrderList': { screen: OrderListScreen },
         "Home": { screen: TabNavigator, navigationOptions: { header: null, } },
-        "Menu": { screen: MenuScreen },
-        "FoodDetail": { screen: FoodDetailScreen },
+        // "Menu": { screen: MenuScreen },
+        // "FoodDetail": { screen: FoodDetailScreen },
         "OrderDetail": { screen: OrderDetailScreen },
-        "ActiveOrderDetail": { screen: ActiveOrderDetailScreen }
+        "ActiveOrderDetail": { screen: ActiveOrderDetailScreen },
+        "EmployeeOrderDetail": { screen: EmployeeOrderDetailScreen },
+        "EditProfile": { screen: EditProfileScreen },
+        "Rating": { screen: RatingScreen },
     },
     {
         initialRouteName: 'Welcome',

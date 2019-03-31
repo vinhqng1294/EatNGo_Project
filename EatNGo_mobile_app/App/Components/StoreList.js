@@ -22,8 +22,13 @@ class StoreList extends Component {
   renderStoreSection = () => (
     <FlatList
       data={this.props.storeList}
-      showsHorizontalScrollIndicator={false}
-      bounces={false}
+      onEndReached={this.props.onEndReached}
+      onEndReachedThreshold={0.1}
+      refreshing={this.props.isLoadingOrders}
+      onRefresh={() => {
+        this.props.fetchStore();
+      }}
+      showsHorizontalScrollIndicator={true}
       renderItem={this.renderStoreList}
       keyExtractor={item => item.id}
     />

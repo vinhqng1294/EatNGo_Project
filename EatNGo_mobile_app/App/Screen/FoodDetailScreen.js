@@ -18,7 +18,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import CheckBox from 'react-native-check-box';
 // import { CheckBox } from 'react-native-elements'
 import NumericInput from 'react-native-numeric-input';
-import { fetchFoodInfo, updateFoodQuantity, updateCartItems, updateFoodOption } from '../../actions/index'
+import { fetchFoodInfo, updateFoodQuantity, updateCartItems, updateFoodOption, updateFoodSpecialRequest } from '../../actions/index'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -26,7 +26,9 @@ import { connect } from 'react-redux';
 class FoodDetailScreen extends Component {
 
     state = {
-        checked: []
+        checked: [],
+        isUpdating: false,
+        updateItemQuantity: null
     }
     constructor() {
         super();
@@ -122,8 +124,17 @@ class FoodDetailScreen extends Component {
 
     componentDidMount() {
         const { navigation } = this.props;
-        const foodId = navigation.getParam('id', null);
-        this.props.fetchFoodInfo(foodId);
+        const isUpdating = navigation.getParam('isUpdating', false);
+        let foodId
+        if (isUpdating) {
+            const item = navigation.getParam('item', null);
+            foodId = item.id
+            this.setState({ isUpdating, updateItemQuantity: item.quantity })
+            this.props.fetchFoodInfo(foodId, item.quantity);
+        } else {
+            foodId = navigation.getParam('id', null);
+            this.props.fetchFoodInfo(foodId);
+        }
     }
     render() {
 
@@ -142,8 +153,10 @@ class FoodDetailScreen extends Component {
                     icon={<FontAwesome5 name={'plus'} size={20} color={'#EBEBEB'} solid />}
                 /> */}
 
-                        <Image style={styles.foodImg}
-                            source={{ uri: food.images[0].image }} />
+                        <Image style={food.images.length ? styles.foodImg : styles.foodNoImg}
+                            source={food.images.length ? { uri: food.images[0].image } : require('../../Assets/resDefault_0.png')} />
+                        {/* <Image style={styles.foodImg}
+                            source={{ uri: food.images[0].image }} /> */}
                         <View style={styles.miniHeader}>
                             <Text numberOfLines={2} style={styles.foodName}>{food.name}</Text>
                             <Text numberOfLines={1} style={styles.foodPrice}>$ {food.price}</Text>
@@ -188,7 +201,7 @@ class FoodDetailScreen extends Component {
                                     style={styles.specialRequestInputText}
                                     multiline={true}
                                     placeholder="eg. extra limes, extra chilis, etc."
-                                    onChangeText={() => { }} />
+                                    onChangeText={(text) => { this.props.updateFoodSpecialRequest(text) }} />
                             </View>
                         </View>
 
@@ -210,18 +223,19 @@ class FoodDetailScreen extends Component {
                                 textColor='black'
                                 iconStyle={{ color: '#EBEBEB' }}
                                 rightButtonBackgroundColor='#54b33d'
-                                leftButtonBackgroundColor='#54b33d' />
+                                leftButtonBackgroundColor='#54b33d'
+                                editable={false} />
                         </View>
 
                     </ScrollView>
                     <TouchableOpacity style={styles.addFoodBtn}
-                        onPress={() => {
-                            this.props.updateCartItems(food)
+                        onPress={() => {                            
+                            this.props.updateCartItems(food, this.state.isUpdating)
                             this.props.navigation.state.params.onGoBack();
                             this.props.navigation.goBack()
                         }}>
                         <FontAwesome5 name={'cart-plus'} size={16} color={'white'} solid />
-                        <Text style={styles.txtAdd}>Add</Text>
+                        <Text style={styles.txtAdd}>{!this.state.isUpdating ? 'Add' : 'Update'}</Text>
                     </TouchableOpacity>
                 </View>
             );
@@ -238,11 +252,19 @@ const styles = StyleSheet.create({
     },
     foodImg: {
         flex: 0,
-        backgroundColor: 'rgba(0, 0, 0, .6)',
+        backgroundColor: '#EBEBEB',
         height: 150,
         width: null,
         margin: null,
-        // resizeMode: 'contain',
+        resizeMode: 'cover',
+    },
+    foodNoImg: {
+        flex: 0,
+        backgroundColor: '#EBEBEB',
+        height: 150,
+        width: null,
+        margin: null,
+        resizeMode: 'contain',
     },
     miniHeader: {
         flex: 0,
@@ -479,7 +501,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-    console.log(state)
     return {
         food: state.foodReducer.foodInfo,
         cart: state.cartReducer.cart
@@ -490,7 +511,8 @@ const mapDispatchToProps = (dispatch) => {
         fetchFoodInfo,
         updateFoodQuantity,
         updateCartItems,
-        updateFoodOption
+        updateFoodOption,
+        updateFoodSpecialRequest
     }, dispatch);
 }
 export default connect(mapStateToProps, mapDispatchToProps)(FoodDetailScreen);

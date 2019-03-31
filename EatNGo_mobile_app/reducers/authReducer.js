@@ -1,9 +1,11 @@
+import { AsyncStorage } from "react-native";
 const initialState = {
   loginError: null,
   loginLoading: false,
   user: null,
   registerLoading: false,
   registerError: null,
+  isLoadingStores: false,
   registerMessage: null
 };
 
@@ -12,20 +14,16 @@ export default (state = initialState, { type, payload }) => {
     case "AUTH_LOGIN_LOADING":
       return {
         ...state,
-        loginLoading: true
-      };
-    case "AUTH_HYDRATE_TOKEN":
-      return {
-        ...state,
-        loginLoading: false,
-        loginError: null,
-        user: payload
+        loginLoading: true,
+        isLoadingStores: true,
       };
     case "AUTH_LOGIN_SUCCESS":
+      AsyncStorage.setItem("user", JSON.stringify(payload));
       return {
         ...state,
         loginLoading: false,
         loginError: null,
+        isLoadingStores: false,
         user: payload
       };
     case "AUTH_LOGIN_ERROR":
@@ -41,8 +39,10 @@ export default (state = initialState, { type, payload }) => {
         registerLoading: true
       };
     case "AUTH_REGISTER_SUCCESS":
+      AsyncStorage.setItem("user", JSON.stringify(payload));
       return {
         ...state,
+        loginError: null,
         registerLoading: false,
         registerError: null,
         user: payload
@@ -56,11 +56,27 @@ export default (state = initialState, { type, payload }) => {
       };
     case "AUTH_LOGOUT_RESET":
       return initialState;
+    case "ADD_CARD_SUCCESS":
+      return {
+        ...state,
+        user: { ...state.user, card: payload }
+      };
     case "AUTH_LOGOUT_SUCCESS":
+      AsyncStorage.removeItem("user");
       return {
         ...state,
         user: null
-      }
+      };
+    case "UPDATE_PROFIE_SUCCESS":
+      return {
+        ...state,
+        user: { ...state.user, email: payload.email, name: payload.name }
+      };
+    case "UPLOAD_AVATAR_SUCCESS":
+      return {
+        ...state,
+        user: { ...state.user, avatar: payload.avatar }
+      };
     default:
       return state;
   }

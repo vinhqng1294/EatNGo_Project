@@ -5,6 +5,10 @@ import { bindActionCreators } from 'redux';
 import { authLogin } from '../../actions/index'
 import { connect } from 'react-redux';
 import { StackActions, NavigationActions } from 'react-navigation';
+import { AsyncStorage } from 'react-native';
+import firebase from 'react-native-firebase';
+import type { Notification, NotificationOpen } from 'react-native-firebase';
+
 import {
     StyleSheet,
     View,
@@ -19,19 +23,65 @@ import AccountKit, {
     Color,
     StatusBarStyle,
 } from 'react-native-facebook-account-kit';
-import { RotationGestureHandler } from 'react-native-gesture-handler';
 class WelcomeScreen extends Component {
     state = {
         phoneNumber: null,
         facebookId: null,
+        deviceToken: null,
     };
+
+    // componentWillUnmount() {
+    //     this.notificationListener();
+    //     this.notificationOpenedListener();
+    // }
 
     componentWillMount() {
         this.configureAccountKit();
-    }
-    // componentDidMount() {
 
-    // }
+    }
+
+    async componentDidMount() {
+
+        this.checkPermission()
+        this.getUserAsync()
+        const fcmToken = await firebase.messaging().getToken();
+        console.log(fcmToken)
+        this.setState({
+            deviceToken: fcmToken
+        })
+    }
+
+    async requestPermission() {
+        try {
+            await firebase.messaging().requestPermission();
+            // User has authorised			
+        } catch (error) {
+            // User has rejected permissions
+            console.log('permission rejected');
+        }
+    }
+
+    async checkPermission() {
+        const enabled = await firebase.messaging().hasPermission();
+        if (enabled) {
+            console.log(enabled)
+        } else {
+            this.requestPermission();
+        }
+    }
+
+
+    getUserAsync = async () => {
+        try {
+            const json = await AsyncStorage.getItem('user')
+            if (json) {
+                const user = JSON.parse(json)
+                this.props.authLogin(user.phoneNumber, user.facebookId, this.state.deviceToken)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
     configureAccountKit() {
         AccountKit.configure({
             theme: {
@@ -39,31 +89,18 @@ class WelcomeScreen extends Component {
             defaultCountry: "VN",
             initialEmail: "example.com",
             initialPhoneCountryPrefix: "+84",
+            receiveSMS: false
         });
     }
-    // handlePhoneLoginButton = async () => {
-    //     try {
-    //         const payload = await RNAccountKit.loginWithPhone()
-    //         if (!payload) {
-    //             console.warn('Login cancelled', payload)
-    //         } else {
-    //             console.log(payload)
-    //             this.props.navigation.navigate('Register')
-    //         }
-    //     } catch (error) {
-    //         console.warn('Error', error.message)
-    //     }
-    // }
     onLogin(token) {
         if (!token) {
             console.warn("User canceled login");
             this.setState({});
         } else {
             AccountKit.getCurrentAccount().then(account => {
-                console.log(account)
                 const phoneNumber = this.getPhoneNumber(account.phoneNumber.number)
                 this.setState({ phoneNumber, facebookId: account.id })
-                this.props.authLogin(phoneNumber, account.id)
+                this.props.authLogin(phoneNumber, account.id, this.state.deviceToken)
                 // this.props.navigation.navigate('Register')
             });
         }
@@ -80,15 +117,24 @@ class WelcomeScreen extends Component {
     render() {
         const { loginError, user } = this.props
         if (loginError) {
-            this.props.navigation.navigate('Register', { phoneNumber: this.state.phoneNumber, facebookId: this.state.facebookId })
+            this.props.navigation.navigate('Register', { ...this.state })
         }
         if (user) {
-            const resetAction = StackActions.reset({
-                index: 0,
-                key: null,
-                actions: [NavigationActions.navigate({ routeName: 'Home' })],
-            });
-            this.props.navigation.dispatch(resetAction);
+            if (user.storesEmployedIn && user.storesEmployedIn.length) {
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    key: null,
+                    actions: [NavigationActions.navigate({ routeName: 'EmployeeHome' })],
+                });
+                this.props.navigation.dispatch(resetAction);
+            } else {
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    key: null,
+                    actions: [NavigationActions.navigate({ routeName: 'Home' })],
+                });
+                this.props.navigation.dispatch(resetAction);
+            }
         }
         return (
             <View style={styles.container}>

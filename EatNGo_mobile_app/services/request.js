@@ -25,7 +25,6 @@ const request = (options) => {
     }
     return Promise.reject(error.response || error.message);
   };
-
   return client(options)
     .then(onSuccess)
     .catch(onError);
