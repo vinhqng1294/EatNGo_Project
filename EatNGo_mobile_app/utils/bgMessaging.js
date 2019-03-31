@@ -33,6 +33,6 @@ const getStatusString = (status) => {
         case "ORDER_REJECTED":
             return 'rejected';
         default:
-            return '';
+            return 'cancelled';
     }
 }
