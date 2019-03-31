@@ -20,6 +20,7 @@ import { Badge, Button, Divider, Overlay } from 'react-native-elements';
 import { deleteCartItem, fetchCartItems, createOrder, removeCreatedOrder, addCard, cleanCart, updatePromotion } from '../../actions/index'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { StackActions, NavigationActions } from 'react-navigation';
 import stripe from 'tipsi-stripe';
 
 class OrderDetailScreen extends Component {
@@ -155,7 +156,11 @@ class OrderDetailScreen extends Component {
 
                             this.props.removeCreatedOrder()
                             this.props.cleanCart()
-                            this.props.navigation.navigate('Active Orders', { isRefreshing: true })
+                            const resetAction = StackActions.reset({
+                                index: 0,
+                                actions: [NavigationActions.navigate({ routeName: 'Active-Order' })],
+                              });
+                              this.props.navigation.dispatch(resetAction);
                         }
                     },
                 ],

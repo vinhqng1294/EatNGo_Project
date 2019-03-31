@@ -33,6 +33,8 @@ const HomeStack = createStackNavigator(
     }
 );
 
+
+
 const ActiveOrderStack = createStackNavigator(
     {
         "Active Orders": { screen: ActiveOrderScreen },
@@ -102,6 +104,46 @@ const TabNavigator = createBottomTabNavigator(
     }
 );
 
+
+const SecondTabNavigator = createBottomTabNavigator(
+    {
+        "Restaurants": HomeStack,
+        "Active Orders": ActiveOrderStack,
+        "Profile": ProfileStack,
+    },
+    {
+        tabBarOptions: {
+            activeTintColor: '#54b33d',
+            inactiveTintColor: 'gray',
+            labelStyle: {
+                fontSize: 13,
+                fontFamily: 'Quicksand-Medium',
+            },
+        },
+        defaultNavigationOptions: ({ navigation }) => ({
+            tabBarIcon: ({ tintColor }) => {
+                const { routeName } = navigation.state;
+                let IconComponent = FontAwesome5;
+                let iconName;
+                if (routeName === 'Restaurants') {
+                    iconName = 'store';
+                } else if (routeName === 'Profile') {
+                    iconName = `user`;
+                } else if (routeName === 'Active Orders') {
+                    iconName = `dolly`;
+                    // Sometimes we want to add badges to some icons. 
+                    // You can check the implementation below.
+                    // IconComponent = HomeIconWithBadge; 
+                }
+
+                // You can return any component that you like here!
+                return <IconComponent name={iconName} size={20} color={tintColor} solid />;
+            },
+        }),
+        initialRouteName: "Active Orders",
+    }
+);
+
 const EmployeeTabNavigator = createBottomTabNavigator(
     {
         "Stores": StoreStack,
@@ -150,6 +192,7 @@ const AppNavigator = createStackNavigator(
         "Register": { screen: RegisterScreen },
         'EmployeeOrderList': { screen: OrderListScreen },
         "Home": { screen: TabNavigator, navigationOptions: { header: null, } },
+        "Active-Order": { screen: SecondTabNavigator, navigationOptions: { header: null, } },
         // "Menu": { screen: MenuScreen },
         // "FoodDetail": { screen: FoodDetailScreen },
         "OrderDetail": { screen: OrderDetailScreen },
