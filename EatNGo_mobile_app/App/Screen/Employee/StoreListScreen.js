@@ -32,12 +32,30 @@ class StoreListScreen extends Component {
         return {
             headerTintColor: '#54b33d',
             headerStyle: { backgroundColor: 'white' },
-            headerRight: <View></View>,
-            headerLeft: <View></View>,
+            headerRight: <View style={{
+                justifyContent: "center",
+                alignItems: "center",
+                paddingRight: 10,
+            }}>
+                <TouchableOpacity style={{
+                    padding: 3,
+                    backgroundColor: '#54b33d',
+                    borderRadius: 999,
+                    paddingRight: 10,
+                    paddingLeft: 10,
+                }} onPress={() => { navigation.navigate('ScanQR') }}>
+                    <Text style={{
+                        fontFamily: 'Quicksand-Bold',
+                        fontSize: 15,
+                        color: 'white',
+                    }}>Scan QR</Text>
+                </TouchableOpacity>
+            </View>,
+            headerLeft: null,
             headerTitle:
                 <View style={{
                     justifyContent: 'center',
-                    alignItems: 'stretch',
+                    alignItems: 'center',
                     flex: 1,
                 }}>
                     <Text numberOfLines={1} style={{
