@@ -10,7 +10,8 @@ import {
   StatusBar,
   Alert,
   Image,
-  Dimensions
+  Dimensions,
+  TextInput,
 } from "react-native";
 
 import CheckBox from "react-native-check-box";
@@ -116,16 +117,51 @@ class OrderDetailScreen extends Component {
           <StatusBar backgroundColor="#54b33d" barStyle="light-content" />
           <ScrollView style={styles.container}>
 
+            {/* NEWWWW - 27-03-2019 */}
             <View style={styles.orderInfoContainer}>
+              <View style={styles.statusWrapper}>
+                <Text style={styles.statusTitle}>Name:
+                <Text style={styles.nameText}> {order.member.name}</Text></Text>
+              </View>
+              <View style={styles.datatimeWrapper}>
+                {/* <Text style={styles.date}>{timestampToString(order.date)}</Text> */}
+                <Text style={styles.phoneText}>
+                  <FontAwesome5
+                    style={styles.icons}
+                    name={'mobile-alt'}
+                    size={15}
+                    color={'#54b33d'}
+                    solid
+                  /> 0906123456</Text>
+              </View>
+            </View>
+
+            <View style={styles.orderInfoContainer}>
+              <View style={styles.datatimeWrapper}>
+                <Text style={styles.date}>{timestampToString(order.date)}</Text>
+                <Text style={styles.time}>{timestampToTime(order.date)}</Text>
+              </View>
               <View style={styles.statusWrapper}>
                 <Text style={styles.statusTitle}>Status:
                 <Text style={styles.statusText}> {mapOrderStatusToName[order.status]}</Text></Text>
 
               </View>
-              <View style={styles.datatimeWrapper}>
-                <Text style={styles.date}>{timestampToString(order.date)}</Text>
-                <Text style={styles.time}>{timestampToTime(order.date)}</Text>
-              </View>
+              {/* <View style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+                <TouchableOpacity style={{
+                  padding: 3,
+                  backgroundColor: '#54b33d',
+                  borderRadius: 999,
+                  paddingRight: 10,
+                  paddingLeft: 10,
+                }} onPress={()=> {this.props.navigation.navigate('ScanQR')}}>
+                  <Text style={styles.cameraText}>Scan QR</Text>
+                </TouchableOpacity>
+              </View> */}
+
             </View>
 
             <View style={styles.orderItemsContainer}>
@@ -251,105 +287,121 @@ class OrderDetailScreen extends Component {
                 <Text numberOfLines={1} style={styles.total}>$ {totalPriceAfterDiscount}</Text>
               </View>
             </View>
-          </ScrollView>
-          {order.status === ORDER_STATUS.PAID ?
-            <View>
-              <TouchableOpacity
-                style={styles.checkoutBtn}
-                onPress={() => {
-                  Alert.alert(
-                    'Complete Order',
-                    'Are you sure to complete this order?',
-                    [
-                      {
-                        text: 'No',
-                        onPress: () => console.log('Cancel Pressed'),
-                        style: 'cancel',
-                      },
-                      {
-                        text: 'Yes', onPress: () => {
-                          this.props.updateOrder(order.id, ORDER_STATUS.COMPLETED)
-                          Alert.alert(
-                            'Complete Order',
-                            'Complete Order Successfully',
-                            [
-                              {
-                                text: 'OK', onPress: () => {
-                                  this.props.navigation.state.params.onGoBack();
-                                  this.props.navigation.goBack()
-                                }
-                              },
-                            ],
-                            { cancelable: false }
-                          );
-                        }
-                      },
-                    ],
-                    { cancelable: true }
-                  );
-                }}>
-                <View style={styles.iconWrapper}>
-                  <FontAwesome5
-                    style={styles.icons}
-                    name={'cash-register'}
-                    size={23}
-                    color={'white'}
-                    solid
-                  />
-                </View>
-                <Text numberOfLines={1} style={styles.buttonTitle}>Complete</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.cancelBtn}
-                onPress={() => {
-                  Alert.alert(
-                    'Reject Order',
-                    'Are you sure to reject this order?',
-                    [
-                      {
-                        text: 'No',
-                        onPress: () => console.log('Cancel Pressed'),
-                        style: 'cancel',
-                      },
-                      {
-                        text: 'Yes', onPress: () => {
-                          this.props.updateOrder(order.id, ORDER_STATUS.REJECTED)
-                          Alert.alert(
-                            'Reject Order',
-                            'Reject Order Successfully',
-                            [
-                              {
-                                text: 'OK', onPress: () => {
-                                  this.props.navigation.state.params.onGoBack();
-                                  this.props.navigation.goBack()
-                                }
-                              },
-                            ],
-                            { cancelable: false }
-                          );
-                        }
-                      },
-                    ],
-                    { cancelable: true }
-                  );
-                }}>
-                <View style={styles.iconWrapper}>
-                  <FontAwesome5
-                    style={styles.icons}
-                    name={'times'}
-                    size={23}
-                    color={'white'}
-                    solid
-                  />
-                </View>
-                <Text numberOfLines={1} style={styles.buttonTitle}>Reject</Text>
-              </TouchableOpacity>
 
-
+            <Divider style={styles.divider} />
+            {/* NEWWWW - 27-03-2019 */}
+            <View style={styles.commentContainer}>
+              <Text numberOfLines={1} style={styles.priceInfoTxt}>Comment</Text>
+              <TextInput multiline={true} style={styles.comment}></TextInput>
             </View>
-            : null}
+
+          </ScrollView>
+          {
+            order.status === ORDER_STATUS.PAID ?
+              <View>
+                <TouchableOpacity
+                  style={styles.checkoutBtn}
+                  onPress={() => {
+                    Alert.alert(
+                      'Complete Order',
+                      'Are you sure to complete this order?',
+                      [
+                        {
+                          text: 'No',
+                          onPress: () => console.log('Cancel Pressed'),
+                          style: 'cancel',
+                        },
+                        {
+                          text: 'Yes', onPress: () => {
+                            this.props.updateOrder(order.id, ORDER_STATUS.COMPLETED)
+                            Alert.alert(
+                              'Complete Order',
+                              'Complete Order Successfully',
+                              [
+                                {
+                                  text: 'OK', onPress: () => {
+                                    const onGoBack = this.props.navigation.getParam('onGoBack');
+                                    if (onGoBack) {
+                                      onGoBack();
+                                    }
+                                    this.props.navigation.goBack()
+                                  }
+                                },
+                              ],
+                              { cancelable: false }
+                            );
+                          }
+                        },
+                      ],
+                      { cancelable: true }
+                    );
+                  }}>
+                  <View style={styles.iconWrapper}>
+                    <FontAwesome5
+                      style={styles.icons}
+                      name={'cash-register'}
+                      size={23}
+                      color={'white'}
+                      solid
+                    />
+                  </View>
+                  <Text numberOfLines={1} style={styles.buttonTitle}>Complete</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.cancelBtn}
+                  onPress={() => {
+                    Alert.alert(
+                      'Reject Order',
+                      'Are you sure to reject this order?',
+                      [
+                        {
+                          text: 'No',
+                          onPress: () => console.log('Cancel Pressed'),
+                          style: 'cancel',
+                        },
+                        {
+                          text: 'Yes', onPress: () => {
+                            this.props.updateOrder(order.id, ORDER_STATUS.REJECTED)
+                            Alert.alert(
+                              'Reject Order',
+                              'Reject Order Successfully',
+                              [
+                                {
+                                  text: 'OK', onPress: () => {
+                                    const onGoBack = this.props.navigation.getParam('onGoBack');
+                                    if (onGoBack) {
+                                      onGoBack();
+                                    }
+                                    this.props.navigation.goBack()
+                                  }
+                                },
+                              ],
+                              { cancelable: false }
+                            );
+                          }
+                        },
+                      ],
+                      { cancelable: true }
+                    );
+                  }}>
+                  <View style={styles.iconWrapper}>
+                    <FontAwesome5
+                      style={styles.icons}
+                      name={'times'}
+                      size={23}
+                      color={'white'}
+                      solid
+                    />
+                  </View>
+                  <Text numberOfLines={1} style={styles.buttonTitle}>Reject</Text>
+                </TouchableOpacity>
 
 
-        </View>
+              </View>
+              : null
+          }
+
+
+        </View >
       );
     } else {
       return (
@@ -380,22 +432,42 @@ class OrderDetailScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+  comment: {
+    fontFamily: 'Quicksand-Regular',
+    fontSize: 15,
+    borderWidth: .7,
+    borderColor: '#54b33d',
+    color: 'black',
+    backgroundColor: 'white',
+    padding: 5,
+    borderRadius: 10,
+  },
+
   orderInfoContainer: {
     flex: 1,
     flexDirection: 'row',
     paddingTop: 15,
   },
   statusWrapper: {
+    flex: 1.5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    // paddingRight: 15,
+    // paddingLeft: 5,
+  },
+  nameWrapper: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
     paddingRight: 10,
   },
   datatimeWrapper: {
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
+    justifyContent: 'center',
     // paddingLeft: 10,
   },
   statusTitle: {
@@ -405,20 +477,36 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontFamily: 'Quicksand-Medium',
-    fontSize: 20,
+    fontSize: 17,
     color: '#54b33d',
+  },
+  nameText: {
+    fontFamily: 'Quicksand-Medium',
+    fontSize: 20,
+    color: 'gray',
   },
   date: {
     fontFamily: 'Quicksand-Medium',
     fontSize: 15,
     color: '#54b33d',
-    paddingRight: 20,
+    // paddingRight: 20,
   },
   time: {
     fontFamily: 'Quicksand-Regular',
     fontSize: 15,
     color: '#54b33d',
-    paddingRight: 20,
+    // paddingRight: 20,
+  },
+  phoneText: {
+    fontFamily: 'Quicksand-Regular',
+    fontSize: 15,
+    color: 'gray',
+    // paddingRight: 20,
+  },
+  cameraText: {
+    fontFamily: 'Quicksand-Bold',
+    fontSize: 15,
+    color: 'white',
   },
 
   container: {
@@ -612,6 +700,18 @@ const styles = StyleSheet.create({
     margin: 15,
     marginTop: 0,
     padding: 10,
+    // borderWidth: .3,
+    // borderColor: '#54b33d',
+  },
+  commentContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: '#EBEBEB',
+    margin: 15,
+    marginTop: 0,
+    padding: 10,
+    // borderRadius: 10,
+    // marginBottom: 100,
     // borderWidth: .3,
     // borderColor: '#54b33d',
   },

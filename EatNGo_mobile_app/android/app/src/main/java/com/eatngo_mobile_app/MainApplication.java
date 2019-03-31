@@ -2,6 +2,7 @@ package com.eatngo_mobile_app;
 
 import android.app.Application;
 
+import org.reactnative.camera.RNCameraPackage;
 import com.gettipsi.stripe.StripeReactPackage;
 import com.facebook.react.ReactApplication;
 import io.invertase.firebase.RNFirebasePackage;
@@ -43,7 +44,8 @@ public class MainApplication extends Application implements ReactApplication {
             new StripeReactPackage(),
             new RNAccountKitPackage(),
             new VectorIconsPackage(),
-            new RNGestureHandlerPackage()
+            new RNGestureHandlerPackage(),
+              new RNCameraPackage()
       );
     }
 

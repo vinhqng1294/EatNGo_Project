@@ -17,6 +17,7 @@ import EmployeeOrderDetailScreen from './Screen/Employee/EmployeeOrderDetailScre
 import AddCardScreen from './Screen/AddCardScreen';
 import EditProfileScreen from './Screen/EditProfileScreen';
 import RatingScreen from './Screen/RatingScreen';
+import ScanQRScreen from './Screen/Employee/ScanQRScreen';
 
 
 const HomeStack = createStackNavigator(
@@ -52,6 +53,7 @@ const ProfileStack = createStackNavigator(
 const StoreStack = createStackNavigator(
     {
         "StoreList": { screen: StoreListScreen },
+        "ScanQR": { screen: ScanQRScreen },
     },
     {
         initialRouteKey: 'StoreList'
